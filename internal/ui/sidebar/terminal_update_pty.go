@@ -69,10 +69,9 @@ func (m *TerminalModel) handlePTYFlush(msg messages.SidebarPTYFlush) tea.Cmd {
 	ts.flushScheduled = false
 	ts.flushPendingSince = time.Time{}
 	if len(ts.pendingOutput) > 0 {
-		var wrote bool
+		var consumed bool
 		ts.mu.Lock()
 		if ts.VTerm != nil {
-			flushDone := perf.Time("pty_flush")
 			chunkSize := len(ts.pendingOutput)
 			if chunkSize > ptyFlushChunkSize {
 				chunkSize = ptyFlushChunkSize
@@ -80,13 +79,23 @@ func (m *TerminalModel) handlePTYFlush(msg messages.SidebarPTYFlush) tea.Cmd {
 			chunk := append([]byte(nil), ts.pendingOutput[:chunkSize]...)
 			copy(ts.pendingOutput, ts.pendingOutput[chunkSize:])
 			ts.pendingOutput = ts.pendingOutput[:len(ts.pendingOutput)-chunkSize]
-			ts.VTerm.Write(chunk)
-			flushDone()
-			perf.Count("pty_flush_bytes", int64(len(chunk)))
-			wrote = true
+			processedBytes := len(chunk)
+			filtered := common.FilterKnownPTYNoiseStream(chunk, &ts.ptyNoiseTrailing)
+			filteredBytes := processedBytes - len(filtered)
+			perf.Count("pty_flush_bytes_processed", int64(processedBytes))
+			if filteredBytes > 0 {
+				perf.Count("pty_flush_bytes_filtered", int64(filteredBytes))
+			}
+			if len(filtered) > 0 {
+				flushDone := perf.Time("pty_flush")
+				ts.VTerm.Write(filtered)
+				flushDone()
+				perf.Count("pty_flush_bytes", int64(len(filtered)))
+			}
+			consumed = true
 		}
 		ts.mu.Unlock()
-		if !wrote {
+		if !consumed {
 			return nil
 		}
 		if len(ts.pendingOutput) == 0 {
@@ -116,6 +125,15 @@ func (m *TerminalModel) handlePTYStopped(msg messages.SidebarPTYStopped) tea.Cmd
 	}
 	ts := tab.State
 	termAlive := ts.Terminal != nil && !ts.Terminal.IsClosed()
+	ts.mu.Lock()
+	if ts.VTerm != nil && len(ts.ptyNoiseTrailing) > 0 {
+		trailing := common.DrainKnownPTYNoiseTrailing(&ts.ptyNoiseTrailing)
+		flushDone := perf.Time("pty_flush")
+		ts.VTerm.Write(trailing)
+		flushDone()
+		perf.Count("pty_flush_bytes", int64(len(trailing)))
+	}
+	ts.mu.Unlock()
 	m.stopPTYReader(ts)
 	if termAlive {
 		shouldRestart := true

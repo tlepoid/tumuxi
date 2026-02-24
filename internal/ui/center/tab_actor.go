@@ -368,20 +368,34 @@ func (m *Model) handleTabEvent(ev tabEvent) {
 			m.sendToTerminal(tab, "\x1b[200~"+ev.pasteText+"\x1b[201~", ev.tabID, ev.workspaceID, "Paste")
 		}
 	case tabEventWriteOutput:
-		if len(ev.output) == 0 {
-			return
-		}
+		processedBytes := len(ev.output)
 		tagSessionName := ""
 		var tagTimestamp int64
+		filteredLen := 0
+		filterApplied := false
 		tab.mu.Lock()
 		if tab.Terminal != nil {
-			flushDone := perf.Time("pty_flush")
-			tab.Terminal.Write(ev.output)
-			flushDone()
-			perf.Count("pty_flush_bytes", int64(len(ev.output)))
+			output := common.FilterKnownPTYNoiseStream(ev.output, &tab.ptyNoiseTrailing)
+			filteredLen = len(output)
+			filterApplied = true
+			if len(output) > 0 {
+				flushDone := perf.Time("pty_flush")
+				tab.Terminal.Write(output)
+				flushDone()
+				perf.Count("pty_flush_bytes", int64(len(output)))
+			}
+			// Activity state intentionally tracks visible terminal mutations only.
+			// Noise-only chunks are filtered above and must not update activity tags.
 			tagSessionName, tagTimestamp, _ = m.noteVisibleActivityLocked(tab, ev.hasMoreBuffered, ev.visibleSeq)
 		}
 		tab.mu.Unlock()
+		perf.Count("pty_flush_bytes_processed", int64(processedBytes))
+		if filterApplied {
+			filteredBytes := processedBytes - filteredLen
+			if filteredBytes > 0 {
+				perf.Count("pty_flush_bytes_filtered", int64(filteredBytes))
+			}
+		}
 		if tagSessionName != "" {
 			opts := m.getTmuxOptions()
 			sessionName := tagSessionName
