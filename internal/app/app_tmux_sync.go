@@ -48,6 +48,9 @@ func (a *App) handleTmuxTabsSyncResult(msg tmuxTabsSyncResult) []tea.Cmd {
 	if msg.WorkspaceID == "" {
 		return nil
 	}
+	if a.isWorkspaceDeleteInFlight(msg.WorkspaceID) {
+		return nil
+	}
 	ws := a.findWorkspaceByID(msg.WorkspaceID)
 	if ws == nil || len(msg.Updates) == 0 {
 		return nil
@@ -83,11 +86,21 @@ func (a *App) handleTmuxTabsSyncResult(msg tmuxTabsSyncResult) []tea.Cmd {
 	}
 	if changed {
 		wsSnapshot := snapshotWorkspaceForSave(ws)
+		wsID := string(wsSnapshot.ID())
 		cmds = append(cmds, func() tea.Msg {
-			if err := a.workspaceService.Save(wsSnapshot); err != nil {
-				logging.Warn("Failed to sync workspace tabs: %v", err)
+			var saveErr error
+			saved := a.runUnlessWorkspaceDeleteInFlight(wsID, func() {
+				saveErr = a.workspaceService.Save(wsSnapshot)
+			})
+			if !saved {
+				return nil
+			}
+			if saveErr != nil {
+				logging.Warn("Failed to sync workspace tabs: %v", saveErr)
 			} else {
-				a.markLocalWorkspaceSaveForID(string(wsSnapshot.ID()))
+				// Marker bookkeeping is intentionally outside delete-state guard.
+				// Delete safety is enforced by the guarded Save above.
+				a.markLocalWorkspaceSaveForID(wsID)
 			}
 			return nil
 		})

@@ -169,6 +169,30 @@ func TestDeleteWorkspaceRejectsPathOutsideManagedProjectRoot(t *testing.T) {
 	}
 }
 
+func TestDeleteWorkspaceAllowsManagedPathWhenProjectNameDriftsFromRepoBasename(t *testing.T) {
+	var removeCalled bool
+	mock := &mockGitOps{
+		removeWorkspace: func(repoPath, workspacePath string) error {
+			removeCalled = true
+			return nil
+		},
+	}
+
+	project := &data.Project{Name: "repo-link", Path: "/tmp/repo-real"}
+	ws := data.NewWorkspace("cursor-blink", "cursor-blink", "main", "/tmp/repo-real", "/tmp/workspaces/repo-real/cursor-blink")
+
+	svc := newWorkspaceService(nil, nil, nil, "/tmp/workspaces")
+	svc.gitOps = mock
+	msg := svc.DeleteWorkspace(project, ws)()
+
+	if _, ok := msg.(messages.WorkspaceDeleted); !ok {
+		t.Fatalf("expected WorkspaceDeleted, got %T", msg)
+	}
+	if !removeCalled {
+		t.Fatal("removeWorkspace should have been called")
+	}
+}
+
 func TestDeleteWorkspaceRejectsUnsafeProjectNameSegment(t *testing.T) {
 	var removeCalled bool
 	mock := &mockGitOps{
@@ -210,6 +234,46 @@ func TestDeleteWorkspaceRejectsSameNameDifferentProjectScope(t *testing.T) {
 	project := data.NewProject("/tmp/repo-owner-a")
 	project.Name = "repo"
 	ws := data.NewWorkspace("feature", "feature", "main", "/tmp/repo-owner-b", "/tmp/workspaces/repo/feature")
+
+	svc := newWorkspaceService(nil, nil, nil, "/tmp/workspaces")
+	svc.gitOps = mock
+	msg := svc.DeleteWorkspace(project, ws)()
+
+	failed, ok := msg.(messages.WorkspaceDeleteFailed)
+	if !ok {
+		t.Fatalf("expected WorkspaceDeleteFailed, got %T", msg)
+	}
+	if failed.Err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.Contains(failed.Err.Error(), "does not match") {
+		t.Fatalf("expected repo mismatch error, got: %v", failed.Err)
+	}
+	if removeCalled {
+		t.Fatal("removeWorkspace should not have been called")
+	}
+}
+
+func TestDeleteWorkspaceRejectsAliasCollisionWhenRepoDoesNotMatch(t *testing.T) {
+	var removeCalled bool
+	mock := &mockGitOps{
+		removeWorkspace: func(repoPath, workspacePath string) error {
+			removeCalled = true
+			return nil
+		},
+	}
+
+	// project.Name differs from the canonical repo basename; managed roots include
+	// both name-based and path-basename aliases. Repo identity must still block a
+	// delete for a workspace that belongs to a different repo with the same basename.
+	project := &data.Project{Name: "repo-link", Path: "/tmp/owner-a/repo-real"}
+	ws := data.NewWorkspace(
+		"feature",
+		"feature",
+		"main",
+		"/tmp/owner-b/repo-real",
+		"/tmp/workspaces/repo-real/feature",
+	)
 
 	svc := newWorkspaceService(nil, nil, nil, "/tmp/workspaces")
 	svc.gitOps = mock
