@@ -10,6 +10,8 @@ import (
 	"github.com/andyrewlee/amux/internal/safego"
 )
 
+const ptyIdleHeartbeatInterval = time.Second
+
 // PTYReaderConfig configures the shared PTY read loop.
 type PTYReaderConfig struct {
 	Label           string // safego goroutine label
@@ -79,8 +81,30 @@ func RunPTYReader(
 		}
 	})
 
-	ticker := time.NewTicker(cfg.FrameInterval)
-	defer ticker.Stop()
+	heartbeatTicker := time.NewTicker(ptyIdleHeartbeatInterval)
+	defer heartbeatTicker.Stop()
+	var flushTicker *time.Ticker
+	var flushTick <-chan time.Time
+	startFlushTicker := func() {
+		if flushTicker != nil {
+			return
+		}
+		flushInterval := cfg.FrameInterval
+		if flushInterval <= 0 {
+			flushInterval = 40 * time.Millisecond
+		}
+		flushTicker = time.NewTicker(flushInterval)
+		flushTick = flushTicker.C
+	}
+	stopFlushTicker := func() {
+		if flushTicker == nil {
+			return
+		}
+		flushTicker.Stop()
+		flushTicker = nil
+		flushTick = nil
+	}
+	defer stopFlushTicker()
 
 	var pending []byte
 	var stoppedErr error
@@ -110,14 +134,23 @@ func RunPTYReader(
 				return
 			}
 			pending = append(pending, data...)
+			startFlushTicker()
 			if len(pending) >= cfg.MaxPendingBytes {
 				if !SendPTYMsg(msgCh, cancel, factory.Output(pending)) {
 					close(msgCh)
 					return
 				}
 				pending = nil
+				if stoppedErr == nil {
+					stopFlushTicker()
+				}
 			}
-		case <-ticker.C:
+			if stoppedErr != nil && len(pending) == 0 {
+				SendPTYMsg(msgCh, cancel, factory.Stopped(stoppedErr))
+				close(msgCh)
+				return
+			}
+		case <-flushTick:
 			beat()
 			if len(pending) > 0 {
 				if !SendPTYMsg(msgCh, cancel, factory.Output(pending)) {
@@ -126,11 +159,16 @@ func RunPTYReader(
 				}
 				pending = nil
 			}
+			if len(pending) == 0 {
+				stopFlushTicker()
+			}
 			if stoppedErr != nil {
 				SendPTYMsg(msgCh, cancel, factory.Stopped(stoppedErr))
 				close(msgCh)
 				return
 			}
+		case <-heartbeatTicker.C:
+			beat()
 		}
 	}
 }

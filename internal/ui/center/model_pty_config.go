@@ -4,10 +4,10 @@ import "time"
 
 // PTY constants
 const (
-	ptyFlushQuiet       = 4 * time.Millisecond
-	ptyFlushMaxInterval = 16 * time.Millisecond
-	ptyFlushQuietAlt    = 8 * time.Millisecond
-	ptyFlushMaxAlt      = 32 * time.Millisecond
+	ptyFlushQuiet       = 12 * time.Millisecond
+	ptyFlushMaxInterval = 48 * time.Millisecond
+	ptyFlushQuietAlt    = 24 * time.Millisecond
+	ptyFlushMaxAlt      = 96 * time.Millisecond
 	// Inactive tabs still need to advance their terminal state, but can flush less frequently.
 	ptyFlushInactiveMultiplier          = 4
 	ptyFlushInactiveHeavyMultiplier     = 8
@@ -21,7 +21,7 @@ const (
 	ptyFlushChunkSizeActive = 256 * 1024
 	ptyReadBufferSize       = 32 * 1024
 	ptyReadQueueSize        = 64
-	ptyFrameInterval        = time.Second / 60
+	ptyFrameInterval        = time.Second / 24
 	ptyMaxPendingBytes      = 512 * 1024
 	ptyMaxBufferedBytes     = 8 * 1024 * 1024
 	ptyReaderStallTimeout   = 10 * time.Second
