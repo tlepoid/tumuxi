@@ -14,8 +14,8 @@ GOFUMPT ?= go run mvdan.cc/gofumpt@v0.9.2
 build:
 	go build -o $(BINARY_NAME) $(MAIN_PACKAGE)
 
-install: build
-	cp $(BINARY_NAME) /usr/local/bin/$(BINARY_NAME)
+install:
+	go install $(MAIN_PACKAGE)
 
 test:
 	go test -v ./...
@@ -123,7 +123,8 @@ dev:
 
 help:
 	@echo "Available targets:"
-	@echo "  build      - Build the binary"
+	@echo "  build      - Build the binary locally"
+	@echo "  install    - Install binary to \$$GOPATH/bin via go install"
 	@echo "  test       - Run all tests"
 	@echo "  lint       - Run golangci-lint and file length checks (max 500 lines)"
 	@echo "  lint-strict - Run stricter lint profile across the whole repo"
