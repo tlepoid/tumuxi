@@ -2,6 +2,8 @@ package sidebar
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -171,6 +173,70 @@ func (m *LazygitModel) contentSize() (int, int) {
 	return w, h
 }
 
+// lazygitCommand returns the shell command used to launch lazygit, including
+// a --use-config-file flag that merges the user's existing config with an
+// amux-generated theme overlay (comma-separated, later files win).
+// Falls back to plain "lazygit" if writing the overlay fails.
+func lazygitCommand() string {
+	hex := common.HexColor
+	yaml := fmt.Sprintf(`gui:
+  theme:
+    activeBorderColor:
+      - '%s'
+      - bold
+    inactiveBorderColor:
+      - '%s'
+    searchingActiveBorderColor:
+      - '%s'
+      - bold
+    optionsTextColor:
+      - '%s'
+    selectedLineBgColor:
+      - '%s'
+    selectedRangeBgColor:
+      - '%s'
+    cherryPickedCommitBgColor:
+      - '%s'
+    cherryPickedCommitFgColor:
+      - '%s'
+    unstagedChangesColor:
+      - '%s'
+    defaultFgColor:
+      - '%s'
+`,
+		hex(common.ColorBorderFocused()),
+		hex(common.ColorBorder()),
+		hex(common.ColorInfo()),
+		hex(common.ColorSecondary()),
+		hex(common.ColorSelection()),
+		hex(common.ColorSelection()),
+		hex(common.ColorSurface2()),
+		hex(common.ColorPrimary()),
+		hex(common.ColorError()),
+		hex(common.ColorForeground()),
+	)
+
+	themePath := filepath.Join(os.TempDir(), "amux-lazygit-theme.yml")
+	if err := os.WriteFile(themePath, []byte(yaml), 0o600); err != nil {
+		logging.Warn("lazygit: could not write theme config: %v", err)
+		return "lazygit"
+	}
+
+	// Build comma-separated config list: user config (if any) then our overlay.
+	var configs []string
+	if existing := os.Getenv("LG_CONFIG_FILE"); existing != "" {
+		configs = append(configs, existing)
+	} else if configDir, err := os.UserConfigDir(); err == nil {
+		defaultCfg := filepath.Join(configDir, "lazygit", "config.yml")
+		if _, err := os.Stat(defaultCfg); err == nil {
+			configs = append(configs, defaultCfg)
+		}
+	}
+	configs = append(configs, themePath)
+
+	return "lazygit --use-config-file " + strings.Join(configs, ",")
+}
+
 // startLazygit launches lazygit in a PTY.
 func (m *LazygitModel) startLazygit() tea.Cmd {
 	ws := m.workspace
@@ -186,8 +252,9 @@ func (m *LazygitModel) startLazygit() tea.Cmd {
 
 	return func() tea.Msg {
 		env := []string{"COLORTERM=truecolor"}
+		cmd := lazygitCommand()
 		logging.Info("lazygit: launching PTY workspace=%s root=%s size=%dx%d gen=%d", wsID, root, termWidth, termHeight, gen)
-		term, err := pty.NewWithSize("lazygit", root, env, uint16(termHeight), uint16(termWidth))
+		term, err := pty.NewWithSize(cmd, root, env, uint16(termHeight), uint16(termWidth))
 		if err != nil {
 			logging.Warn("lazygit: PTY launch failed: %v", err)
 			return LazygitStarted{WorkspaceID: wsID, RunGen: gen, Err: err}

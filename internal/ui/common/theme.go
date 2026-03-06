@@ -16,6 +16,7 @@ const (
 	ThemeGruvbox    ThemeID = "gruvbox"
 	ThemeSolarized  ThemeID = "solarized"
 	ThemeMonokai    ThemeID = "monokai"
+	ThemeMonokaiPro ThemeID = "monokai-pro"
 	ThemeRosePine   ThemeID = "rose-pine"
 	ThemeOneDark    ThemeID = "one-dark"
 	ThemeKanagawa   ThemeID = "kanagawa"
@@ -94,6 +95,7 @@ func AvailableThemes() []Theme {
 		DraculaTheme(),
 		NordTheme(),
 		MonokaiTheme(),
+		MonokaiProTheme(),
 		KanagawaTheme(),
 		EverforestTheme(),
 		AyuDarkTheme(),

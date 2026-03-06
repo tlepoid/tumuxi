@@ -214,6 +214,36 @@ func MonokaiTheme() Theme {
 	}
 }
 
+// MonokaiProTheme - Monokai Pro dark, with vibrant accents on a black base
+func MonokaiProTheme() Theme {
+	return Theme{
+		ID:   ThemeMonokaiPro,
+		Name: "Monokai Pro",
+		Colors: ThemeColors{
+			Background:    lipgloss.Color("#0d1117"),
+			Foreground:    lipgloss.Color("#fcfcfa"),
+			Muted:         lipgloss.Color("#727072"),
+			Border:        lipgloss.Color("#21262d"),
+			BorderFocused: lipgloss.Color("#ffd866"),
+
+			Primary:   lipgloss.Color("#ffd866"), // Yellow
+			Secondary: lipgloss.Color("#ab9df2"), // Purple
+			Success:   lipgloss.Color("#a9dc76"), // Green
+			Warning:   lipgloss.Color("#fc9867"), // Orange
+			Error:     lipgloss.Color("#ff6188"), // Red/Pink
+			Info:      lipgloss.Color("#78dce8"), // Cyan
+
+			Surface0: lipgloss.Color("#0d1117"),
+			Surface1: lipgloss.Color("#161b22"),
+			Surface2: lipgloss.Color("#21262d"),
+			Surface3: lipgloss.Color("#30363d"),
+
+			Selection: lipgloss.Color("#30363d"),
+			Highlight: lipgloss.Color("#21262d"),
+		},
+	}
+}
+
 // SolarizedTheme - precise, scientific color scheme
 func SolarizedTheme() Theme {
 	return Theme{
