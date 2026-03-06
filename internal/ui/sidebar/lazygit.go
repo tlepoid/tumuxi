@@ -180,6 +180,7 @@ func (m *LazygitModel) contentSize() (int, int) {
 func lazygitCommand() string {
 	hex := common.HexColor
 	yaml := fmt.Sprintf(`gui:
+  nerdFontsVersion: "3"
   theme:
     activeBorderColor:
       - '%s'
