@@ -34,13 +34,29 @@ func (a *App) focusPane(pane messages.PaneType) tea.Cmd {
 // focusPaneLeft moves focus one pane to the left, respecting layout visibility.
 func (a *App) focusPaneLeft() tea.Cmd {
 	switch a.focusedPane {
-	case messages.PaneSidebarTerminal, messages.PaneSidebar:
+	case messages.PaneSidebar:
 		if a.layout != nil && a.layout.ShowCenter() {
 			return a.focusPane(messages.PaneCenter)
 		}
 		return a.focusPane(messages.PaneDashboard)
-	case messages.PaneCenter:
+	case messages.PaneCenter, messages.PaneSidebarTerminal:
 		return a.focusPane(messages.PaneDashboard)
+	}
+	return nil
+}
+
+// focusPaneDown moves focus from the agent pane to the terminal pane below it.
+func (a *App) focusPaneDown() tea.Cmd {
+	if a.focusedPane == messages.PaneCenter {
+		return a.focusPane(messages.PaneSidebarTerminal)
+	}
+	return nil
+}
+
+// focusPaneUp moves focus from the terminal pane back to the agent pane above it.
+func (a *App) focusPaneUp() tea.Cmd {
+	if a.focusedPane == messages.PaneSidebarTerminal {
+		return a.focusPane(messages.PaneCenter)
 	}
 	return nil
 }
@@ -55,7 +71,7 @@ func (a *App) focusPaneRight() tea.Cmd {
 		if a.layout != nil && a.layout.ShowSidebar() {
 			return a.focusPane(messages.PaneSidebar)
 		}
-	case messages.PaneCenter:
+	case messages.PaneCenter, messages.PaneSidebarTerminal:
 		if a.layout != nil && a.layout.ShowSidebar() {
 			return a.focusPane(messages.PaneSidebar)
 		}
@@ -85,6 +101,8 @@ var prefixCommandTable = []prefixCommand{
 	{Sequence: []string{"K"}, Desc: "cleanup tmux", Action: "cleanup_tmux"},
 	{Sequence: []string{"h"}, Desc: "focus left", Action: "focus_left"},
 	{Sequence: []string{"l"}, Desc: "focus right", Action: "focus_right"},
+	{Sequence: []string{"j"}, Desc: "focus down", Action: "focus_down"},
+	{Sequence: []string{"k"}, Desc: "focus up", Action: "focus_up"},
 	{Sequence: []string{"t", "a"}, Desc: "new agent tab", Action: "new_agent_tab"},
 	{Sequence: []string{"t", "t"}, Desc: "new terminal tab", Action: "new_terminal_tab"},
 	{Sequence: []string{"t", "n"}, Desc: "next tab", Action: "next_tab"},
@@ -235,6 +253,10 @@ func (a *App) runPrefixAction(action string) tea.Cmd {
 		return a.focusPaneLeft()
 	case "focus_right":
 		return a.focusPaneRight()
+	case "focus_down":
+		return a.focusPaneDown()
+	case "focus_up":
+		return a.focusPaneUp()
 	case "add_project":
 		return func() tea.Msg { return messages.ShowAddProjectDialog{} }
 	case "delete_workspace":

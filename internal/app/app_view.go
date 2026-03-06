@@ -124,7 +124,7 @@ func (a *App) viewLayerBased() tea.View {
 	if dashDrawable := a.dashboardContent.get(dashContent, leftGutter+1, topGutter+1); dashDrawable != nil {
 		canvas.Compose(dashDrawable)
 	}
-	for _, border := range a.dashboardBorders.get(leftGutter, topGutter, dashWidth, dashHeight) {
+	for _, border := range a.dashboardBorders.get(leftGutter, topGutter, dashWidth, dashHeight, a.focusedPane == messages.PaneDashboard) {
 		canvas.Compose(border)
 	}
 
@@ -147,7 +147,7 @@ func (a *App) viewLayerBased() tea.View {
 				Width:      termW,
 				Height:     termH,
 			})
-			for _, border := range a.centerBorders.get(centerX, topGutter, centerWidth, centerTopHeight) {
+			for _, border := range a.centerBorders.get(centerX, topGutter, centerWidth, centerTopHeight, a.focusedPane == messages.PaneCenter) {
 				canvas.Compose(border)
 			}
 			contentWidth := a.center.ContentWidth()
@@ -180,7 +180,7 @@ func (a *App) viewLayerBased() tea.View {
 			} else {
 				centerContent = a.renderCenterPaneContent()
 			}
-			centerView := buildBorderedPane(centerContent, centerWidth, centerTopHeight)
+			centerView := buildBorderedPane(centerContent, centerWidth, centerTopHeight, a.focusedPane == messages.PaneCenter)
 			centerDrawable := compositor.NewStringDrawable(clampPane(centerView, centerWidth, centerTopHeight), centerX, topGutter)
 			canvas.Compose(centerDrawable)
 		}
@@ -265,7 +265,7 @@ func (a *App) viewLayerBased() tea.View {
 					canvas.Compose(bottomDrawable)
 				}
 			}
-			for _, border := range a.sidebarBottomBorders.get(centerX, termPaneY, centerWidth, centerBottomHeight) {
+			for _, border := range a.sidebarBottomBorders.get(centerX, termPaneY, centerWidth, centerBottomHeight, a.focusedPane == messages.PaneSidebarTerminal) {
 				canvas.Compose(border)
 			}
 		}
@@ -320,7 +320,7 @@ func (a *App) viewLayerBased() tea.View {
 				canvas.Compose(topDrawable)
 			}
 		}
-		for _, border := range a.sidebarTopBorders.get(sidebarX, topGutter, sidebarWidth, sidebarHeight) {
+		for _, border := range a.sidebarTopBorders.get(sidebarX, topGutter, sidebarWidth, sidebarHeight, a.focusedPane == messages.PaneSidebar) {
 			canvas.Compose(border)
 		}
 	}

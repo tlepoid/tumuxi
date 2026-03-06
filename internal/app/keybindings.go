@@ -22,6 +22,12 @@ type KeyMap struct {
 	Down  key.Binding
 	Left  key.Binding
 	Right key.Binding
+
+	// Pane focus navigation (Alt+hjkl / Alt+arrows — intercepted globally)
+	FocusPaneLeft  key.Binding
+	FocusPaneRight key.Binding
+	FocusPaneDown  key.Binding
+	FocusPaneUp    key.Binding
 }
 
 // DefaultKeyMap returns the default keybindings
@@ -78,6 +84,24 @@ func DefaultKeyMap() KeyMap {
 		Right: key.NewBinding(
 			key.WithKeys("l", "right"),
 			key.WithHelp("l/right", "right"),
+		),
+
+		// Pane focus navigation
+		FocusPaneLeft: key.NewBinding(
+			key.WithKeys("alt+h", "alt+left"),
+			key.WithHelp("alt+h", "focus left pane"),
+		),
+		FocusPaneRight: key.NewBinding(
+			key.WithKeys("alt+l", "alt+right"),
+			key.WithHelp("alt+l", "focus right pane"),
+		),
+		FocusPaneDown: key.NewBinding(
+			key.WithKeys("alt+j", "alt+down"),
+			key.WithHelp("alt+j", "focus pane below"),
+		),
+		FocusPaneUp: key.NewBinding(
+			key.WithKeys("alt+k", "alt+up"),
+			key.WithHelp("alt+k", "focus pane above"),
 		),
 	}
 }

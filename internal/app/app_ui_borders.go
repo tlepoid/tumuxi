@@ -11,12 +11,15 @@ import (
 )
 
 // buildBorderedPane creates a bordered pane with exact dimensions, manually drawing the border
-func buildBorderedPane(content string, width, height int) string {
+func buildBorderedPane(content string, width, height int, focused bool) string {
 	if width < 3 || height < 3 {
 		return ""
 	}
 
-	borderColor := common.ColorBorder()
+	borderColor := common.ColorBorderFocused()
+	if !focused {
+		borderColor = common.ColorBorder()
+	}
 	topLeft, topRight, bottomLeft, bottomRight := "╭", "╮", "╰", "╯"
 	horizontal, vertical := "─", "│"
 	borderStyle := lipgloss.NewStyle().Foreground(borderColor)
@@ -76,12 +79,15 @@ func buildBorderedPane(content string, width, height int) string {
 	return result.String()
 }
 
-func borderDrawables(x, y, width, height int) []*compositor.StringDrawable {
+func borderDrawables(x, y, width, height int, focused bool) []*compositor.StringDrawable {
 	if width < 3 || height < 3 {
 		return nil
 	}
 
-	borderColor := common.ColorBorder()
+	borderColor := common.ColorBorderFocused()
+	if !focused {
+		borderColor = common.ColorBorder()
+	}
 	topLeft, topRight, bottomLeft, bottomRight := "╭", "╮", "╰", "╯"
 	horizontal, vertical := "─", "│"
 

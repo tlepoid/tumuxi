@@ -73,7 +73,19 @@ func (a *App) handleKeyPress(msg tea.KeyPressMsg) tea.Cmd {
 		// Fall through to normal handling below
 	}
 
-	// 3. Passthrough mode - route keys to focused pane
+	// 3. Global pane navigation (intercepted before routing to any pane)
+	switch {
+	case key.Matches(msg, a.keymap.FocusPaneLeft):
+		return a.focusPaneLeft()
+	case key.Matches(msg, a.keymap.FocusPaneRight):
+		return a.focusPaneRight()
+	case key.Matches(msg, a.keymap.FocusPaneDown):
+		return a.focusPaneDown()
+	case key.Matches(msg, a.keymap.FocusPaneUp):
+		return a.focusPaneUp()
+	}
+
+	// 4. Passthrough mode - route keys to focused pane
 	// Handle button navigation when center pane is focused and showing welcome/workspace info (no tabs)
 	if a.focusedPane == messages.PaneCenter && !a.center.HasTabs() {
 		maxIndex := a.centerButtonCount() - 1

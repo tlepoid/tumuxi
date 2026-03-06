@@ -42,7 +42,7 @@ func TestPaneForPoint_ThreePaneGeometry(t *testing.T) {
 
 	centerStart := left + dashWidth + gap
 	sidebarStart := centerStart + centerWidth + gap
-	topPaneHeight, _ := sidebarPaneHeights(height)
+	centerTopHeight, _ := centerPaneHeights(height)
 
 	assertPaneAt(t, app, left, top-1, paneNone, false)
 	assertPaneAt(t, app, left, top+height, paneNone, false)
@@ -51,12 +51,14 @@ func TestPaneForPoint_ThreePaneGeometry(t *testing.T) {
 	assertPaneAt(t, app, left+dashWidth-1, top, messages.PaneDashboard, true)
 	assertPaneAt(t, app, left+dashWidth, top, paneNone, false)
 
+	// Center column: top = agent, bottom = terminal
 	assertPaneAt(t, app, centerStart, top, messages.PaneCenter, true)
 	assertPaneAt(t, app, centerStart+centerWidth-1, top, messages.PaneCenter, true)
+	assertPaneAt(t, app, centerStart, top+centerTopHeight, messages.PaneSidebarTerminal, true)
 	assertPaneAt(t, app, centerStart+centerWidth, top, paneNone, false)
 
+	// Sidebar column: full height is PaneSidebar (no terminal split here)
 	assertPaneAt(t, app, sidebarStart, top, messages.PaneSidebar, true)
-	assertPaneAt(t, app, sidebarStart, top+topPaneHeight, messages.PaneSidebarTerminal, true)
 	assertPaneAt(t, app, sidebarStart+sidebarWidth, top, paneNone, false)
 }
 

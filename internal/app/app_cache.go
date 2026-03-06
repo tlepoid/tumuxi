@@ -32,15 +32,17 @@ type borderCache struct {
 	width     int
 	height    int
 	themeID   common.ThemeID
+	focused   bool
 	drawables []*compositor.StringDrawable
 }
 
-func (c *borderCache) get(x, y, width, height int) []*compositor.StringDrawable {
+func (c *borderCache) get(x, y, width, height int, focused bool) []*compositor.StringDrawable {
 	themeID := common.GetCurrentTheme().ID
 	if c.drawables != nil &&
 		c.x == x && c.y == y &&
 		c.width == width && c.height == height &&
-		c.themeID == themeID {
+		c.themeID == themeID &&
+		c.focused == focused {
 		return c.drawables
 	}
 	c.x = x
@@ -48,6 +50,7 @@ func (c *borderCache) get(x, y, width, height int) []*compositor.StringDrawable 
 	c.width = width
 	c.height = height
 	c.themeID = themeID
-	c.drawables = borderDrawables(x, y, width, height)
+	c.focused = focused
+	c.drawables = borderDrawables(x, y, width, height, focused)
 	return c.drawables
 }
