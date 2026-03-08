@@ -148,45 +148,6 @@ func (a *App) setKeymapHintsEnabled(enabled bool) {
 	}
 }
 
-func sidebarPaneHeights(total int) (int, int) {
-	if total <= 0 {
-		return 0, 0
-	}
-	top := total / 2
-	bottom := total - top
-
-	// Prefer keeping both panes visible when there's room.
-	if total >= 6 {
-		if top < 3 {
-			top = 3
-			bottom = total - top
-		}
-		if bottom < 3 {
-			bottom = 3
-			top = total - bottom
-		}
-		return top, bottom
-	}
-
-	// In tight spaces, keep the terminal visible by shrinking the top pane first.
-	if total >= 3 && bottom < 3 {
-		bottom = 3
-		top = total - bottom
-		if top < 0 {
-			top = 0
-		}
-		return top, bottom
-	}
-
-	if top > total {
-		top = total
-	}
-	if bottom < 0 {
-		bottom = 0
-	}
-	return top, bottom
-}
-
 // centerPaneHeights splits the center column: ~3/4 for the agent, ~1/4 for the terminal.
 func centerPaneHeights(total int) (int, int) {
 	if total <= 0 {

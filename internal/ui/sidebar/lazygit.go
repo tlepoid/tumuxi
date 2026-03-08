@@ -27,21 +27,21 @@ const (
 
 // LazygitModel is the Bubbletea model for the lazygit sidebar pane.
 type LazygitModel struct {
-	workspace *data.Workspace
-	focused   bool
-	width     int
-	height    int
-	styles    common.Styles
+	workspace       *data.Workspace
+	focused         bool
+	width           int
+	height          int
+	styles          common.Styles
 	showKeymapHints bool
 
 	msgSink func(tea.Msg)
 
-	mu           sync.Mutex
-	term         *pty.Terminal
-	vt           *vterm.VTerm
-	running      bool
-	lastWidth    int
-	lastHeight   int
+	mu               sync.Mutex
+	term             *pty.Terminal
+	vt               *vterm.VTerm
+	running          bool
+	lastWidth        int
+	lastHeight       int
 	ptyNoiseTrailing []byte
 
 	// PTY buffering
