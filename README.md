@@ -24,11 +24,13 @@
   <a href="#configuration">Configuration</a>
 </p>
 
-![amux TUI preview](https://github.com/user-attachments/assets/f5c4647e-a6ee-4d62-b548-0fdd73714c90)
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/63aa6c74-0a71-4475-a493-404be6408f5b" />
 
 ## What is amux?
 
 amux is a terminal UI for running multiple coding agents in parallel with a workspace-first model that can import git worktrees.
+
+> This repository is a personal fork of [andyrewlee/amux](https://github.com/andyrewlee/amux).
 
 ## Prerequisites
 
@@ -36,24 +38,18 @@ amux requires [tmux](https://github.com/tmux/tmux) (minimum 3.2). Each agent run
 
 ## Quick start
 
-```bash
-brew tap andyrewlee/amux
-brew install amux
-```
-
-Or via the install script:
+Via the install script:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/andyrewlee/amux/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/tlepoid/agent-mux/main/install.sh | sh
 ```
 
 Or with Go:
 
 ```bash
-go install github.com/andyrewlee/amux/cmd/amux@latest
+go install github.com/tlepoid/agent-mux/cmd/amux@latest
 ```
 
-Then run `amux` to open the dashboard.
 
 ## How it works
 
@@ -69,92 +65,3 @@ Start with `internal/app/ARCHITECTURE.md` for lifecycle, PTY flow, tmux tagging,
 - **No wrappers**: Works with Claude Code, Codex, Gemini, Amp, OpenCode, and Droid
 - **Keyboard + mouse**: Can be operated with just the keyboard or with a mouse
 - **All-in-one tool**: Run agents, view diffs, and access terminal
-
-## Configuration
-
-## Platform Support
-
-AMUX requires `tmux` and is supported on Linux/macOS. Windows is not supported.
-
-Create `.amux/workspaces.json` in your project to run setup commands for new workspaces:
-
-```json
-{
-  "setup-workspace": [
-    "npm install",
-    "cp $ROOT_WORKSPACE_PATH/.env.local .env.local"
-  ]
-}
-```
-
-Workspace metadata is stored in `~/.amux/workspaces-metadata/<workspace-id>/workspace.json`, and local worktree directories live under `~/.amux/workspaces/<project>/<workspace>`.
-
-Assistant profiles can be configured in `~/.amux/config.json`:
-
-```json
-{
-  "assistants": {
-    "openclaw": {
-      "command": "openclaw",
-      "interrupt_count": 1,
-      "interrupt_delay_ms": 0
-    }
-  }
-}
-```
-
-## Headless CLI for Skills
-
-For automation and skill-driven control (for example an agent orchestrator), prefer the headless CLI with `--json`.
-
-Discovery and contract:
-
-```bash
-amux --json capabilities
-```
-
-Recommended mutation pattern:
-
-1. Use `--idempotency-key <stable-key>` on mutating commands.
-2. Retry safely on transport/process failures with the same key.
-3. Treat JSON envelope fields (`ok`, `error.code`, `data`) as the API contract.
-
-Async send pattern:
-
-```bash
-# enqueue prompt
-amux --json agent send <session_or_agent> --text "..." --enter --async
-
-# poll status
-amux --json agent job status <job_id>
-
-# or wait until terminal state
-amux --json agent job wait <job_id> --timeout 30s --interval 200ms
-
-# optional cancellation (pending jobs only)
-amux --json agent job cancel <job_id>
-```
-
-Graceful stop pattern:
-
-```bash
-amux --json agent stop <session_or_agent> --graceful --grace-period 1200ms
-```
-
-This sends `Ctrl-C` first, then force-kills if the session is still running after the grace period.
-
-## Development
-
-```bash
-git clone https://github.com/andyrewlee/amux.git
-cd amux
-make run
-```
-
-## Operations
-
-- Logs are written to `~/.amux/logs/amux-YYYY-MM-DD.log` (default retention 14 days). Override retention with `AMUX_LOG_RETENTION_DAYS`.
-- Perf profiling: set `AMUX_PROFILE=1` to emit periodic timing/counter snapshots; adjust cadence with `AMUX_PROFILE_INTERVAL_MS` (default 5000).
-- pprof: set `AMUX_PPROF=1` (or a port like `6061`) to expose `net/http/pprof` on `127.0.0.1`.
-- Debug signals: set `AMUX_DEBUG_SIGNALS=1` and send `SIGUSR1` to dump goroutines into the log.
-- PTY tracing: set `AMUX_PTY_TRACE=1` or a comma-separated assistant list; traces write to the log dir (or OS temp dir if logging is disabled).
