@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 func TestAddDetachedTab_SetsLastFocusedFromCreatedAt(t *testing.T) {

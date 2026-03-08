@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestCmdAgentRunSessionExitsBeforeStartupReturnsInternalErrorAndDoesNotPersistTab(t *testing.T) {

@@ -8,12 +8,12 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/pty"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/ui/compositor"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/ui/compositor"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 // TerminalTabID is a unique identifier for a terminal tab

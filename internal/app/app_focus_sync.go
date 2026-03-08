@@ -1,6 +1,6 @@
 package app
 
-import "github.com/andyrewlee/amux/internal/messages"
+import "github.com/tlepoid/tumuxi/internal/messages"
 
 // syncPaneFocusFlags keeps child model focus flags consistent with focusedPane.
 // This is a defensive invariant to prevent stale multi-cursor states.

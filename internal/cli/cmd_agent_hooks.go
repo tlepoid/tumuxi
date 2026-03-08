@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // Test-seam variables: tests that mutate these must NOT use t.Parallel(),

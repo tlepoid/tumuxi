@@ -9,11 +9,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 // AddProject adds a new project to the registry.

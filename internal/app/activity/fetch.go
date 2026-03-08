@@ -6,19 +6,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
-// FetchTaggedSessions retrieves tmux sessions with amux tags and known-tab metadata.
+// FetchTaggedSessions retrieves tmux sessions with tumuxi tags and known-tab metadata.
 func FetchTaggedSessions(svc SessionFetcher, infoBySession map[string]SessionInfo, opts tmux.Options) ([]TaggedSession, error) {
 	if isNilSessionFetcher(svc) {
 		return nil, ErrTmuxUnavailable
 	}
 	keys := []string{
-		"@amux",
-		"@amux_workspace",
-		"@amux_tab",
-		"@amux_type",
+		"@tumuxi",
+		"@tumuxi_workspace",
+		"@tumuxi_tab",
+		"@tumuxi_type",
 		tmux.TagLastOutputAt,
 		tmux.TagLastInputAt,
 		tmux.TagSessionLeaseAt,
@@ -34,16 +34,16 @@ func FetchTaggedSessions(svc SessionFetcher, infoBySession map[string]SessionInf
 			continue
 		}
 		_, knownSession := infoBySession[name]
-		amuxTag := strings.TrimSpace(row.Tags["@amux"])
-		tagged := amuxTag != "" && amuxTag != "0"
+		tumuxiTag := strings.TrimSpace(row.Tags["@tumuxi"])
+		tagged := tumuxiTag != "" && tumuxiTag != "0"
 		if !tagged && !knownSession {
 			continue
 		}
 		session := tmux.SessionActivity{
 			Name:        name,
-			WorkspaceID: strings.TrimSpace(row.Tags["@amux_workspace"]),
-			TabID:       strings.TrimSpace(row.Tags["@amux_tab"]),
-			Type:        strings.TrimSpace(row.Tags["@amux_type"]),
+			WorkspaceID: strings.TrimSpace(row.Tags["@tumuxi_workspace"]),
+			TabID:       strings.TrimSpace(row.Tags["@tumuxi_tab"]),
+			Type:        strings.TrimSpace(row.Tags["@tumuxi_type"]),
 			Tagged:      tagged,
 		}
 		lastOutputAt, ok := ParseLastOutputAtTag(row.Tags[tmux.TagLastOutputAt])
@@ -141,7 +141,7 @@ func WorkspaceIDForSession(session tmux.SessionActivity, info SessionInfo, hasIn
 //
 // Detection priority:
 //  1. Known-tab metadata marks chat sessions active even if tmux type is stale.
-//  2. Session tag (@amux_type == "agent") is authoritative for agent sessions.
+//  2. Session tag (@tumuxi_type == "agent") is authoritative for agent sessions.
 //  3. For known sessions with no explicit type, fall back to tab metadata.
 func IsChatSession(session tmux.SessionActivity, info SessionInfo, hasInfo bool) bool {
 	if hasInfo && info.IsChat {
@@ -192,9 +192,9 @@ func HasRecentWindowActivity(sessionName string, recentActivityBySession map[str
 	return recentActivityBySession[name]
 }
 
-// WorkspaceIDFromSessionName extracts a workspace ID from an amux session name pattern.
+// WorkspaceIDFromSessionName extracts a workspace ID from an tumuxi session name pattern.
 func WorkspaceIDFromSessionName(name string) string {
-	const prefix = "amux-"
+	const prefix = "tumuxi-"
 	if !strings.HasPrefix(name, prefix) {
 		return ""
 	}

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func testSessionServices(t *testing.T, queryFn func(tmux.Options) ([]sessionRow, error)) *Services {
@@ -74,8 +74,8 @@ func TestCmdSessionListJSON(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-ws1-tab-1",
-				tags:      map[string]string{"@amux_workspace": "ws1", "@amux_type": "agent"},
+				name:      "tumuxi-ws1-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "ws1", "@tumuxi_type": "agent"},
 				attached:  true,
 				createdAt: 1000,
 			},
@@ -111,8 +111,8 @@ func TestCmdSessionPruneDryRunJSON(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-gone-tab-1",
-				tags:      map[string]string{"@amux_workspace": "gone", "@amux_type": "agent"},
+				name:      "tumuxi-gone-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "gone", "@tumuxi_type": "agent"},
 				createdAt: 100,
 			},
 		}, nil
@@ -149,8 +149,8 @@ func TestCmdSessionPruneYesJSON(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-gone-tab-1",
-				tags:      map[string]string{"@amux_workspace": "gone", "@amux_type": "agent"},
+				name:      "tumuxi-gone-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "gone", "@tumuxi_type": "agent"},
 				createdAt: 100,
 			},
 		}, nil
@@ -170,8 +170,8 @@ func TestCmdSessionPruneYesJSON(t *testing.T) {
 		t.Fatalf("code = %d, want %d; stderr: %s", code, ExitOK, errOut.String())
 	}
 
-	if len(killed) != 1 || killed[0] != "amux-gone-tab-1" {
-		t.Fatalf("killed = %v, want [amux-gone-tab-1]", killed)
+	if len(killed) != 1 || killed[0] != "tumuxi-gone-tab-1" {
+		t.Fatalf("killed = %v, want [tumuxi-gone-tab-1]", killed)
 	}
 
 	var env Envelope
@@ -211,8 +211,8 @@ func TestCmdSessionPruneDryRunHuman(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-ws-a-term-tab-1",
-				tags:      map[string]string{"@amux_workspace": "ws-a", "@amux_type": "term-tab"},
+				name:      "tumuxi-ws-a-term-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"},
 				createdAt: 100,
 			},
 		}, nil
@@ -254,13 +254,13 @@ func TestCmdSessionPrunePartialFailureReturnsError(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-gone-tab-1",
-				tags:      map[string]string{"@amux_workspace": "gone", "@amux_type": "agent"},
+				name:      "tumuxi-gone-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "gone", "@tumuxi_type": "agent"},
 				createdAt: 100,
 			},
 			{
-				name:      "amux-gone-tab-2",
-				tags:      map[string]string{"@amux_workspace": "gone", "@amux_type": "agent"},
+				name:      "tumuxi-gone-tab-2",
+				tags:      map[string]string{"@tumuxi_workspace": "gone", "@tumuxi_type": "agent"},
 				createdAt: 100,
 			},
 		}, nil
@@ -269,7 +269,7 @@ func TestCmdSessionPrunePartialFailureReturnsError(t *testing.T) {
 	origKill := tmuxKillSession
 	defer func() { tmuxKillSession = origKill }()
 	tmuxKillSession = func(name string, _ tmux.Options) error {
-		if name == "amux-gone-tab-2" {
+		if name == "tumuxi-gone-tab-2" {
 			return errors.New("kill failed")
 		}
 		return nil
@@ -297,8 +297,8 @@ func TestCmdSessionPruneFullSuccessReturnsOK(t *testing.T) {
 	svc := testSessionServices(t, func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
 			{
-				name:      "amux-gone-tab-1",
-				tags:      map[string]string{"@amux_workspace": "gone", "@amux_type": "agent"},
+				name:      "tumuxi-gone-tab-1",
+				tags:      map[string]string{"@tumuxi_workspace": "gone", "@tumuxi_type": "agent"},
 				createdAt: 100,
 			},
 		}, nil

@@ -29,10 +29,10 @@ type ErrorInfo struct {
 // Meta contains response metadata.
 type Meta struct {
 	GeneratedAt string `json:"generated_at"`
-	AmuxVersion string `json:"amux_version"`
+	AmuxVersion string `json:"tumuxi_version"`
 }
 
-const EnvelopeSchemaVersion = "amux.cli.v1"
+const EnvelopeSchemaVersion = "tumuxi.cli.v1"
 
 type responseContext struct {
 	mu        sync.RWMutex

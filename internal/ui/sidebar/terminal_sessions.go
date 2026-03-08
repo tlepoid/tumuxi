@@ -3,7 +3,7 @@ package sidebar
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 type SessionAttachInfo struct {

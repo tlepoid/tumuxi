@@ -7,7 +7,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/safego"
+	"github.com/tlepoid/tumuxi/internal/safego"
 )
 
 const ptyIdleHeartbeatInterval = time.Second

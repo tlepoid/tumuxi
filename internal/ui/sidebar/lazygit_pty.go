@@ -10,17 +10,17 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/pty"
-	"github.com/andyrewlee/amux/internal/safego"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/safego"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 // lazygitCommand returns the shell command used to launch lazygit, including
 // a --use-config-file flag that merges the user's existing config with an
-// amux-generated theme overlay (comma-separated, later files win).
+// tumuxi-generated theme overlay (comma-separated, later files win).
 // Falls back to plain "lazygit" if writing the overlay fails.
 func lazygitCommand() string {
 	hex := common.HexColor
@@ -62,7 +62,7 @@ func lazygitCommand() string {
 		hex(common.ColorForeground()),
 	)
 
-	themePath := filepath.Join(os.TempDir(), "amux-lazygit-theme.yml")
+	themePath := filepath.Join(os.TempDir(), "tumuxi-lazygit-theme.yml")
 	if err := os.WriteFile(themePath, []byte(yaml), 0o600); err != nil {
 		logging.Warn("lazygit: could not write theme config: %v", err)
 		return "lazygit"

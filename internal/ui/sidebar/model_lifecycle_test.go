@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/git"
+	"github.com/tlepoid/tumuxi/internal/git"
 )
 
 func TestSetGitStatusFastResultDoesNotPreserveOldLineStats(t *testing.T) {

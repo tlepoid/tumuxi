@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 const (

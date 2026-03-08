@@ -1,11 +1,10 @@
 #!/bin/sh
 set -e
 
-# amux installer script
-# Usage: curl -fsSL https://raw.githubusercontent.com/andyrewlee/amux/main/install.sh | sh
+# tumuxi installer script
 
-REPO="tlepoid/agent-mux"
-BINARY="amux"
+REPO="tlepoid/tumuxi"
+BINARY="tumuxi"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
 # Detect OS

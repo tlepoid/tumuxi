@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/app/activity"
-	"github.com/andyrewlee/amux/internal/ui/dashboard"
+	"github.com/tlepoid/tumuxi/internal/app/activity"
+	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
 )
 
 func TestHandleTmuxActivityResult_OwnerTransitionErrorResetsHysteresis(t *testing.T) {

@@ -8,21 +8,21 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/app/activity"
-	"github.com/andyrewlee/amux/internal/config"
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/process"
-	"github.com/andyrewlee/amux/internal/supervisor"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/ui/center"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/ui/compositor"
-	"github.com/andyrewlee/amux/internal/ui/dashboard"
-	"github.com/andyrewlee/amux/internal/ui/layout"
-	"github.com/andyrewlee/amux/internal/ui/sidebar"
+	"github.com/tlepoid/tumuxi/internal/app/activity"
+	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/process"
+	"github.com/tlepoid/tumuxi/internal/supervisor"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/ui/center"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/ui/compositor"
+	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
+	"github.com/tlepoid/tumuxi/internal/ui/layout"
+	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
 )
 
 // New creates a new App instance.
@@ -256,13 +256,13 @@ func (a *App) startTmuxSyncTicker() tea.Cmd {
 }
 
 func (a *App) tmuxSyncInterval() time.Duration {
-	value := strings.TrimSpace(os.Getenv("AMUX_TMUX_SYNC_INTERVAL"))
+	value := strings.TrimSpace(os.Getenv("TUMUXI_TMUX_SYNC_INTERVAL"))
 	if value == "" {
 		return tmuxSyncDefaultInterval
 	}
 	interval, err := time.ParseDuration(value)
 	if err != nil || interval <= 0 {
-		logging.Warn("Invalid AMUX_TMUX_SYNC_INTERVAL=%q; using %s", value, tmuxSyncDefaultInterval)
+		logging.Warn("Invalid TUMUXI_TMUX_SYNC_INTERVAL=%q; using %s", value, tmuxSyncDefaultInterval)
 		return tmuxSyncDefaultInterval
 	}
 	return interval
@@ -273,14 +273,14 @@ func applyTmuxEnvFromConfig(cfg *config.Config, force bool) {
 		return
 	}
 	if force {
-		setEnvOrUnset("AMUX_TMUX_SERVER", cfg.UI.TmuxServer)
-		setEnvOrUnset("AMUX_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
-		setEnvOrUnset("AMUX_TMUX_SYNC_INTERVAL", cfg.UI.TmuxSyncInterval)
+		setEnvOrUnset("TUMUXI_TMUX_SERVER", cfg.UI.TmuxServer)
+		setEnvOrUnset("TUMUXI_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
+		setEnvOrUnset("TUMUXI_TMUX_SYNC_INTERVAL", cfg.UI.TmuxSyncInterval)
 		return
 	}
-	setEnvIfNonEmpty("AMUX_TMUX_SERVER", cfg.UI.TmuxServer)
-	setEnvIfNonEmpty("AMUX_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
-	setEnvIfNonEmpty("AMUX_TMUX_SYNC_INTERVAL", cfg.UI.TmuxSyncInterval)
+	setEnvIfNonEmpty("TUMUXI_TMUX_SERVER", cfg.UI.TmuxServer)
+	setEnvIfNonEmpty("TUMUXI_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
+	setEnvIfNonEmpty("TUMUXI_TMUX_SYNC_INTERVAL", cfg.UI.TmuxSyncInterval)
 }
 
 // startFileWatcher starts watching for file changes and returns events.

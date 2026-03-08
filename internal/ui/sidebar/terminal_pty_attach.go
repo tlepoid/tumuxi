@@ -10,11 +10,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/pty"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // createTerminalTab creates a new terminal tab for the workspace
@@ -37,7 +37,7 @@ func (m *TerminalModel) createTerminalTab(ws *data.Workspace) tea.Cmd {
 
 		var scrollback []byte
 		env := []string{"COLORTERM=truecolor"}
-		sessionName := tmux.SessionName("amux", wsID, string(tabID))
+		sessionName := tmux.SessionName("tumuxi", wsID, string(tabID))
 		// Reuse scrollback if a prior tmux session with the same name exists
 		// (e.g., app restart with persisted tmux session).
 		if state, err := tmux.SessionStateFor(sessionName, opts); err == nil && state.Exists && state.HasLivePane {
@@ -106,7 +106,7 @@ func (m *TerminalModel) ReattachActiveTab() tea.Cmd {
 	}
 	ws := m.workspace
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), string(tab.ID))
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(tab.ID))
 	}
 	return m.attachToSession(ws, tab.ID, sessionName, true, "reattach")
 }
@@ -129,7 +129,7 @@ func (m *TerminalModel) RestartActiveTab() tea.Cmd {
 	}
 	ws := m.workspace
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), string(tab.ID))
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(tab.ID))
 	}
 	m.detachState(ts, false)
 	_ = tmux.KillSession(sessionName, m.getTmuxOptions())
@@ -284,31 +284,31 @@ func terminalTagChecks(tags tmux.SessionTags) []struct {
 		key  string
 		want string
 	}{
-		{key: "@amux", want: "1"},
+		{key: "@tumuxi", want: "1"},
 	}
 	if strings.TrimSpace(tags.WorkspaceID) != "" {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_workspace", want: strings.TrimSpace(tags.WorkspaceID)})
+		}{key: "@tumuxi_workspace", want: strings.TrimSpace(tags.WorkspaceID)})
 	}
 	if strings.TrimSpace(tags.TabID) != "" {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_tab", want: strings.TrimSpace(tags.TabID)})
+		}{key: "@tumuxi_tab", want: strings.TrimSpace(tags.TabID)})
 	}
 	if strings.TrimSpace(tags.Type) != "" {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_type", want: strings.TrimSpace(tags.Type)})
+		}{key: "@tumuxi_type", want: strings.TrimSpace(tags.Type)})
 	}
 	if strings.TrimSpace(tags.Assistant) != "" {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_assistant", want: strings.TrimSpace(tags.Assistant)})
+		}{key: "@tumuxi_assistant", want: strings.TrimSpace(tags.Assistant)})
 	}
 	// CreatedAt is optional for reattach paths; SessionOwner/LeaseAtMS remain the
 	// primary freshness/ownership tags for those sessions.
@@ -316,13 +316,13 @@ func terminalTagChecks(tags tmux.SessionTags) []struct {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_created_at", want: strconv.FormatInt(tags.CreatedAt, 10)})
+		}{key: "@tumuxi_created_at", want: strconv.FormatInt(tags.CreatedAt, 10)})
 	}
 	if strings.TrimSpace(tags.InstanceID) != "" {
 		checks = append(checks, struct {
 			key  string
 			want string
-		}{key: "@amux_instance", want: strings.TrimSpace(tags.InstanceID)})
+		}{key: "@tumuxi_instance", want: strings.TrimSpace(tags.InstanceID)})
 	}
 	if strings.TrimSpace(tags.SessionOwner) != "" {
 		checks = append(checks, struct {

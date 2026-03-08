@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # poll-agent.sh — Poll agent capture with change detection.
-# Fallback for environments without `amux agent watch`.
+# Fallback for environments without `tumuxi agent watch`.
 #
 # Usage: poll-agent.sh --session <name> [--lines 100] [--interval 2] [--timeout 120]
 #
-# Polls amux agent capture and prints only new/changed content.
+# Polls tumuxi agent capture and prints only new/changed content.
 # Exits when idle (no changes for --timeout seconds) or session disappears.
 
 set -euo pipefail
@@ -33,7 +33,7 @@ last_hash=""
 idle_since=""
 
 while true; do
-  result=$(amux --json agent capture "$SESSION" --lines "$LINES" 2>&1) || true
+  result=$(tumuxi --json agent capture "$SESSION" --lines "$LINES" 2>&1) || true
 
   ok=$(echo "$result" | jq -r '.ok // false' 2>/dev/null) || ok="false"
   if [[ "$ok" != "true" ]]; then

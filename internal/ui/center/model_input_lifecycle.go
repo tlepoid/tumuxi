@@ -7,11 +7,11 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 const activityTagThrottle = 1 * time.Second

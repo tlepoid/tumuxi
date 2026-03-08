@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 // Config holds the application configuration

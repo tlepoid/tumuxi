@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# openclaw-present.sh — augment amux chat payloads with channel-neutral render data.
+# openclaw-present.sh — augment tumuxi chat payloads with channel-neutral render data.
 #
 # Reads one JSON object from stdin and emits the same object plus:
 # - normalized quick action ids (`action_id`)
@@ -262,7 +262,7 @@ jq -c --arg target_channel "$TARGET_CHANNEL" '
         | from_entries
       )
     | .openclaw = {
-        schema_version: "amux.openclaw.channel-ux.v1",
+        schema_version: "tumuxi.openclaw.channel-ux.v1",
         supported_channels: $supported_channels,
         target_channel: $preferred,
         selected_channel: $selected_channel,

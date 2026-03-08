@@ -11,9 +11,9 @@ func TestOpenClawDXStart_InvalidAssistantReturnsCommandError(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -56,9 +56,9 @@ func TestOpenClawDXReview_InvalidAssistantReturnsCommandError(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -100,9 +100,9 @@ func TestOpenClawDXWorkflowKickoff_InvalidAssistantReturnsCommandError(t *testin
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -136,9 +136,9 @@ func TestOpenClawDXWorkflowDual_InvalidAssistantReturnsCommandError(t *testing.T
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -181,9 +181,9 @@ func TestOpenClawDXStart_UnlistedAssistantPassesThrough(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "openclaw-turn.sh")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash

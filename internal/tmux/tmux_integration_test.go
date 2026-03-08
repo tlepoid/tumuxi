@@ -39,7 +39,7 @@ func ensureTmuxServer(t *testing.T, opts Options) {
 // a cleanup that kills the server when the test finishes.
 func testServer(t *testing.T) Options {
 	t.Helper()
-	name := fmt.Sprintf("amux-test-%d", time.Now().UnixNano())
+	name := fmt.Sprintf("tumuxi-test-%d", time.Now().UnixNano())
 	opts := Options{
 		ServerName:     name,
 		ConfigPath:     "/dev/null",
@@ -124,17 +124,17 @@ func TestSetSessionTagValue_AgentIDResolutionRoundtrip(t *testing.T) {
 	skipIfNoTmux(t)
 	opts := testServer(t)
 
-	sessionName := "amux-ws123-tab456"
+	sessionName := "tumuxi-ws123-tab456"
 	createSession(t, opts, sessionName, "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
 	// Simulate what cmd_agent_run_write does: set all tags.
 	tags := []struct{ key, value string }{
-		{"@amux", "1"},
-		{"@amux_workspace", "ws123"},
-		{"@amux_tab", "tab456"},
-		{"@amux_type", "agent"},
-		{"@amux_assistant", "test-assistant"},
+		{"@tumuxi", "1"},
+		{"@tumuxi_workspace", "ws123"},
+		{"@tumuxi_tab", "tab456"},
+		{"@tumuxi_type", "agent"},
+		{"@tumuxi_assistant", "test-assistant"},
 	}
 	for _, tag := range tags {
 		if err := SetSessionTagValue(sessionName, tag.key, tag.value, opts); err != nil {
@@ -145,9 +145,9 @@ func TestSetSessionTagValue_AgentIDResolutionRoundtrip(t *testing.T) {
 	// Simulate what resolveSessionNameForAgentID does: query by tags.
 	rows, err := SessionsWithTags(
 		map[string]string{
-			"@amux":           "1",
-			"@amux_workspace": "ws123",
-			"@amux_tab":       "tab456",
+			"@tumuxi":           "1",
+			"@tumuxi_workspace": "ws123",
+			"@tumuxi_tab":       "tab456",
 		},
 		nil,
 		opts,
@@ -167,7 +167,7 @@ func TestGlobalOptionValue_MissingOptionReturnsEmpty(t *testing.T) {
 	skipIfNoTmux(t)
 	opts := testServer(t)
 
-	got, err := GlobalOptionValue("@amux_missing_option", opts)
+	got, err := GlobalOptionValue("@tumuxi_missing_option", opts)
 	if err != nil {
 		t.Fatalf("GlobalOptionValue missing option: %v", err)
 	}
@@ -179,12 +179,12 @@ func TestGlobalOptionValue_MissingOptionReturnsEmpty(t *testing.T) {
 func TestGlobalOptionValue_NoServerReturnsError(t *testing.T) {
 	skipIfNoTmux(t)
 	opts := Options{
-		ServerName:     fmt.Sprintf("amux-noserver-%d", time.Now().UnixNano()),
+		ServerName:     fmt.Sprintf("tumuxi-noserver-%d", time.Now().UnixNano()),
 		ConfigPath:     "/dev/null",
 		CommandTimeout: 5 * time.Second,
 	}
 
-	got, err := GlobalOptionValue("@amux_missing_option", opts)
+	got, err := GlobalOptionValue("@tumuxi_missing_option", opts)
 	if err == nil {
 		t.Fatal("expected no-server lookup to return an error")
 	}
@@ -332,12 +332,12 @@ func TestAmuxSessionsByWorkspace_GroupsByWorkspace(t *testing.T) {
 	createSession(t, opts, "s3", "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
-	setTag(t, opts, "s1", "@amux", "1")
-	setTag(t, opts, "s1", "@amux_workspace", "ws-a")
-	setTag(t, opts, "s2", "@amux", "1")
-	setTag(t, opts, "s2", "@amux_workspace", "ws-a")
-	setTag(t, opts, "s3", "@amux", "1")
-	setTag(t, opts, "s3", "@amux_workspace", "ws-b")
+	setTag(t, opts, "s1", "@tumuxi", "1")
+	setTag(t, opts, "s1", "@tumuxi_workspace", "ws-a")
+	setTag(t, opts, "s2", "@tumuxi", "1")
+	setTag(t, opts, "s2", "@tumuxi_workspace", "ws-a")
+	setTag(t, opts, "s3", "@tumuxi", "1")
+	setTag(t, opts, "s3", "@tumuxi_workspace", "ws-b")
 
 	m, err := AmuxSessionsByWorkspace(opts)
 	if err != nil {
@@ -359,8 +359,8 @@ func TestAmuxSessionsByWorkspace_IgnoresNonAmux(t *testing.T) {
 	createSession(t, opts, "tagged", "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
-	setTag(t, opts, "tagged", "@amux", "1")
-	setTag(t, opts, "tagged", "@amux_workspace", "ws-x")
+	setTag(t, opts, "tagged", "@tumuxi", "1")
+	setTag(t, opts, "tagged", "@tumuxi_workspace", "ws-x")
 
 	m, err := AmuxSessionsByWorkspace(opts)
 	if err != nil {
@@ -381,7 +381,7 @@ func TestAmuxSessionsByWorkspace_SkipsNoWorkspace(t *testing.T) {
 	createSession(t, opts, "no-ws", "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
-	setTag(t, opts, "no-ws", "@amux", "1")
+	setTag(t, opts, "no-ws", "@tumuxi", "1")
 
 	m, err := AmuxSessionsByWorkspace(opts)
 	if err != nil {
@@ -475,7 +475,7 @@ func TestSessionTagValue_NonexistentSession(t *testing.T) {
 	skipIfNoTmux(t)
 	opts := testServer(t)
 
-	val, err := SessionTagValue("no-such-session", "@amux", opts)
+	val, err := SessionTagValue("no-such-session", "@tumuxi", opts)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
 	}

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/logging"
 )
 
 // RestartPolicy controls when a worker should be restarted.

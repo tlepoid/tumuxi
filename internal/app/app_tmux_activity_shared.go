@@ -9,14 +9,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 const (
-	tmuxActivityOwnerOption     = "@amux_activity_owner"
-	tmuxActivityHeartbeatOption = "@amux_activity_owner_heartbeat_ms"
-	tmuxActivityEpochOption     = "@amux_activity_owner_epoch"
-	tmuxActivitySnapshotOption  = "@amux_activity_active_workspaces"
+	tmuxActivityOwnerOption     = "@tumuxi_activity_owner"
+	tmuxActivityHeartbeatOption = "@tumuxi_activity_owner_heartbeat_ms"
+	tmuxActivityEpochOption     = "@tumuxi_activity_owner_epoch"
+	tmuxActivitySnapshotOption  = "@tumuxi_activity_active_workspaces"
 )
 
 var errTmuxActivityOwnershipLostAfterPublish = errors.New("tmux activity ownership lost after snapshot publish")

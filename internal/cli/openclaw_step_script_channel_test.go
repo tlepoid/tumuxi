@@ -13,22 +13,22 @@ func TestOpenClawStepScriptRun_QuietVerbositySuppressesDetailSections(t *testing
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_AMUX_RUN_JSON:?missing FAKE_AMUX_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake amux: %v", err)
+		t.Fatalf("write fake tumuxi: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-quiet","agent_id":"agent-quiet","workspace_id":"ws-quiet","assistant":"codex","response":{"status":"idle","latest_line":"done","summary":"done","delta":"line1\nline2\nline3\nline4","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -44,7 +44,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_AMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
 	env = withEnv(env, "OPENCLAW_STEP_VERBOSITY", "quiet")
 	cmd.Env = env
 	out, err := cmd.Output()
@@ -74,22 +74,22 @@ func TestOpenClawStepScriptRun_DisablesInlineButtonsWhenScopeOff(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_AMUX_RUN_JSON:?missing FAKE_AMUX_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake amux: %v", err)
+		t.Fatalf("write fake tumuxi: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-inline-off","agent_id":"agent-inline-off","workspace_id":"ws-inline-off","assistant":"codex","response":{"status":"idle","latest_line":"done","summary":"done","delta":"line1\nline2","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -105,7 +105,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_AMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
 	env = withEnv(env, "OPENCLAW_INLINE_BUTTONS_SCOPE", "off")
 	cmd.Env = env
 	out, err := cmd.Output()
@@ -141,22 +141,22 @@ func TestOpenClawStepScriptRun_AddsChunkContinuationMetadata(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_AMUX_RUN_JSON:?missing FAKE_AMUX_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake amux: %v", err)
+		t.Fatalf("write fake tumuxi: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-4","agent_id":"agent-4","workspace_id":"ws-4","assistant":"codex","response":{"status":"idle","latest_line":"done","summary":"This is a very long summary intended to force OpenClaw chunking into multiple segments with continuation metadata for better mobile readability.","delta":"line1\nline2\nline3\nline4\nline5\nline6","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -172,7 +172,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_AMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
 	env = withEnv(env, "OPENCLAW_STEP_CHUNK_CHARS", "80")
 	cmd.Env = env
 	out, err := cmd.Output()
@@ -207,27 +207,27 @@ func TestOpenClawStepScriptRun_UsesAbsoluteSelfPathInSuggestedCommand(t *testing
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	relScriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-step.sh")
+	relScriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
 	scriptPath, err := filepath.Abs(relScriptPath)
 	if err != nil {
 		t.Fatalf("abs script path: %v", err)
 	}
 
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_AMUX_RUN_JSON:?missing FAKE_AMUX_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake amux: %v", err)
+		t.Fatalf("write fake tumuxi: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-abs","agent_id":"agent-abs","workspace_id":"ws-abs","assistant":"codex","response":{"status":"timed_out","latest_line":"","summary":"","delta":"","needs_input":false,"input_hint":"","timed_out":true,"session_exited":false,"changed":false}}}`
@@ -244,7 +244,7 @@ exit 2
 	cmd.Dir = t.TempDir()
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_AMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
 	cmd.Env = env
 	out, err := cmd.Output()
 	if err != nil {
@@ -256,7 +256,7 @@ exit 2
 		t.Fatalf("decode json: %v\nraw: %s", err, string(out))
 	}
 	suggested, _ := payload["suggested_command"].(string)
-	if !strings.HasPrefix(suggested, "skills/amux/scripts/openclaw-step.sh send --agent agent-abs") {
+	if !strings.HasPrefix(suggested, "skills/tumuxi/scripts/openclaw-step.sh send --agent agent-abs") {
 		t.Fatalf("suggested_command = %q, want openclaw-step command prefix", suggested)
 	}
 }

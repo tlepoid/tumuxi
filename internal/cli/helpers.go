@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func isReadable(path string) bool {

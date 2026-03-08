@@ -12,9 +12,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/perf"
-	"github.com/andyrewlee/amux/internal/ui/center"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/perf"
+	"github.com/tlepoid/tumuxi/internal/ui/center"
 )
 
 func TestSoakHarnessPTY(t *testing.T) {
@@ -100,12 +100,12 @@ func TestSoakHarnessPTY(t *testing.T) {
 
 func soakDuration(t *testing.T, fallback time.Duration) time.Duration {
 	t.Helper()
-	raw := os.Getenv("AMUX_SOAK_DURATION")
+	raw := os.Getenv("TUMUXI_SOAK_DURATION")
 	if raw == "" {
-		if mins := os.Getenv("AMUX_SOAK_MINUTES"); mins != "" {
+		if mins := os.Getenv("TUMUXI_SOAK_MINUTES"); mins != "" {
 			val, err := strconv.Atoi(mins)
 			if err != nil || val <= 0 {
-				t.Fatalf("invalid AMUX_SOAK_MINUTES=%q", mins)
+				t.Fatalf("invalid TUMUXI_SOAK_MINUTES=%q", mins)
 			}
 			return time.Duration(val) * time.Minute
 		}
@@ -113,7 +113,7 @@ func soakDuration(t *testing.T, fallback time.Duration) time.Duration {
 	}
 	d, err := time.ParseDuration(raw)
 	if err != nil || d <= 0 {
-		t.Fatalf("invalid AMUX_SOAK_DURATION=%q", raw)
+		t.Fatalf("invalid TUMUXI_SOAK_DURATION=%q", raw)
 	}
 	return d
 }

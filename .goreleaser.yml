@@ -5,9 +5,9 @@ before:
     - go mod tidy
 
 builds:
-  - id: amux
-    main: ./cmd/amux
-    binary: amux
+  - id: tumuxi
+    main: ./cmd/tumuxi
+    binary: tumuxi
     env:
       - CGO_ENABLED=0
     goos:
@@ -45,7 +45,7 @@ changelog:
 release:
   github:
     owner: tlepoid
-    name: agent-mux
+    name: tumuxi
   draft: false
   prerelease: auto
   name_template: "v{{.Version}}"

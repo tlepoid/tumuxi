@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestActiveWorkspaceIDsFromTags_StaleTagFallbackClearsHoldAndDecaysQuickly(t *testing.T) {

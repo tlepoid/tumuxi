@@ -65,16 +65,16 @@ func KillWorkspaceSessions(wsID string, opts Options) error {
 	if wsID == "" {
 		return nil
 	}
-	prefix := SessionName("amux", wsID) + "-"
+	prefix := SessionName("tumuxi", wsID) + "-"
 	return KillSessionsWithPrefix(prefix, opts)
 }
 
-// AmuxSessionsByWorkspace returns all @amux=1 sessions grouped by their
-// @amux_workspace value. Sessions without a workspace tag are omitted.
+// AmuxSessionsByWorkspace returns all @tumuxi=1 sessions grouped by their
+// @tumuxi_workspace value. Sessions without a workspace tag are omitted.
 func AmuxSessionsByWorkspace(opts Options) (map[string][]string, error) {
 	rows, err := SessionsWithTags(
-		map[string]string{"@amux": "1"},
-		[]string{"@amux_workspace"},
+		map[string]string{"@tumuxi": "1"},
+		[]string{"@tumuxi_workspace"},
 		opts,
 	)
 	if err != nil {
@@ -82,7 +82,7 @@ func AmuxSessionsByWorkspace(opts Options) (map[string][]string, error) {
 	}
 	out := make(map[string][]string)
 	for _, row := range rows {
-		wsID := row.Tags["@amux_workspace"]
+		wsID := row.Tags["@tumuxi_workspace"]
 		if wsID == "" {
 			continue
 		}

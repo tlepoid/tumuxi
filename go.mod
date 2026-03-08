@@ -1,4 +1,4 @@
-module github.com/andyrewlee/amux
+module github.com/tlepoid/tumuxi
 
 go 1.24.13
 

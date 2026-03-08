@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 type sessionRow struct {
@@ -21,11 +21,11 @@ type sessionRow struct {
 func buildSessionList(rows []sessionRow, now time.Time) []sessionListEntry {
 	var entries []sessionListEntry
 	for _, row := range rows {
-		wsID := row.tags["@amux_workspace"]
+		wsID := row.tags["@tumuxi_workspace"]
 		if wsID == "" {
 			wsID = inferWorkspaceID(row.name)
 		}
-		sessionType := row.tags["@amux_type"]
+		sessionType := row.tags["@tumuxi_type"]
 		if sessionType == "" {
 			sessionType = inferSessionType(row.name)
 		}
@@ -57,16 +57,16 @@ func findPruneCandidates(rows []sessionRow, wsIDs []data.WorkspaceID, minAge tim
 
 	var candidates []pruneEntry
 	for _, row := range rows {
-		// Only consider amux-owned sessions for pruning.
+		// Only consider tumuxi-owned sessions for pruning.
 		if !isAmuxSession(row) {
 			continue
 		}
 
-		wsID := row.tags["@amux_workspace"]
+		wsID := row.tags["@tumuxi_workspace"]
 		if wsID == "" {
 			wsID = inferWorkspaceID(row.name)
 		}
-		sessionType := row.tags["@amux_type"]
+		sessionType := row.tags["@tumuxi_type"]
 		if sessionType == "" {
 			sessionType = inferSessionType(row.name)
 		}
@@ -123,12 +123,12 @@ func classifyForPrune(wsID, sessionType string, attached bool, validWS map[strin
 	return ""
 }
 
-// isAmuxSession returns true if the session is owned by amux (tagged or name-prefixed).
+// isAmuxSession returns true if the session is owned by tumuxi (tagged or name-prefixed).
 func isAmuxSession(row sessionRow) bool {
-	if row.tags["@amux_workspace"] != "" {
+	if row.tags["@tumuxi_workspace"] != "" {
 		return true
 	}
-	return strings.HasPrefix(row.name, "amux-")
+	return strings.HasPrefix(row.name, "tumuxi-")
 }
 
 // defaultQuerySessionRows queries tmux list-sessions with tags, attached state, and creation time.
@@ -136,10 +136,10 @@ func defaultQuerySessionRows(opts tmux.Options) ([]sessionRow, error) {
 	if err := tmux.EnsureAvailable(); err != nil {
 		return nil, err
 	}
-	// Query amux tags.
+	// Query tumuxi tags.
 	rows, err := tmux.SessionsWithTags(
 		nil,
-		[]string{"@amux_workspace", "@amux_type", "@amux_created_at"},
+		[]string{"@tumuxi_workspace", "@tumuxi_type", "@tumuxi_created_at"},
 		opts,
 	)
 	if err != nil {
@@ -169,7 +169,7 @@ func defaultQuerySessionRows(opts tmux.Options) ([]sessionRow, error) {
 
 	var result []sessionRow
 	for _, r := range rows {
-		createdAt := parseTagCreatedAt(r.Tags["@amux_created_at"])
+		createdAt := parseTagCreatedAt(r.Tags["@tumuxi_created_at"])
 		if createdAt == 0 {
 			createdAt = createdMap[r.Name]
 		}
@@ -195,12 +195,12 @@ func parseTagCreatedAt(raw string) int64 {
 	return v
 }
 
-// inferWorkspaceID extracts workspace ID from a session name like "amux-<wsID>-tab-1".
+// inferWorkspaceID extracts workspace ID from a session name like "tumuxi-<wsID>-tab-1".
 func inferWorkspaceID(name string) string {
-	if !strings.HasPrefix(name, "amux-") {
+	if !strings.HasPrefix(name, "tumuxi-") {
 		return ""
 	}
-	rest := name[len("amux-"):]
+	rest := name[len("tumuxi-"):]
 	if idx := strings.Index(rest, "-term-tab-"); idx > 0 {
 		return rest[:idx]
 	}

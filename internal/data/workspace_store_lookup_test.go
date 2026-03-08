@@ -15,7 +15,7 @@ func TestWorkspaceStore_LoadMetadataForFallsBackToPathMatch(t *testing.T) {
 	// canonicalLookupPath can resolve them.
 	base := t.TempDir()
 	repoDir := filepath.Join(base, "myrepo")
-	rootDir := filepath.Join(repoDir, ".amux", "workspaces", "feature")
+	rootDir := filepath.Join(repoDir, ".tumuxi", "workspaces", "feature")
 	if err := os.MkdirAll(rootDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll(rootDir) error = %v", err)
 	}
@@ -103,7 +103,7 @@ func TestWorkspaceStore_FallbackPrefersActiveOverArchived(t *testing.T) {
 
 	base := t.TempDir()
 	repoDir := filepath.Join(base, "myrepo")
-	rootDir := filepath.Join(repoDir, ".amux", "workspaces", "feature")
+	rootDir := filepath.Join(repoDir, ".tumuxi", "workspaces", "feature")
 	if err := os.MkdirAll(rootDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll(rootDir) error = %v", err)
 	}
@@ -174,7 +174,7 @@ func TestWorkspaceStore_FallbackPrefersNewestCreated(t *testing.T) {
 
 	base := t.TempDir()
 	repoDir := filepath.Join(base, "repo")
-	rootDir := filepath.Join(repoDir, ".amux", "workspaces", "feature")
+	rootDir := filepath.Join(repoDir, ".tumuxi", "workspaces", "feature")
 	if err := os.MkdirAll(rootDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll(rootDir) error = %v", err)
 	}
@@ -239,7 +239,7 @@ func TestWorkspaceStore_ListByRepoCWDIndependent(t *testing.T) {
 	// Create real directories.
 	base := t.TempDir()
 	repoDir := filepath.Join(base, "project")
-	rootDir := filepath.Join(repoDir, ".amux", "workspaces", "ws1")
+	rootDir := filepath.Join(repoDir, ".tumuxi", "workspaces", "ws1")
 	if err := os.MkdirAll(rootDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll(rootDir) error = %v", err)
 	}

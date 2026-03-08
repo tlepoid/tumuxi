@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func cmdTerminalRun(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux terminal run --workspace <id> --text <command> [--enter=true] [--create=true] [--json]"
+	const usage = "Usage: tumuxi terminal run --workspace <id> --text <command> [--enter=true] [--create=true] [--json]"
 	fs := newFlagSet("terminal run")
 	workspace := fs.String("workspace", "", "workspace ID (required)")
 	text := fs.String("text", "", "command text to send (required)")
@@ -142,14 +142,14 @@ func resolveTerminalSessionForWorkspace(wsID data.WorkspaceID, opts tmux.Options
 	bestAttached := false
 	bestCreated := int64(-1)
 	for _, row := range rows {
-		sessionType := strings.TrimSpace(row.tags["@amux_type"])
+		sessionType := strings.TrimSpace(row.tags["@tumuxi_type"])
 		if sessionType == "" {
 			sessionType = inferSessionType(row.name)
 		}
 		if !isTermTabType(sessionType) {
 			continue
 		}
-		rowWSID := strings.TrimSpace(row.tags["@amux_workspace"])
+		rowWSID := strings.TrimSpace(row.tags["@tumuxi_workspace"])
 		if rowWSID == "" {
 			rowWSID = inferWorkspaceID(row.name)
 		}
@@ -180,7 +180,7 @@ func createWorkspaceTerminalSession(ws *data.Workspace, wsID data.WorkspaceID, o
 	}
 
 	tabID := "term-tab-" + strconv.FormatInt(time.Now().UnixNano(), 36)
-	sessionName := tmux.SessionName("amux", string(wsID), tabID)
+	sessionName := tmux.SessionName("tumuxi", string(wsID), tabID)
 	createArgs := []string{
 		"new-session", "-d", "-s", sessionName, "-c", root, terminalShellCommand(),
 	}
@@ -197,13 +197,13 @@ func createWorkspaceTerminalSession(ws *data.Workspace, wsID data.WorkspaceID, o
 		Key   string
 		Value string
 	}{
-		{Key: "@amux", Value: "1"},
-		{Key: "@amux_workspace", Value: string(wsID)},
-		{Key: "@amux_tab", Value: tabID},
-		{Key: "@amux_type", Value: "terminal"},
-		{Key: "@amux_assistant", Value: "terminal"},
-		{Key: "@amux_created_at", Value: nowUnix},
-		{Key: "@amux_instance", Value: "cli"},
+		{Key: "@tumuxi", Value: "1"},
+		{Key: "@tumuxi_workspace", Value: string(wsID)},
+		{Key: "@tumuxi_tab", Value: tabID},
+		{Key: "@tumuxi_type", Value: "terminal"},
+		{Key: "@tumuxi_assistant", Value: "terminal"},
+		{Key: "@tumuxi_created_at", Value: nowUnix},
+		{Key: "@tumuxi_instance", Value: "cli"},
 		{Key: tmux.TagSessionOwner, Value: "cli"},
 		{Key: tmux.TagSessionLeaseAt, Value: nowMS},
 	}

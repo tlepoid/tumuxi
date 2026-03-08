@@ -5,12 +5,12 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/config"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/ui/center"
-	"github.com/andyrewlee/amux/internal/ui/dashboard"
-	"github.com/andyrewlee/amux/internal/ui/layout"
-	"github.com/andyrewlee/amux/internal/ui/sidebar"
+	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/ui/center"
+	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
+	"github.com/tlepoid/tumuxi/internal/ui/layout"
+	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
 )
 
 func TestPaneForPoint_NoLayoutReturnsNoMatch(t *testing.T) {

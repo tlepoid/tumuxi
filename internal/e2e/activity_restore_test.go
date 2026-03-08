@@ -21,7 +21,7 @@ func TestWorkspaceFirstActivation_DoesNotFlashTabActive(t *testing.T) {
 	// Emit a small startup line, then idle. This mirrors real sessions that have
 	// existing content but no current work.
 	binDir := writeStubAssistantScript(t, home, "claude", "#!/bin/sh\necho booted\nsleep 1000\n")
-	server := "amux-e2e-first-activation"
+	server := "tumuxi-e2e-first-activation"
 	defer killTmuxServer(t, server)
 
 	env := sessionEnv(binDir, server)

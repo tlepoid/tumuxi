@@ -9,14 +9,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/logging"
 )
 
 const workspaceFilename = "workspace.json"
 
 // WorkspaceStore manages workspace persistence
 type WorkspaceStore struct {
-	root             string // ~/.amux/workspaces-metadata
+	root             string // ~/.tumuxi/workspaces-metadata
 	defaultAssistant string
 }
 

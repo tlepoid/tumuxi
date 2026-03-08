@@ -3,12 +3,12 @@ package app
 import (
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/config"
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/ui/center"
-	"github.com/andyrewlee/amux/internal/ui/dashboard"
-	"github.com/andyrewlee/amux/internal/ui/sidebar"
+	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/ui/center"
+	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
+	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
 )
 
 func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing.T) {
@@ -24,13 +24,13 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 		{
 			Assistant:   "codex",
 			Name:        "existing",
-			SessionName: "amux-existing-session",
+			SessionName: "tumuxi-existing-session",
 			Status:      "running",
 		},
 		{
 			Assistant:   "codex",
 			Name:        "external",
-			SessionName: "amux-external-session",
+			SessionName: "tumuxi-external-session",
 			Status:      "running",
 		},
 	}
@@ -47,7 +47,7 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 		ID:          center.TabID("existing"),
 		Name:        "existing",
 		Assistant:   "codex",
-		SessionName: "amux-existing-session",
+		SessionName: "tumuxi-existing-session",
 		Workspace:   oldWS,
 		Running:     true,
 	})
@@ -74,7 +74,7 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 	}
 	hasExternal := false
 	for _, tab := range tabs {
-		if tab.SessionName == "amux-external-session" {
+		if tab.SessionName == "tumuxi-external-session" {
 			hasExternal = true
 			break
 		}
@@ -97,7 +97,7 @@ func TestRebindActiveSelection_DoesNotRehydratePersistedTabsWhenWorkspaceStateEx
 		{
 			Assistant:   "codex",
 			Name:        "stale",
-			SessionName: "amux-stale-session",
+			SessionName: "tumuxi-stale-session",
 			Status:      "running",
 		},
 	}

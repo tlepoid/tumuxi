@@ -7,7 +7,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/andyrewlee/amux/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/messages"
 )
 
 // SettingsResult is sent when the settings dialog is closed.

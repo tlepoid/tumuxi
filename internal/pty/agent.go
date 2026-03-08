@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/config"
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // AgentType represents the type of AI agent
@@ -79,7 +79,7 @@ func (m *AgentManager) CreateAgentWithTags(ws *data.Workspace, agentType AgentTy
 		return nil, fmt.Errorf("unknown agent type: %s", agentType)
 	}
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), string(agentType))
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(agentType))
 	}
 	if err := tmux.EnsureAvailable(); err != nil {
 		return nil, err
@@ -143,7 +143,7 @@ func (m *AgentManager) CreateViewerWithTags(ws *data.Workspace, command, session
 		return nil, errors.New("workspace is required")
 	}
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), "viewer")
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), "viewer")
 	}
 	if err := tmux.EnsureAvailable(); err != nil {
 		return nil, err

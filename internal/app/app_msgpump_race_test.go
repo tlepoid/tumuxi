@@ -9,7 +9,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/messages"
 )
 
 func TestExternalMsgPumpConcurrent(t *testing.T) {

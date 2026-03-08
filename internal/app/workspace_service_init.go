@@ -3,9 +3,9 @@ package app
 import (
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/process"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/process"
 )
 
 // GitOperations abstracts git workspace operations for testability.

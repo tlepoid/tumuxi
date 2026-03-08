@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestWorkspaceCreateAgentsHaveDistinctSessions(t *testing.T) {
@@ -19,11 +19,11 @@ func TestWorkspaceCreateAgentsHaveDistinctSessions(t *testing.T) {
 	writeConfig(t, home, false)
 	binDir := writeStubAssistant(t, home, "claude")
 	_ = writeStubAssistant(t, home, "codex")
-	server := fmt.Sprintf("amux-e2e-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumuxi-e2e-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
 	env := sessionEnv(binDir, server)
-	env = append(env, "AMUX_TMUX_SYNC_INTERVAL=1s")
+	env = append(env, "TUMUXI_TMUX_SYNC_INTERVAL=1s")
 	session, cleanup, err := StartPTYSession(PTYOptions{
 		Home: home,
 		Env:  env,

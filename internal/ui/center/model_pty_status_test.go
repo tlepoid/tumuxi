@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 func TestTerminalLayerForcesVisibleCursorForChatTabs(t *testing.T) {

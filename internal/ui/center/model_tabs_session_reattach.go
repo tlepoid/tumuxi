@@ -5,9 +5,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/messages"
-	appPty "github.com/andyrewlee/amux/internal/pty"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	appPty "github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // ReattachActiveTab reattaches to a detached/stopped tmux session.
@@ -63,7 +63,7 @@ func (m *Model) ReattachActiveTab() tea.Cmd {
 	termWidth := tm.Width
 	termHeight := tm.Height
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(tab.Workspace.ID()), string(tab.ID))
+		sessionName = tmux.SessionName("tumuxi", string(tab.Workspace.ID()), string(tab.ID))
 	}
 	assistant := tab.Assistant
 	ws := tab.Workspace
@@ -179,7 +179,7 @@ func (m *Model) RestartActiveTab() tea.Cmd {
 	ws := tab.Workspace
 	tabID := tab.ID
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), string(tabID))
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(tabID))
 	}
 	m.stopPTYReader(tab)
 	var existingAgent *appPty.Agent

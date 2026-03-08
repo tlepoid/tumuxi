@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 func parseWorkspaceIDFlag(raw string) (data.WorkspaceID, error) {

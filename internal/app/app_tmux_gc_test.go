@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // ---------------------------------------------------------------------------
@@ -147,7 +147,7 @@ func ensureTmuxServer(t *testing.T, opts tmux.Options) {
 
 func gcTestServer(t *testing.T) tmux.Options {
 	t.Helper()
-	name := fmt.Sprintf("amux-gctest-%d", time.Now().UnixNano())
+	name := fmt.Sprintf("tumuxi-gctest-%d", time.Now().UnixNano())
 	opts := tmux.Options{
 		ServerName:     name,
 		ConfigPath:     "/dev/null",
@@ -218,19 +218,19 @@ func TestGcOrphanedTmuxSessions_Integration(t *testing.T) {
 	gcCreateSession(t, opts, "orphan2", "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
-	// Tag all as @amux with different workspace IDs.
-	gcSetTag(t, opts, "known-sess", "@amux", "1")
-	gcSetTag(t, opts, "known-sess", "@amux_workspace", knownID)
+	// Tag all as @tumuxi with different workspace IDs.
+	gcSetTag(t, opts, "known-sess", "@tumuxi", "1")
+	gcSetTag(t, opts, "known-sess", "@tumuxi_workspace", knownID)
 
 	staleCreatedAt := fmt.Sprintf("%d", time.Now().Add(-2*time.Minute).Unix())
 
-	gcSetTag(t, opts, "orphan1", "@amux", "1")
-	gcSetTag(t, opts, "orphan1", "@amux_workspace", "dead-ws-1")
-	gcSetTag(t, opts, "orphan1", "@amux_created_at", staleCreatedAt)
+	gcSetTag(t, opts, "orphan1", "@tumuxi", "1")
+	gcSetTag(t, opts, "orphan1", "@tumuxi_workspace", "dead-ws-1")
+	gcSetTag(t, opts, "orphan1", "@tumuxi_created_at", staleCreatedAt)
 
-	gcSetTag(t, opts, "orphan2", "@amux", "1")
-	gcSetTag(t, opts, "orphan2", "@amux_workspace", "dead-ws-2")
-	gcSetTag(t, opts, "orphan2", "@amux_created_at", staleCreatedAt)
+	gcSetTag(t, opts, "orphan2", "@tumuxi", "1")
+	gcSetTag(t, opts, "orphan2", "@tumuxi_workspace", "dead-ws-2")
+	gcSetTag(t, opts, "orphan2", "@tumuxi_created_at", staleCreatedAt)
 
 	app := &App{
 		tmuxAvailable:  true,
@@ -285,10 +285,10 @@ func TestGcOrphanedTmuxSessions_DoesNotKillOrphansFromOtherInstances(t *testing.
 	gcCreateSession(t, opts, "other-orphan", "sleep 300")
 	time.Sleep(50 * time.Millisecond)
 
-	gcSetTag(t, opts, "other-orphan", "@amux", "1")
-	gcSetTag(t, opts, "other-orphan", "@amux_workspace", "dead-ws-other")
-	gcSetTag(t, opts, "other-orphan", "@amux_instance", "other-instance")
-	gcSetTag(t, opts, "other-orphan", "@amux_created_at", staleCreatedAt)
+	gcSetTag(t, opts, "other-orphan", "@tumuxi", "1")
+	gcSetTag(t, opts, "other-orphan", "@tumuxi_workspace", "dead-ws-other")
+	gcSetTag(t, opts, "other-orphan", "@tumuxi_instance", "other-instance")
+	gcSetTag(t, opts, "other-orphan", "@tumuxi_created_at", staleCreatedAt)
 
 	app := &App{
 		tmuxAvailable:  true,

@@ -1,10 +1,10 @@
-# Contributing to amux
+# Contributing to tumuxi
 
 ## Development
 
 ```bash
-git clone https://github.com/andyrewlee/amux.git
-cd amux
+git clone https://github.com/tlepoid/tumuxi.git
+cd tumuxi
 ./scripts/install-hooks.sh
 make run
 ```
@@ -34,7 +34,7 @@ make lint-strict-new
 Pull requests are CI-gated (automated). For local confidence before opening a PR:
 
 - always: `make devcheck`, `make lint-strict-new`
-- if touching `internal/ui/`, `internal/vterm/`, or `cmd/amux-harness/`: `make harness-presets`
+- if touching `internal/ui/`, `internal/vterm/`, or `cmd/tumuxi-harness/`: `make harness-presets`
 - if touching `internal/tmux/`, `internal/e2e/`, or `internal/pty/`: `go test ./internal/tmux ./internal/e2e`
 
 Architecture references:
@@ -44,7 +44,7 @@ Architecture references:
 
 ## Platform Support
 
-amux is developed and tested on **Linux and macOS** only. CI runs exclusively on Ubuntu.
+tumuxi is developed and tested on **Linux and macOS** only. CI runs exclusively on Ubuntu.
 
 Windows stub files (`*_windows.go`) exist to allow the package to compile on Windows, but Windows support is **experimental and untested**. PRs that improve Windows compatibility are welcome, but Windows-only regressions will not block Linux/macOS releases.
 
@@ -74,8 +74,8 @@ Notes:
 
 ### Homebrew tap
 
-The Homebrew tap lives in `andyrewlee/homebrew-amux` and auto-bumps the formula after a release.
+The Homebrew tap lives in `tlepoid/homebrew-tumuxi` and auto-bumps the formula after a release.
 
-- After `make release VERSION=vX.Y.Z`, the tap workflow updates `Formula/amux.rb` (daily at 06:00 UTC).
-- To update immediately, run the **Bump amux formula** workflow in the tap repo.
-- Users upgrade with `brew upgrade amux`.
+- After `make release VERSION=vX.Y.Z`, the tap workflow updates `Formula/tumuxi.rb` (daily at 06:00 UTC).
+- To update immediately, run the **Bump tumuxi formula** workflow in the tap repo.
+- Users upgrade with `brew upgrade tumuxi`.

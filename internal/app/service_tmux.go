@@ -3,7 +3,7 @@ package app
 import (
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // tmuxService centralizes tmux side effects for the app.

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/ui/compositor"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/ui/compositor"
 )
 
 type drawableCache struct {

@@ -85,7 +85,7 @@ The strict profile is where new rules should be introduced first (ratcheted on c
 
 Escalation is path-based and automated by CI jobs. For local confidence, use:
 
-- `internal/ui/`, `internal/vterm/`, `cmd/amux-harness/`:
+- `internal/ui/`, `internal/vterm/`, `cmd/tumuxi-harness/`:
   - run `make harness-presets`
 - `internal/tmux/`, `internal/e2e/`, `internal/pty/`:
   - run `go test ./internal/tmux ./internal/e2e`

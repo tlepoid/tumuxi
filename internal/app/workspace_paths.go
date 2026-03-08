@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 // projectNameSegment extracts a filesystem-safe name from a project.

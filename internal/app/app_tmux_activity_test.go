@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/app/activity"
-	"github.com/andyrewlee/amux/internal/config"
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/ui/dashboard"
+	"github.com/tlepoid/tumuxi/internal/app/activity"
+	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
 )
 
 // stubTmuxOps implements TmuxOps for testing syncActivitySessionStates.
@@ -337,10 +337,10 @@ func (s *scriptedActivityTmuxOps) SessionsWithTags(map[string]string, []string, 
 	return []tmux.SessionTagValues{{
 		Name: s.sessionName,
 		Tags: map[string]string{
-			"@amux":              "1",
-			"@amux_workspace":    s.workspaceID,
-			"@amux_tab":          "tab-1",
-			"@amux_type":         "agent",
+			"@tumuxi":              "1",
+			"@tumuxi_workspace":    s.workspaceID,
+			"@tumuxi_tab":          "tab-1",
+			"@tumuxi_type":         "agent",
 			tmux.TagLastOutputAt: nowMillis,
 		},
 	}}, nil
@@ -401,7 +401,7 @@ func newActivityTestAppWithScriptedTmux(contentByScan []string) (*App, string) {
 		OpenTabs: []data.TabInfo{{
 			Assistant:   "codex",
 			Name:        "codex",
-			SessionName: "amux-testws-tab-1",
+			SessionName: "tumuxi-testws-tab-1",
 			Status:      "running",
 		}},
 	}
@@ -412,7 +412,7 @@ func newActivityTestAppWithScriptedTmux(contentByScan []string) (*App, string) {
 		Workspaces: []data.Workspace{ws},
 	}
 	tmuxOps := &scriptedActivityTmuxOps{
-		sessionName:   "amux-testws-tab-1",
+		sessionName:   "tumuxi-testws-tab-1",
 		workspaceID:   wsID,
 		contentByScan: contentByScan,
 	}

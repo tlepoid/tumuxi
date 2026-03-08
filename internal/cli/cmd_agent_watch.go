@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // watchInitialCaptureMaxAttempts bounds the initial capture loop so it cannot
@@ -49,7 +49,7 @@ const (
 )
 
 func cmdAgentWatch(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux agent watch <session_name> [--lines N] [--interval <duration>] [--idle-threshold <duration>] [--heartbeat <duration>]"
+	const usage = "Usage: tumuxi agent watch <session_name> [--lines N] [--interval <duration>] [--idle-threshold <duration>] [--heartbeat <duration>]"
 	fs := newFlagSet("agent watch")
 	lines := fs.Int("lines", 100, "capture buffer depth")
 	interval := fs.Duration("interval", 500*time.Millisecond, "poll interval")

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/config"
+	"github.com/tlepoid/tumuxi/internal/config"
 )
 
 const (

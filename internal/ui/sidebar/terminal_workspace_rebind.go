@@ -3,8 +3,8 @@ package sidebar
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 // RebindWorkspaceID migrates terminal tabs from a previous workspace ID to a new one.

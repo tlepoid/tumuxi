@@ -6,8 +6,8 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 // View renders the sidebar

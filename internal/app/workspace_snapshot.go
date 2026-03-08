@@ -1,6 +1,6 @@
 package app
 
-import "github.com/andyrewlee/amux/internal/data"
+import "github.com/tlepoid/tumuxi/internal/data"
 
 func snapshotWorkspaceForSave(ws *data.Workspace) *data.Workspace {
 	if ws == nil {

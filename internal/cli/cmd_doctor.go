@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 type checkResult struct {
@@ -21,7 +21,7 @@ type doctorResult struct {
 }
 
 func cmdDoctor(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux doctor [--json]"
+	const usage = "Usage: tumuxi doctor [--json]"
 	if len(args) > 0 {
 		return returnUsageError(
 			w,
@@ -51,7 +51,7 @@ func cmdDoctor(w, wErr io.Writer, gf GlobalFlags, args []string, version string)
 	// 2. tmux version
 	checks = append(checks, checkTmuxVersion())
 
-	// 3. amux home exists and writable
+	// 3. tumuxi home exists and writable
 	checks = append(checks, checkHomeDir(svc.Config.Paths.Home))
 
 	// 4. metadata parseable
@@ -103,19 +103,19 @@ func checkTmuxVersion() checkResult {
 func checkHomeDir(home string) checkResult {
 	info, err := os.Stat(home)
 	if err != nil {
-		return checkResult{Name: "amux_home", Status: "fail", Message: home + " not found"}
+		return checkResult{Name: "tumuxi_home", Status: "fail", Message: home + " not found"}
 	}
 	if !info.IsDir() {
-		return checkResult{Name: "amux_home", Status: "fail", Message: home + " is not a directory"}
+		return checkResult{Name: "tumuxi_home", Status: "fail", Message: home + " is not a directory"}
 	}
 	// Check writable by creating a temp file
 	tmp, err := os.CreateTemp(home, ".doctor-check-*")
 	if err != nil {
-		return checkResult{Name: "amux_home", Status: "warn", Message: home + " is not writable"}
+		return checkResult{Name: "tumuxi_home", Status: "warn", Message: home + " is not writable"}
 	}
 	tmp.Close()
 	os.Remove(tmp.Name())
-	return checkResult{Name: "amux_home", Status: "ok", Message: home}
+	return checkResult{Name: "tumuxi_home", Status: "ok", Message: home}
 }
 
 func checkMetadata(svc *Services) checkResult {

@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 
-	"github.com/andyrewlee/amux/internal/git"
+	"github.com/tlepoid/tumuxi/internal/git"
 )
 
 type gitStatusService struct {

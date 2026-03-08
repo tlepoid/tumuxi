@@ -3,7 +3,7 @@ package center
 import (
 	"testing"
 
-	appPty "github.com/andyrewlee/amux/internal/pty"
+	appPty "github.com/tlepoid/tumuxi/internal/pty"
 )
 
 func TestUpdatePtyTabReattachResult_ResetsActivityANSIState(t *testing.T) {

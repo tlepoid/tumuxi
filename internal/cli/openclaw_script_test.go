@@ -31,9 +31,9 @@ func TestOpenClawPresentScript_AugmentsChannelEnvelope(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-present.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-present.sh")
 	env := withEnv(os.Environ(), "OPENCLAW_CHANNEL", "msteams")
-	input := `{"ok":true,"summary":"ok","message":"Build complete","quick_actions":[{"id":"status","label":"Status","command":"amux --json status","style":"primary","prompt":"Check status"}],"channel":{"message":"Build complete","chunks_meta":[{"index":1,"total":1,"text":"Build complete"}]}}`
+	input := `{"ok":true,"summary":"ok","message":"Build complete","quick_actions":[{"id":"status","label":"Status","command":"tumuxi --json status","style":"primary","prompt":"Check status"}],"channel":{"message":"Build complete","chunks_meta":[{"index":1,"total":1,"text":"Build complete"}]}}`
 
 	payload := runScriptJSONWithInput(t, scriptPath, env, input)
 
@@ -69,8 +69,8 @@ func TestOpenClawPresentScript_AugmentsChannelEnvelope(t *testing.T) {
 	if !ok {
 		t.Fatalf("quick_action_by_id missing or wrong type: %T", payload["quick_action_by_id"])
 	}
-	if got, _ := actionMap["status"].(string); got != "amux --json status" {
-		t.Fatalf("quick_action_by_id[status] = %q, want %q", got, "amux --json status")
+	if got, _ := actionMap["status"].(string); got != "tumuxi --json status" {
+		t.Fatalf("quick_action_by_id[status] = %q, want %q", got, "tumuxi --json status")
 	}
 }
 
@@ -78,16 +78,16 @@ func TestOpenClawStepWrapper_UsesChannelAndWrapperSuggestions(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_AMUX_RUN_JSON:?missing FAKE_AMUX_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
@@ -97,7 +97,7 @@ exit 2
 	runJSON := `{"ok":true,"data":{"session_name":"sess-wrap-1","agent_id":"agent-wrap-1","workspace_id":"ws-wrap-1","assistant":"codex","response":{"status":"timed_out","latest_line":"Still running build","summary":"Timed out; build still running.","delta":"Still running build","needs_input":false,"input_hint":"","timed_out":true,"session_exited":false,"changed":true}}}`
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_AMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
 	env = withEnv(env, "OPENCLAW_CHANNEL", "slack")
 
 	payload := runScriptJSON(t, scriptPath, env,
@@ -127,9 +127,9 @@ func TestOpenClawDXWrapper_UsesChannelAndWrapperSuggestions(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then

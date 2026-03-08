@@ -23,7 +23,7 @@ func cmdSessionList(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 }
 
 func cmdSessionListWith(w, wErr io.Writer, gf GlobalFlags, args []string, version string, svc *Services) int {
-	const usage = "Usage: amux session list [--json]"
+	const usage = "Usage: tumuxi session list [--json]"
 	if len(args) > 0 {
 		return returnUsageError(w, wErr, gf, usage, version, fmt.Errorf("unexpected arguments: %s", strings.Join(args, " ")))
 	}
@@ -96,7 +96,7 @@ func cmdSessionPrune(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 }
 
 func cmdSessionPruneWith(w, wErr io.Writer, gf GlobalFlags, args []string, version string, svc *Services) int {
-	const usage = "Usage: amux session prune [--yes] [--older-than <dur>] [--json]"
+	const usage = "Usage: tumuxi session prune [--yes] [--older-than <dur>] [--json]"
 	fs := newFlagSet("session prune")
 	yes := fs.Bool("yes", false, "confirm prune (required)")
 	olderThan := fs.String("older-than", "", "only prune sessions older than duration (e.g. 1h, 30m)")
@@ -251,9 +251,9 @@ func cmdSessionPruneWith(w, wErr io.Writer, gf GlobalFlags, args []string, versi
 func routeSession(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: amux session <list|prune> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumuxi session <list|prune> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: amux session <list|prune> [flags]")
+			fmt.Fprintln(wErr, "Usage: tumuxi session <list|prune> [flags]")
 		}
 		return ExitUsage
 	}

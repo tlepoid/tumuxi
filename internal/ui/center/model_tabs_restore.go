@@ -7,10 +7,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	appPty "github.com/andyrewlee/amux/internal/pty"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/data"
+	appPty "github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 func (m *Model) addDetachedTab(ws *data.Workspace, info data.TabInfo) {
@@ -80,7 +80,7 @@ func (m *Model) addPlaceholderTab(ws *data.Workspace, info data.TabInfo) (TabID,
 	tabID := generateTabID()
 	sessionName := strings.TrimSpace(info.SessionName)
 	if sessionName == "" {
-		sessionName = tmux.SessionName("amux", string(ws.ID()), string(tabID))
+		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(tabID))
 	}
 	ca := info.CreatedAt
 	if ca == 0 {

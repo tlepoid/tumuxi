@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 var (
@@ -100,25 +100,25 @@ func listAgentSessionsForStopAll(opts tmux.Options) ([]tmux.SessionActivity, err
 	}
 
 	tagged, err := tmuxSessionsWithTags(
-		map[string]string{"@amux": "1"},
-		[]string{"@amux_workspace", "@amux_tab", "@amux_type"},
+		map[string]string{"@tumuxi": "1"},
+		[]string{"@tumuxi_workspace", "@tumuxi_tab", "@tumuxi_type"},
 		opts,
 	)
 	if err != nil {
 		return nil, err
 	}
 	for _, row := range tagged {
-		sessionType := strings.TrimSpace(row.Tags["@amux_type"])
+		sessionType := strings.TrimSpace(row.Tags["@tumuxi_type"])
 		if sessionType != "agent" {
 			continue
 		}
 		session := byName[row.Name]
 		session.Name = row.Name
 		if session.WorkspaceID == "" {
-			session.WorkspaceID = strings.TrimSpace(row.Tags["@amux_workspace"])
+			session.WorkspaceID = strings.TrimSpace(row.Tags["@tumuxi_workspace"])
 		}
 		if session.TabID == "" {
-			session.TabID = strings.TrimSpace(row.Tags["@amux_tab"])
+			session.TabID = strings.TrimSpace(row.Tags["@tumuxi_tab"])
 		}
 		if session.Type == "" {
 			session.Type = sessionType

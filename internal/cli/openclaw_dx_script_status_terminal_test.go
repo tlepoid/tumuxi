@@ -13,9 +13,9 @@ func TestOpenClawDXGitShip_NoChangesWithPushPushesAheadCommits(t *testing.T) {
 	requireBinary(t, "bash")
 	requireBinary(t, "git")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	repoDir := t.TempDir()
 	if out, err := exec.Command("git", "-C", repoDir, "init", "-b", "main").CombinedOutput(); err != nil {
@@ -125,9 +125,9 @@ func TestOpenClawDXWorkspaceDecide_RecommendsNestedFromParent(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -183,9 +183,9 @@ func TestOpenClawDXWorkspaceDecide_ProjectOnlyDoesNotRequireAlternateCommand(t *
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -237,9 +237,9 @@ func TestOpenClawDXTerminalPreset_StartsNextJSPreset(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	argsLog := filepath.Join(fakeBinDir, "terminal-args.log")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -297,9 +297,9 @@ func TestOpenClawDXStatus_SurfacesCompletedAlertAndReviewActions(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -399,9 +399,9 @@ func TestOpenClawDXStatus_InvalidResultCommandEnvFallsBackToStatus(t *testing.T)
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail

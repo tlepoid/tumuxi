@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func cmdTerminalLogs(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux terminal logs --workspace <id> [--lines N] [--follow] [--interval <duration>] [--idle-threshold <duration>] [--json]"
+	const usage = "Usage: tumuxi terminal logs --workspace <id> [--lines N] [--follow] [--interval <duration>] [--idle-threshold <duration>] [--json]"
 	fs := newFlagSet("terminal logs")
 	workspace := fs.String("workspace", "", "workspace ID (required)")
 	lines := fs.Int("lines", 200, "number of lines to capture")

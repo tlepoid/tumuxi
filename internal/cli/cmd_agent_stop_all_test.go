@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestCmdAgentStopAllWithPositionalTargetReturnsUsageError(t *testing.T) {
@@ -153,9 +153,9 @@ func TestCmdAgentStopAllExcludesPartiallyTaggedSessionsWithoutType(t *testing.T)
 			{
 				Name: "session-partial",
 				Tags: map[string]string{
-					"@amux_workspace": "ws-a",
-					"@amux_tab":       "tab-a",
-					// @amux_type intentionally missing — sessions without
+					"@tumuxi_workspace": "ws-a",
+					"@tumuxi_tab":       "tab-a",
+					// @tumuxi_type intentionally missing — sessions without
 					// explicit type "agent" are no longer included.
 				},
 			},
@@ -179,6 +179,6 @@ func TestCmdAgentStopAllExcludesPartiallyTaggedSessionsWithoutType(t *testing.T)
 		t.Fatalf("cmdAgentStop() code = %d, want %d", code, ExitOK)
 	}
 	if got := killed["session-partial"]; got != 0 {
-		t.Fatalf("session-partial kill calls = %d, want 0 (should be excluded without @amux_type=agent)", got)
+		t.Fatalf("session-partial kill calls = %d, want 0 (should be excluded without @tumuxi_type=agent)", got)
 	}
 }

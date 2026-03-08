@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 func TestFlushTiming_InactiveBackpressureRespectsHardCap(t *testing.T) {

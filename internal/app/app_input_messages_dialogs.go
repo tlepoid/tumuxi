@@ -6,10 +6,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 // handleShowAddProjectDialog shows the add project file picker.
@@ -70,7 +70,7 @@ func (a *App) handleShowRemoveProjectDialog(msg messages.ShowRemoveProjectDialog
 	a.dialog = common.NewConfirmDialog(
 		DialogRemoveProject,
 		"Remove Project",
-		fmt.Sprintf("Remove project '%s' from AMUX? This won't delete any files.", projectName),
+		fmt.Sprintf("Remove project '%s' from TUMUXI? This won't delete any files.", projectName),
 	)
 	a.dialog.SetSize(a.width, a.height)
 	a.dialog.SetShowKeymapHints(a.config.UI.ShowKeymapHints)
@@ -96,7 +96,7 @@ func (a *App) handleShowCleanupTmuxDialog() {
 	a.dialog = common.NewConfirmDialog(
 		DialogCleanupTmux,
 		"Cleanup tmux sessions",
-		fmt.Sprintf("Kill all amux-* tmux sessions on server %q?", a.tmuxOptions.ServerName),
+		fmt.Sprintf("Kill all tumuxi-* tmux sessions on server %q?", a.tmuxOptions.ServerName),
 	)
 	a.dialog.SetSize(a.width, a.height)
 	a.dialog.SetShowKeymapHints(a.config.UI.ShowKeymapHints)
@@ -126,7 +126,7 @@ func (a *App) handleShowSettingsDialog() {
 		a.settingsDialog.SetUpdateInfo(a.version, "", false)
 	}
 	if a.updateService != nil && a.updateService.IsHomebrewBuild() {
-		a.settingsDialog.SetUpdateHint("Installed via Homebrew - update with brew upgrade amux")
+		a.settingsDialog.SetUpdateHint("Installed via Homebrew - update with brew upgrade tumuxi")
 	}
 
 	a.settingsDialog.Show()

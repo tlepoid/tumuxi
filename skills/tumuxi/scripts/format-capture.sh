@@ -9,7 +9,7 @@
 #   --trim          Trim leading/trailing blank lines
 #
 # Example:
-#   amux --json agent capture <session> | jq -r '.data.content' | format-capture.sh --strip-ansi --trim
+#   tumuxi --json agent capture <session> | jq -r '.data.content' | format-capture.sh --strip-ansi --trim
 
 set -euo pipefail
 

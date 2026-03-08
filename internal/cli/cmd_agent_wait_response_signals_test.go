@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestWaitForAgentResponse_PreHashPreventsEarlyIdle(t *testing.T) {

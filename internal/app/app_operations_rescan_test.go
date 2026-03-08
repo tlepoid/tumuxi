@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/messages"
 )
 
 func TestRescanWorkspaces_ArchivesMissingWorkspaces(t *testing.T) {

@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/logging"
 )
 
 const (
@@ -321,7 +321,7 @@ func computeP95(samples []time.Duration, idx int, full bool) time.Duration {
 }
 
 func isEnabled() bool {
-	raw := strings.TrimSpace(os.Getenv("AMUX_PROFILE"))
+	raw := strings.TrimSpace(os.Getenv("TUMUXI_PROFILE"))
 	if raw == "" {
 		return false
 	}
@@ -335,7 +335,7 @@ func isEnabled() bool {
 
 func defaultLogInterval() time.Duration {
 	interval := defaultIntervalMs
-	if raw := strings.TrimSpace(os.Getenv("AMUX_PROFILE_INTERVAL_MS")); raw != "" {
+	if raw := strings.TrimSpace(os.Getenv("TUMUXI_PROFILE_INTERVAL_MS")); raw != "" {
 		if val, err := strconv.Atoi(raw); err == nil && val > 0 {
 			interval = val
 		}

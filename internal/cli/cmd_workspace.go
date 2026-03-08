@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 // WorkspaceInfo is the JSON-serializable workspace representation.
@@ -46,7 +46,7 @@ func workspaceToInfo(ws *data.Workspace) WorkspaceInfo {
 }
 
 func cmdWorkspaceList(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux workspace list [--repo <path>|--project <path>] [--archived] [--json]"
+	const usage = "Usage: tumuxi workspace list [--repo <path>|--project <path>] [--archived] [--json]"
 	fs := newFlagSet("workspace list")
 	repo := fs.String("repo", "", "filter by repo path")
 	project := fs.String("project", "", "alias for --repo")

@@ -11,9 +11,9 @@ func TestOpenClawDXWorkspaceCreate_NestedFromWorkspace(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	calledNameFile := filepath.Join(fakeBinDir, "called-name.txt")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -70,9 +70,9 @@ func TestOpenClawDXProjectPick_DisambiguationUsesIndexSelectors(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -125,9 +125,9 @@ func TestOpenClawDXProjectAdd_PropagatesStructuredAmuxError(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -157,7 +157,7 @@ esac
 	}
 	summary, _ := payload["summary"].(string)
 	if !strings.Contains(summary, "project path already registered") {
-		t.Fatalf("summary = %q, want propagated amux error message", summary)
+		t.Fatalf("summary = %q, want propagated tumuxi error message", summary)
 	}
 	data, ok := payload["data"].(map[string]any)
 	if !ok {
@@ -176,9 +176,9 @@ func TestOpenClawDXProjectAdd_InitialCommitGuidanceForWorkspaceCreate(t *testing
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -243,9 +243,9 @@ func TestOpenClawDXWorkspaceCreate_RecoversFromExistingBranchConflict(t *testing
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail

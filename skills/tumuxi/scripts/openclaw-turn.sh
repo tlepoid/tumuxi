@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# openclaw-turn.sh — Multi-step bounded OpenClaw coding turn for amux.
+# openclaw-turn.sh — Multi-step bounded OpenClaw coding turn for tumuxi.
 #
 # Usage:
 #   openclaw-turn.sh run  --workspace <id> --assistant <name> --prompt <text> [--max-steps 3] [--turn-budget 180] [--wait-timeout 60s] [--idle-threshold 10s]
@@ -105,12 +105,12 @@ workspace_root_for_turn() {
     printf ''
     return 0
   fi
-  if ! command -v amux >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+  if ! command -v tumuxi >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
     printf ''
     return 0
   fi
   local ws_json root
-  ws_json="$(amux --json workspace list --archived 2>/dev/null || true)"
+  ws_json="$(tumuxi --json workspace list --archived 2>/dev/null || true)"
   if ! jq -e '.ok == true' >/dev/null 2>&1 <<<"$ws_json"; then
     printf ''
     return 0
@@ -141,13 +141,13 @@ TURN_VERBOSITY="$(normalize_verbosity_level "${OPENCLAW_TURN_VERBOSITY:-normal}"
 SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" >/dev/null 2>&1 && pwd -P)"
 SCRIPT_PATH="$SCRIPT_DIR/$(basename "$SCRIPT_SOURCE")"
-TURN_SCRIPT_REF="${OPENCLAW_TURN_CMD_REF:-skills/amux/scripts/openclaw-turn.sh}"
+TURN_SCRIPT_REF="${OPENCLAW_TURN_CMD_REF:-skills/tumuxi/scripts/openclaw-turn.sh}"
 TURN_SCRIPT_CMD="$(shell_quote "$TURN_SCRIPT_REF")"
 STEP_SCRIPT="${OPENCLAW_TURN_STEP_SCRIPT:-$SCRIPT_DIR/openclaw-step.sh}"
 if [[ ! -x "$STEP_SCRIPT" ]]; then
   STEP_SCRIPT="$SCRIPT_DIR/openclaw-step.sh"
 fi
-STEP_SCRIPT_REF="${OPENCLAW_TURN_STEP_CMD_REF:-skills/amux/scripts/openclaw-step.sh}"
+STEP_SCRIPT_REF="${OPENCLAW_TURN_STEP_CMD_REF:-skills/tumuxi/scripts/openclaw-step.sh}"
 STEP_SCRIPT_CMD="$(shell_quote "$STEP_SCRIPT_REF")"
 OPENCLAW_PRESENT_SCRIPT="${OPENCLAW_PRESENT_SCRIPT:-$SCRIPT_DIR/openclaw-present.sh}"
 

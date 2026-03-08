@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# openclaw-dx.sh — OpenClaw-first control plane for amux coding workflows.
+# openclaw-dx.sh — OpenClaw-first control plane for tumuxi coding workflows.
 #
 # Covers project/workspace/agent/terminal/session/git/review flows in one UX layer.
 
@@ -118,45 +118,45 @@ normalize_json_or_default() {
   fi
 }
 
-AMUX_ERROR_OUTPUT=""
-AMUX_ERROR_CAPTURE_FILE=""
-if AMUX_ERROR_CAPTURE_FILE="$(mktemp "${TMPDIR:-/tmp}/amux-openclaw-dx-error.XXXXXX" 2>/dev/null)"; then
+TUMUXI_ERROR_OUTPUT=""
+TUMUXI_ERROR_CAPTURE_FILE=""
+if TUMUXI_ERROR_CAPTURE_FILE="$(mktemp "${TMPDIR:-/tmp}/tumuxi-openclaw-dx-error.XXXXXX" 2>/dev/null)"; then
   :
 else
-  AMUX_ERROR_CAPTURE_FILE="${TMPDIR:-/tmp}/amux-openclaw-dx-error.$$"
+  TUMUXI_ERROR_CAPTURE_FILE="${TMPDIR:-/tmp}/tumuxi-openclaw-dx-error.$$"
 fi
 _openclaw_dx_cleanup() {
-  if [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" && -f "$AMUX_ERROR_CAPTURE_FILE" ]]; then
-    rm -f "$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true
+  if [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" && -f "$TUMUXI_ERROR_CAPTURE_FILE" ]]; then
+    rm -f "$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true
   fi
 }
 trap _openclaw_dx_cleanup EXIT
-amux_ok_json() {
+tumuxi_ok_json() {
   local out
-  AMUX_ERROR_OUTPUT=""
-  if [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]]; then
-    : >"$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true
+  TUMUXI_ERROR_OUTPUT=""
+  if [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]]; then
+    : >"$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true
   fi
-  if ! out="$(amux --json "$@" 2>&1)"; then
-    AMUX_ERROR_OUTPUT="$out"
-    if [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]]; then
-      printf '%s' "$out" >"$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true
+  if ! out="$(tumuxi --json "$@" 2>&1)"; then
+    TUMUXI_ERROR_OUTPUT="$out"
+    if [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]]; then
+      printf '%s' "$out" >"$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true
     fi
     return 1
   fi
   if ! jq -e . >/dev/null 2>&1 <<<"$out"; then
-    AMUX_ERROR_OUTPUT="$out"
-    if [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]]; then
-      printf '%s' "$out" >"$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true
+    TUMUXI_ERROR_OUTPUT="$out"
+    if [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]]; then
+      printf '%s' "$out" >"$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true
     fi
     return 1
   fi
   local ok
   ok="$(jq -r '.ok // false' <<<"$out")"
   if [[ "$ok" != "true" ]]; then
-    AMUX_ERROR_OUTPUT="$out"
-    if [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]]; then
-      printf '%s' "$out" >"$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true
+    TUMUXI_ERROR_OUTPUT="$out"
+    if [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]]; then
+      printf '%s' "$out" >"$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true
     fi
     return 1
   fi
@@ -190,15 +190,15 @@ if [[ "$INLINE_BUTTONS_SCOPE" == "off" ]]; then
   INLINE_BUTTONS_ENABLED=false
 fi
 
-DX_CMD_REF="skills/amux/scripts/openclaw-dx.sh"
-TURN_CMD_REF="skills/amux/scripts/openclaw-turn.sh"
-STEP_CMD_REF="skills/amux/scripts/openclaw-step.sh"
+DX_CMD_REF="skills/tumuxi/scripts/openclaw-dx.sh"
+TURN_CMD_REF="skills/tumuxi/scripts/openclaw-turn.sh"
+STEP_CMD_REF="skills/tumuxi/scripts/openclaw-step.sh"
 
 normalize_command_refs() {
   local value="$1"
-  value="${value//skills\/amux\/scripts\/openclaw-dx.sh/$DX_CMD_REF}"
-  value="${value//skills\/amux\/scripts\/openclaw-turn.sh/$TURN_CMD_REF}"
-  value="${value//skills\/amux\/scripts\/openclaw-step.sh/$STEP_CMD_REF}"
+  value="${value//skills\/tumuxi\/scripts\/openclaw-dx.sh/$DX_CMD_REF}"
+  value="${value//skills\/tumuxi\/scripts\/openclaw-turn.sh/$TURN_CMD_REF}"
+  value="${value//skills\/tumuxi\/scripts\/openclaw-step.sh/$STEP_CMD_REF}"
   printf '%s' "$value"
 }
 
@@ -221,9 +221,9 @@ emit_result() {
   quick_actions_json="$(jq -c --arg dx "$DX_CMD_REF" --arg turn "$TURN_CMD_REF" --arg step "$STEP_CMD_REF" '
     map(
       .command = ((.command // "")
-        | gsub("skills/amux/scripts/openclaw-dx\\.sh"; $dx)
-        | gsub("skills/amux/scripts/openclaw-turn\\.sh"; $turn)
-        | gsub("skills/amux/scripts/openclaw-step\\.sh"; $step)
+        | gsub("skills/tumuxi/scripts/openclaw-dx\\.sh"; $dx)
+        | gsub("skills/tumuxi/scripts/openclaw-turn\\.sh"; $turn)
+        | gsub("skills/tumuxi/scripts/openclaw-step\\.sh"; $step)
       )
     )
   ' <<<"$quick_actions_json")"
@@ -231,9 +231,9 @@ emit_result() {
   data_json="$(jq -c --arg dx "$DX_CMD_REF" --arg turn "$TURN_CMD_REF" --arg step "$STEP_CMD_REF" '
     def rewrite:
       if type == "string" then
-        gsub("skills/amux/scripts/openclaw-dx\\.sh"; $dx)
-        | gsub("skills/amux/scripts/openclaw-turn\\.sh"; $turn)
-        | gsub("skills/amux/scripts/openclaw-step\\.sh"; $step)
+        gsub("skills/tumuxi/scripts/openclaw-dx\\.sh"; $dx)
+        | gsub("skills/tumuxi/scripts/openclaw-turn\\.sh"; $turn)
+        | gsub("skills/tumuxi/scripts/openclaw-step\\.sh"; $step)
       elif type == "array" then
         map(rewrite)
       elif type == "object" then
@@ -451,18 +451,18 @@ emit_error() {
   emit_result
 }
 
-emit_amux_error() {
+emit_tumuxi_error() {
   local command_name="$1"
-  local out="${2:-$AMUX_ERROR_OUTPUT}"
-  if [[ -z "${out// }" ]] && [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$AMUX_ERROR_CAPTURE_FILE" ]]; then
-    out="$(cat "$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
+  local out="${2:-$TUMUXI_ERROR_OUTPUT}"
+  if [[ -z "${out// }" ]] && [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$TUMUXI_ERROR_CAPTURE_FILE" ]]; then
+    out="$(cat "$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
   fi
   local err_code="command_error"
-  local err_msg="amux command failed"
+  local err_msg="tumuxi command failed"
   local err_details='{}'
   if jq -e . >/dev/null 2>&1 <<<"$out"; then
     err_code="$(jq -r '.error.code // "command_error"' <<<"$out")"
-    err_msg="$(jq -r '.error.message // "amux command failed"' <<<"$out")"
+    err_msg="$(jq -r '.error.message // "tumuxi command failed"' <<<"$out")"
     err_details="$(jq -c '.error.details // {}' <<<"$out")"
   else
     err_msg="$out"
@@ -474,7 +474,7 @@ emit_amux_error() {
     if [[ -n "${out// }" ]]; then
       err_msg="$(printf '%s' "$out" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g' | cut -c 1-240)"
     else
-      err_msg="amux command failed"
+      err_msg="tumuxi command failed"
     fi
   fi
   local status="command_error"
@@ -486,7 +486,7 @@ emit_amux_error() {
   RESULT_STATUS="$status"
   RESULT_SUMMARY="$err_msg"
   RESULT_MESSAGE="🛑 $err_msg"
-  RESULT_NEXT_ACTION="Fix the failing amux command input and retry."
+  RESULT_NEXT_ACTION="Fix the failing tumuxi command input and retry."
   RESULT_SUGGESTED_COMMAND=""
   RESULT_DATA="$(jq -cn --arg code "$err_code" --arg message "$err_msg" --argjson details "$err_details" '{error: {code: $code, message: $message, details: $details}}')"
   RESULT_QUICK_ACTIONS='[]'
@@ -500,7 +500,7 @@ emit_amux_error() {
 workspace_row_by_id() {
   local workspace_id="$1"
   local ws_out
-  if ! ws_out="$(amux_ok_json workspace list --archived)"; then
+  if ! ws_out="$(tumuxi_ok_json workspace list --archived)"; then
     return 1
   fi
   jq -c --arg id "$workspace_id" '
@@ -516,7 +516,7 @@ workspace_require_exists() {
   local workspace_id="$2"
   local ws_row
   if ! ws_row="$(workspace_row_by_id "$workspace_id")"; then
-    emit_amux_error "$command_name"
+    emit_tumuxi_error "$command_name"
     return 1
   fi
   if [[ -z "${ws_row// }" ]]; then
@@ -529,7 +529,7 @@ workspace_require_exists() {
 agent_for_workspace() {
   local workspace_id="$1"
   local agents_out
-  if ! agents_out="$(amux_ok_json agent list --workspace "$workspace_id")"; then
+  if ! agents_out="$(tumuxi_ok_json agent list --workspace "$workspace_id")"; then
     printf ''
     return 0
   fi
@@ -561,7 +561,7 @@ agent_for_workspace() {
     [[ -z "${session_name// }" ]] && continue
 
     local capture_out capture_status capture_needs_input capture_hint capture_hint_trim
-    if ! capture_out="$(amux_ok_json agent capture "$session_name" --lines 48)"; then
+    if ! capture_out="$(tumuxi_ok_json agent capture "$session_name" --lines 48)"; then
       continue
     fi
     capture_status="$(jq -r '.data.status // "captured"' <<<"$capture_out")"
@@ -715,7 +715,7 @@ context_file_path() {
       base="/tmp"
     fi
   fi
-  printf '%s' "$base/amux/openclaw-dx-context.json"
+  printf '%s' "$base/tumuxi/openclaw-dx-context.json"
 }
 
 context_read_json() {
@@ -951,7 +951,7 @@ project_row_by_path() {
   local project_path="$1"
   local canonical out
   canonical="$(canonicalize_path "$project_path")"
-  if ! out="$(amux_ok_json project list)"; then
+  if ! out="$(tumuxi_ok_json project list)"; then
     return 1
   fi
   jq -c --arg raw "$project_path" --arg canonical "$canonical" '
@@ -968,7 +968,7 @@ ensure_project_registered() {
     printf '%s' "$existing"
     return 0
   fi
-  if ! add_out="$(amux_ok_json project add "$project_path")"; then
+  if ! add_out="$(tumuxi_ok_json project add "$project_path")"; then
     return 1
   fi
   jq -c '.data // {}' <<<"$add_out"
@@ -1247,9 +1247,9 @@ emit_turn_passthrough() {
   normalized_json="$(jq -c --arg dx "$DX_CMD_REF" --arg turn "$TURN_CMD_REF" --arg step "$STEP_CMD_REF" '
     def rewrite:
       if type == "string" then
-        gsub("skills/amux/scripts/openclaw-dx\\.sh"; $dx)
-        | gsub("skills/amux/scripts/openclaw-turn\\.sh"; $turn)
-        | gsub("skills/amux/scripts/openclaw-step\\.sh"; $step)
+        gsub("skills/tumuxi/scripts/openclaw-dx\\.sh"; $dx)
+        | gsub("skills/tumuxi/scripts/openclaw-turn\\.sh"; $turn)
+        | gsub("skills/tumuxi/scripts/openclaw-step\\.sh"; $step)
       elif type == "array" then
         map(rewrite)
       elif type == "object" then
@@ -1325,8 +1325,8 @@ cmd_project_add() {
   fi
 
   local add_out
-  if ! add_out="$(amux_ok_json project add "$path")"; then
-    emit_amux_error "project.add"
+  if ! add_out="$(tumuxi_ok_json project add "$path")"; then
+    emit_tumuxi_error "project.add"
     return
   fi
 
@@ -1347,11 +1347,11 @@ cmd_project_add() {
       ws_args+=(--base "$base")
     fi
 
-    if ! ws_create_out="$(amux_ok_json "${ws_args[@]}")"; then
+    if ! ws_create_out="$(tumuxi_ok_json "${ws_args[@]}")"; then
       local err_payload err_code err_message retry_cmd
-      err_payload="$AMUX_ERROR_OUTPUT"
-      if [[ -z "${err_payload// }" ]] && [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$AMUX_ERROR_CAPTURE_FILE" ]]; then
-        err_payload="$(cat "$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
+      err_payload="$TUMUXI_ERROR_OUTPUT"
+      if [[ -z "${err_payload// }" ]] && [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$TUMUXI_ERROR_CAPTURE_FILE" ]]; then
+        err_payload="$(cat "$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
       fi
       err_code=""
       err_message=""
@@ -1360,14 +1360,14 @@ cmd_project_add() {
         err_message="$(jq -r '.error.message // ""' <<<"$err_payload")"
       fi
       if workspace_create_needs_initial_commit "$err_code" "$err_message"; then
-        retry_cmd="skills/amux/scripts/openclaw-dx.sh project add --path $(shell_quote "$project_path") --workspace $(shell_quote "$workspace_name") --assistant $(shell_quote "${assistant:-codex}")"
+        retry_cmd="skills/tumuxi/scripts/openclaw-dx.sh project add --path $(shell_quote "$project_path") --workspace $(shell_quote "$workspace_name") --assistant $(shell_quote "${assistant:-codex}")"
         if [[ -n "$base" ]]; then
           retry_cmd+=" --base $(shell_quote "$base")"
         fi
         emit_initial_commit_guidance "project.add" "$project_path" "$retry_cmd" "$err_message"
         return
       fi
-      emit_amux_error "project.add" "$err_payload"
+      emit_tumuxi_error "project.add" "$err_payload"
       return
     fi
     workspace_data="$(jq -c '.data' <<<"$ws_create_out")"
@@ -1394,19 +1394,19 @@ cmd_project_add() {
   RESULT_NEXT_ACTION="Create/select a workspace and start a focused coding turn."
   RESULT_SUGGESTED_COMMAND=""
   if [[ -n "$workspace_id" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze the biggest tech-debt items and fix the top one.\""
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze the biggest tech-debt items and fix the top one.\""
   else
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$project_path") --assistant codex"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$project_path") --assistant codex"
   fi
 
   local actions='[]'
-  actions="$(append_action "$actions" "ws_list" "Workspaces" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$project_path")" "primary" "List workspaces for this project")"
+  actions="$(append_action "$actions" "ws_list" "Workspaces" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$project_path")" "primary" "List workspaces for this project")"
   if [[ -z "$workspace_id" ]]; then
-    actions="$(append_action "$actions" "ws_create" "Create WS" "skills/amux/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$project_path") --assistant codex" "success" "Create a workspace for mobile coding")"
+    actions="$(append_action "$actions" "ws_create" "Create WS" "skills/tumuxi/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$project_path") --assistant codex" "success" "Create a workspace for mobile coding")"
   else
-    actions="$(append_action "$actions" "start" "Start" "skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze technical debt and implement the highest-impact fix.\"" "success" "Start a coding turn in this workspace")"
+    actions="$(append_action "$actions" "start" "Start" "skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze technical debt and implement the highest-impact fix.\"" "success" "Start a coding turn in this workspace")"
   fi
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --argjson project "$(jq -c '.data' <<<"$add_out")" --argjson workspace "$workspace_data" '{project: $project, workspace: $workspace}')"
@@ -1461,8 +1461,8 @@ cmd_project_list() {
   fi
 
   local out
-  if ! out="$(amux_ok_json project list)"; then
-    emit_amux_error "project.list"
+  if ! out="$(tumuxi_ok_json project list)"; then
+    emit_tumuxi_error "project.list"
     return
   fi
 
@@ -1518,9 +1518,9 @@ cmd_project_list() {
     local first_project_name
     first_project_name="$(jq -r '.[0].name // ""' <<<"$preview")"
     if [[ -n "$first_project_name" ]]; then
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")"
     else
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh project pick --index 1"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh project pick --index 1"
     fi
   elif [[ -n "${query// }" ]]; then
     RESULT_NEXT_ACTION="Try a broader query or register a new project."
@@ -1531,12 +1531,12 @@ cmd_project_list() {
   first_project_name="$(jq -r '.[0].name // ""' <<<"$preview")"
   local actions='[]'
   if [[ -n "$first_project_name" ]]; then
-    actions="$(append_action "$actions" "pick1" "Pick #1" "skills/amux/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")" "primary" "Select the first project")"
+    actions="$(append_action "$actions" "pick1" "Pick #1" "skills/tumuxi/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")" "primary" "Select the first project")"
   fi
   if [[ -n "$first_project_path" ]]; then
-    actions="$(append_action "$actions" "ws1" "WS #1" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$first_project_path")" "primary" "List workspaces for project #1")"
+    actions="$(append_action "$actions" "ws1" "WS #1" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$first_project_path")" "primary" "List workspaces for project #1")"
   fi
-  local page_cmd_base="skills/amux/scripts/openclaw-dx.sh project list --limit $limit"
+  local page_cmd_base="skills/tumuxi/scripts/openclaw-dx.sh project list --limit $limit"
   if [[ -n "${query// }" ]]; then
     page_cmd_base+=" --query $(shell_quote "$query")"
   fi
@@ -1547,9 +1547,9 @@ cmd_project_list() {
     actions="$(append_action "$actions" "next_page" "Next" "$page_cmd_base --page $((page + 1))" "primary" "Show next projects page")"
   fi
   if [[ -n "${query// }" ]]; then
-    actions="$(append_action "$actions" "clear_query" "Clear Query" "skills/amux/scripts/openclaw-dx.sh project list" "primary" "Show all projects")"
+    actions="$(append_action "$actions" "clear_query" "Clear Query" "skills/tumuxi/scripts/openclaw-dx.sh project list" "primary" "Show all projects")"
   fi
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg query "$query" --argjson count "$count" --argjson total_count "$total_count" --argjson page "$page" --argjson limit "$limit" --argjson total_pages "$total_pages" --argjson has_prev "$has_prev" --argjson has_next "$has_next" --argjson projects "$sorted" --argjson projects_page "$preview" '{query: $query, count: $count, total_count: $total_count, page: $page, limit: $limit, total_pages: $total_pages, has_prev: $has_prev, has_next: $has_next, projects: $projects, projects_page: $projects_page}')"
@@ -1620,8 +1620,8 @@ cmd_project_pick() {
   fi
 
   local out sorted count selected selected_name selected_path selected_index resolved_by resolved_input
-  if ! out="$(amux_ok_json project list)"; then
-    emit_amux_error "project.pick"
+  if ! out="$(tumuxi_ok_json project list)"; then
+    emit_tumuxi_error "project.pick"
     return
   fi
   sorted="$(jq -c '.data // [] | sort_by(.name)' <<<"$out")"
@@ -1691,9 +1691,9 @@ cmd_project_pick() {
         if ! is_positive_int "$row_index"; then
           continue
         fi
-        actions="$(append_action "$actions" "pick_${row_index}" "Pick #$row_index" "skills/amux/scripts/openclaw-dx.sh project pick --index $row_index" "primary" "Select $row_name")"
+        actions="$(append_action "$actions" "pick_${row_index}" "Pick #$row_index" "skills/tumuxi/scripts/openclaw-dx.sh project pick --index $row_index" "primary" "Select $row_name")"
       done < <(jq -c '.[0:6][]' <<<"$matches")
-      actions="$(append_action "$actions" "list" "List" "skills/amux/scripts/openclaw-dx.sh project list --query $(shell_quote "$name_query")" "primary" "Show filtered projects again")"
+      actions="$(append_action "$actions" "list" "List" "skills/tumuxi/scripts/openclaw-dx.sh project list --query $(shell_quote "$name_query")" "primary" "Show filtered projects again")"
       RESULT_QUICK_ACTIONS="$actions"
 
       RESULT_DATA="$(jq -cn --arg query "$name_query" --argjson matches "$matches" '{query: $query, matches: $matches}')"
@@ -1731,11 +1731,11 @@ cmd_project_pick() {
     RESULT_STATUS="ok"
     RESULT_SUMMARY="Selected project: $selected_name"
     RESULT_NEXT_ACTION="Create a workspace on this project, or choose an existing workspace."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$selected_path") --assistant codex"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$selected_path") --assistant codex"
 
     local actions='[]'
     actions="$(append_action "$actions" "ws_create" "Create WS" "$RESULT_SUGGESTED_COMMAND" "success" "Create a workspace on the selected project")"
-    actions="$(append_action "$actions" "ws_list" "Workspaces" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_path")" "primary" "List project workspaces")"
+    actions="$(append_action "$actions" "ws_list" "Workspaces" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_path")" "primary" "List project workspaces")"
     RESULT_QUICK_ACTIONS="$actions"
 
     RESULT_DATA="$(jq -cn --arg resolved_by "$resolved_by" --arg resolved_input "$resolved_input" --argjson index "$selected_index" --argjson project "$selected" '{resolved_by: $resolved_by, resolved_input: $resolved_input, index: $index, project: $project}')"
@@ -1756,8 +1756,8 @@ cmd_project_pick() {
   if [[ -n "$base" ]]; then
     ws_args+=(--base "$base")
   fi
-  if ! ws_out="$(amux_ok_json "${ws_args[@]}")"; then
-    emit_amux_error "project.pick"
+  if ! ws_out="$(tumuxi_ok_json "${ws_args[@]}")"; then
+    emit_tumuxi_error "project.pick"
     return
   fi
 
@@ -1774,11 +1774,11 @@ cmd_project_pick() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Selected project and created workspace: $ws_id"
   RESULT_NEXT_ACTION="Start a coding turn in the new workspace."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$ws_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze the biggest debt items and fix one high-impact issue.\""
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$ws_id") --assistant $(shell_quote "${assistant:-codex}") --prompt \"Analyze the biggest debt items and fix one high-impact issue.\""
 
   local actions='[]'
   actions="$(append_action "$actions" "start" "Start" "$RESULT_SUGGESTED_COMMAND" "success" "Start a coding turn")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$ws_id")" "primary" "Show workspace status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$ws_id")" "primary" "Show workspace status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg resolved_by "$resolved_by" --arg resolved_input "$resolved_input" --argjson index "$selected_index" --argjson project "$selected" --argjson workspace "$(jq -c '.data' <<<"$ws_out")" '{resolved_by: $resolved_by, resolved_input: $resolved_input, index: $index, project: $project, workspace: $workspace}')"
@@ -1828,8 +1828,8 @@ cmd_guide() {
   fi
 
   local projects_out projects_json project_count
-  if ! projects_out="$(amux_ok_json project list)"; then
-    emit_amux_error "guide"
+  if ! projects_out="$(tumuxi_ok_json project list)"; then
+    emit_tumuxi_error "guide"
     return
   fi
   projects_json="$(jq -c '.data // [] | sort_by(.name)' <<<"$projects_out")"
@@ -1859,8 +1859,8 @@ cmd_guide() {
   fi
 
   local ws_out ws_json
-  if ! ws_out="$(amux_ok_json workspace list)"; then
-    emit_amux_error "guide"
+  if ! ws_out="$(tumuxi_ok_json workspace list)"; then
+    emit_tumuxi_error "guide"
     return
   fi
   ws_json="$(jq -c '.data // []' <<<"$ws_out")"
@@ -1879,8 +1879,8 @@ cmd_guide() {
   fi
 
   local agents_out agents_json
-  if ! agents_out="$(amux_ok_json agent list)"; then
-    emit_amux_error "guide"
+  if ! agents_out="$(tumuxi_ok_json agent list)"; then
+    emit_tumuxi_error "guide"
     return
   fi
   agents_json="$(jq -c '.data // []' <<<"$agents_out")"
@@ -1943,7 +1943,7 @@ cmd_guide() {
   primary_session="$(jq -r '.[0].session_name // ""' <<<"$workspace_agents")"
 
   local terms_out terms_json
-  if ! terms_out="$(amux_ok_json terminal list)"; then
+  if ! terms_out="$(tumuxi_ok_json terminal list)"; then
     terms_json='[]'
   else
     terms_json="$(jq -c '.data // []' <<<"$terms_out")"
@@ -1964,7 +1964,7 @@ cmd_guide() {
   local capture_has_completion="false"
   if [[ -n "$primary_session" ]]; then
     local capture_out
-    if capture_out="$(amux_ok_json agent capture "$primary_session" --lines "$capture_lines")"; then
+    if capture_out="$(tumuxi_ok_json agent capture "$primary_session" --lines "$capture_lines")"; then
       capture_status="$(jq -r '.data.status // ""' <<<"$capture_out")"
       capture_summary="$(jq -r '.data.summary // .data.latest_line // ""' <<<"$capture_out")"
       capture_needs_input="$(jq -r '.data.needs_input // false' <<<"$capture_out")"
@@ -1995,32 +1995,32 @@ cmd_guide() {
       reason="No project is registered yet."
       RESULT_SUMMARY="Guide: register your first project"
       RESULT_NEXT_ACTION="Register the current repo as a project, then create a workspace."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant $(shell_quote "$assistant")"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant $(shell_quote "$assistant")"
     else
       stage="select_project"
       reason="Project context is not selected."
       RESULT_SUMMARY="Guide: choose a project"
       RESULT_NEXT_ACTION="Pick one project to continue."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh project list"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh project list"
     fi
   elif [[ "$project_workspace_count" -eq 0 ]]; then
     stage="create_workspace"
     reason="This project has no workspace yet."
     RESULT_SUMMARY="Guide: create a workspace"
     RESULT_NEXT_ACTION="Create a workspace, then start coding."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh workspace decide --project $(shell_quote "$selected_project_path") --task $(shell_quote "$kickoff_prompt") --assistant $(shell_quote "$assistant")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh workspace decide --project $(shell_quote "$selected_project_path") --task $(shell_quote "$kickoff_prompt") --assistant $(shell_quote "$assistant")"
   elif [[ -z "$selected_workspace_id" ]]; then
     stage="select_workspace"
     reason="A workspace is required before starting or continuing agents."
     RESULT_SUMMARY="Guide: select a workspace"
     RESULT_NEXT_ACTION="Pick a workspace for this project."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_project_path")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_project_path")"
   elif [[ "$workspace_agent_count" -eq 0 ]]; then
     stage="start_agent"
     reason="No active coding agent is running in this workspace."
     RESULT_SUMMARY="Guide: start a coding turn"
     RESULT_NEXT_ACTION="Start an agent turn in this workspace."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
   elif [[ "$capture_needs_input" == "true" ]]; then
     stage="reply_agent"
     reason="Active agent is waiting for user input."
@@ -2028,9 +2028,9 @@ cmd_guide() {
     RESULT_SUMMARY="Guide: reply to blocked agent"
     RESULT_NEXT_ACTION="Reply to the active prompt so work can continue."
     if [[ -n "$primary_agent" ]]; then
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$primary_agent") --text $(shell_quote "${capture_hint:-Continue with the safest option and report status plus next action.}") --enter"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$primary_agent") --text $(shell_quote "${capture_hint:-Continue with the safest option and report status plus next action.}") --enter"
     else
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$selected_workspace_id") --text $(shell_quote "${capture_hint:-Continue with the safest option and report status plus next action.}") --enter"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$selected_workspace_id") --text $(shell_quote "${capture_hint:-Continue with the safest option and report status plus next action.}") --enter"
     fi
   elif [[ "$capture_status" == "session_exited" ]]; then
     stage="restart_agent"
@@ -2038,23 +2038,23 @@ cmd_guide() {
     RESULT_STATUS="attention"
     RESULT_SUMMARY="Guide: restart the coding agent"
     RESULT_NEXT_ACTION="Restart an agent turn in this workspace."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
   elif [[ "$capture_has_completion" == "true" ]]; then
     stage="review_and_ship"
     reason="Agent output indicates a completed change."
     RESULT_STATUS="attention"
     RESULT_SUMMARY="Guide: review and ship"
     RESULT_NEXT_ACTION="Run review, then commit/push if clean."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$selected_workspace_id") --assistant codex"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$selected_workspace_id") --assistant codex"
   else
     stage="continue_agent"
     reason="Agent is active and can continue with the next task."
     RESULT_SUMMARY="Guide: continue current turn"
     RESULT_NEXT_ACTION="Continue the agent or monitor status/alerts."
     if [[ -n "$primary_agent" ]]; then
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$primary_agent") --text \"Continue from current state and report status plus next action.\" --enter"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$primary_agent") --text \"Continue from current state and report status plus next action.\" --enter"
     else
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$selected_workspace_id") --text \"Continue from current state and report status plus next action.\" --enter"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$selected_workspace_id") --text \"Continue from current state and report status plus next action.\" --enter"
     fi
   fi
 
@@ -2066,57 +2066,57 @@ cmd_guide() {
 
   case "$stage" in
     add_project)
-      actions="$(append_action "$actions" "add_cwd" "Add Project" "skills/amux/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant $(shell_quote "$assistant")" "success" "Register current directory and create a workspace")"
-      actions="$(append_action "$actions" "project_list" "Projects" "skills/amux/scripts/openclaw-dx.sh project list" "primary" "List registered projects")"
+      actions="$(append_action "$actions" "add_cwd" "Add Project" "skills/tumuxi/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant $(shell_quote "$assistant")" "success" "Register current directory and create a workspace")"
+      actions="$(append_action "$actions" "project_list" "Projects" "skills/tumuxi/scripts/openclaw-dx.sh project list" "primary" "List registered projects")"
       ;;
     select_project)
-      actions="$(append_action "$actions" "project_list" "Projects" "skills/amux/scripts/openclaw-dx.sh project list" "primary" "List registered projects")"
+      actions="$(append_action "$actions" "project_list" "Projects" "skills/tumuxi/scripts/openclaw-dx.sh project list" "primary" "List registered projects")"
       if [[ -n "$first_project_name" ]]; then
-        actions="$(append_action "$actions" "pick_first" "Pick #1" "skills/amux/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")" "success" "Select the first listed project")"
+        actions="$(append_action "$actions" "pick_first" "Pick #1" "skills/tumuxi/scripts/openclaw-dx.sh project pick --name $(shell_quote "$first_project_name")" "success" "Select the first listed project")"
       fi
       ;;
     create_workspace)
-      actions="$(append_action "$actions" "decide_ws" "Decide WS" "skills/amux/scripts/openclaw-dx.sh workspace decide --project $(shell_quote "$selected_project_path") --task $(shell_quote "$kickoff_prompt") --assistant $(shell_quote "$assistant")" "success" "Get project vs nested workspace recommendation")"
-      actions="$(append_action "$actions" "create_ws" "Create WS" "skills/amux/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$selected_project_path") --assistant $(shell_quote "$assistant")" "primary" "Create a project workspace directly")"
+      actions="$(append_action "$actions" "decide_ws" "Decide WS" "skills/tumuxi/scripts/openclaw-dx.sh workspace decide --project $(shell_quote "$selected_project_path") --task $(shell_quote "$kickoff_prompt") --assistant $(shell_quote "$assistant")" "success" "Get project vs nested workspace recommendation")"
+      actions="$(append_action "$actions" "create_ws" "Create WS" "skills/tumuxi/scripts/openclaw-dx.sh workspace create --name mobile --project $(shell_quote "$selected_project_path") --assistant $(shell_quote "$assistant")" "primary" "Create a project workspace directly")"
       ;;
     select_workspace)
-      actions="$(append_action "$actions" "list_ws" "Workspaces" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_project_path")" "primary" "List project workspaces")"
+      actions="$(append_action "$actions" "list_ws" "Workspaces" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$selected_project_path")" "primary" "List project workspaces")"
       if [[ -n "$first_workspace_id" ]]; then
-        actions="$(append_action "$actions" "start_ws" "Start #1" "skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$first_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")" "success" "Start coding in the first workspace")"
+        actions="$(append_action "$actions" "start_ws" "Start #1" "skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$first_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")" "success" "Start coding in the first workspace")"
       fi
       ;;
     start_agent)
-      actions="$(append_action "$actions" "start" "Start" "skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")" "success" "Start coding turn")"
-      actions="$(append_action "$actions" "dual" "Dual Pass" "skills/amux/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$selected_workspace_id") --implement-assistant claude --review-assistant codex" "primary" "Implement then review with separate assistants")"
-      actions="$(append_action "$actions" "terminal" "Next.js Dev" "skills/amux/scripts/openclaw-dx.sh terminal preset --workspace $(shell_quote "$selected_workspace_id") --kind nextjs" "primary" "Start Next.js dev server in this workspace")"
+      actions="$(append_action "$actions" "start" "Start" "skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$selected_workspace_id") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")" "success" "Start coding turn")"
+      actions="$(append_action "$actions" "dual" "Dual Pass" "skills/tumuxi/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$selected_workspace_id") --implement-assistant claude --review-assistant codex" "primary" "Implement then review with separate assistants")"
+      actions="$(append_action "$actions" "terminal" "Next.js Dev" "skills/tumuxi/scripts/openclaw-dx.sh terminal preset --workspace $(shell_quote "$selected_workspace_id") --kind nextjs" "primary" "Start Next.js dev server in this workspace")"
       ;;
     reply_agent)
       actions="$(append_action "$actions" "reply" "Reply" "$RESULT_SUGGESTED_COMMAND" "danger" "Reply to blocked agent prompt")"
-      actions="$(append_action "$actions" "status_ws" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
-      actions="$(append_action "$actions" "alerts_ws" "Alerts" "skills/amux/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$selected_workspace_id")" "primary" "Show blocking alerts only")"
+      actions="$(append_action "$actions" "status_ws" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
+      actions="$(append_action "$actions" "alerts_ws" "Alerts" "skills/tumuxi/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$selected_workspace_id")" "primary" "Show blocking alerts only")"
       ;;
     restart_agent)
       actions="$(append_action "$actions" "restart" "Restart" "$RESULT_SUGGESTED_COMMAND" "danger" "Restart agent in this workspace")"
-      actions="$(append_action "$actions" "status_ws" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
+      actions="$(append_action "$actions" "status_ws" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
       ;;
     review_and_ship)
-      actions="$(append_action "$actions" "review" "Review" "skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$selected_workspace_id") --assistant codex" "success" "Review uncommitted changes")"
-      actions="$(append_action "$actions" "ship" "Ship" "skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$selected_workspace_id")" "primary" "Commit current changes")"
-      actions="$(append_action "$actions" "dual" "Dual Pass" "skills/amux/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$selected_workspace_id") --implement-assistant claude --review-assistant codex" "primary" "Run implementation+review pass")"
+      actions="$(append_action "$actions" "review" "Review" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$selected_workspace_id") --assistant codex" "success" "Review uncommitted changes")"
+      actions="$(append_action "$actions" "ship" "Ship" "skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$selected_workspace_id")" "primary" "Commit current changes")"
+      actions="$(append_action "$actions" "dual" "Dual Pass" "skills/tumuxi/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$selected_workspace_id") --implement-assistant claude --review-assistant codex" "primary" "Run implementation+review pass")"
       ;;
     continue_agent)
       actions="$(append_action "$actions" "continue" "Continue" "$RESULT_SUGGESTED_COMMAND" "success" "Continue active coding turn")"
-      actions="$(append_action "$actions" "status_ws" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
-      actions="$(append_action "$actions" "logs" "Terminal Logs" "skills/amux/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$selected_workspace_id") --lines 120" "primary" "Inspect terminal output")"
+      actions="$(append_action "$actions" "status_ws" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$selected_workspace_id")" "primary" "Check workspace state")"
+      actions="$(append_action "$actions" "logs" "Terminal Logs" "skills/tumuxi/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$selected_workspace_id") --lines 120" "primary" "Inspect terminal output")"
       ;;
   esac
 
   if [[ -n "$selected_workspace_id" ]]; then
-    actions="$(append_action "$actions" "cleanup" "Cleanup" "skills/amux/scripts/openclaw-dx.sh cleanup --older-than 24h --yes" "primary" "Prune stale sessions")"
+    actions="$(append_action "$actions" "cleanup" "Cleanup" "skills/tumuxi/scripts/openclaw-dx.sh cleanup --older-than 24h --yes" "primary" "Prune stale sessions")"
   elif [[ -n "$first_project_path" ]]; then
-    actions="$(append_action "$actions" "workspace_list_first" "WS #1" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$first_project_path")" "primary" "Inspect first project's workspaces")"
+    actions="$(append_action "$actions" "workspace_list_first" "WS #1" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$first_project_path")" "primary" "Inspect first project's workspaces")"
   fi
-  actions="$(append_action "$actions" "status_global" "Global Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Show global status across projects")"
+  actions="$(append_action "$actions" "status_global" "Global Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Show global status across projects")"
   RESULT_QUICK_ACTIONS="$actions"
 
   local workspace_count_total
@@ -2198,7 +2198,7 @@ workspace_create_emit_existing_recovery() {
   local conflict_message="$5"
 
   local ws_out ws_rows existing
-  if ! ws_out="$(amux_ok_json workspace list --repo "$project")"; then
+  if ! ws_out="$(tumuxi_ok_json workspace list --repo "$project")"; then
     return 1
   fi
   ws_rows="$(jq -c '.data // []' <<<"$ws_out")"
@@ -2249,12 +2249,12 @@ workspace_create_emit_existing_recovery() {
   RESULT_STATUS="attention"
   RESULT_SUMMARY="Workspace already exists: $existing_id"
   RESULT_NEXT_ACTION="Reuse the existing workspace, or retry with a different workspace name."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$existing_id") --assistant $(shell_quote "$suggested_assistant") --prompt \"Summarize current status and continue with next high-impact task.\""
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$existing_id") --assistant $(shell_quote "$suggested_assistant") --prompt \"Summarize current status and continue with next high-impact task.\""
 
   local actions='[]'
   actions="$(append_action "$actions" "start_existing" "Use Existing" "$RESULT_SUGGESTED_COMMAND" "success" "Start in the existing workspace")"
-  actions="$(append_action "$actions" "list_ws" "Workspaces" "skills/amux/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$project")" "primary" "List all workspaces for this project")"
-  actions="$(append_action "$actions" "retry_new_name" "New Name" "skills/amux/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$alt_name") --project $(shell_quote "$project") --scope $(shell_quote "$requested_scope") --assistant $(shell_quote "$suggested_assistant")" "primary" "Retry workspace creation with a new name")"
+  actions="$(append_action "$actions" "list_ws" "Workspaces" "skills/tumuxi/scripts/openclaw-dx.sh workspace list --project $(shell_quote "$project")" "primary" "List all workspaces for this project")"
+  actions="$(append_action "$actions" "retry_new_name" "New Name" "skills/tumuxi/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$alt_name") --project $(shell_quote "$project") --scope $(shell_quote "$requested_scope") --assistant $(shell_quote "$suggested_assistant")" "primary" "Retry workspace creation with a new name")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn \
@@ -2311,7 +2311,7 @@ emit_initial_commit_guidance() {
 
   local actions='[]'
   actions="$(append_action "$actions" "retry" "Retry" "$retry_command" "primary" "Retry workspace creation after initial commit")"
-  actions="$(append_action "$actions" "project_only" "Project Only" "skills/amux/scripts/openclaw-dx.sh project add --path $(shell_quote "$project")" "primary" "Register project without creating a workspace")"
+  actions="$(append_action "$actions" "project_only" "Project Only" "skills/tumuxi/scripts/openclaw-dx.sh project add --path $(shell_quote "$project")" "primary" "Register project without creating a workspace")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg project "$project" --arg retry_command "$retry_command" --arg commit_command "$commit_cmd" --arg error "$raw_error" '{project: $project, retry_command: $retry_command, commit_command: $commit_command, error: $error, reason: "initial_commit_required"}')"
@@ -2359,7 +2359,7 @@ cmd_workspace_create() {
 
   if [[ -n "$from_workspace" ]]; then
     if ! parent_row="$(workspace_row_by_id "$from_workspace")"; then
-      emit_amux_error "workspace.create"
+      emit_tumuxi_error "workspace.create"
       return
     fi
     if [[ -z "${parent_row// }" ]]; then
@@ -2416,11 +2416,11 @@ cmd_workspace_create() {
   if [[ -n "$base" ]]; then
     args+=(--base "$base")
   fi
-  if ! out="$(amux_ok_json "${args[@]}")"; then
+  if ! out="$(tumuxi_ok_json "${args[@]}")"; then
     local err_payload err_code err_message
-    err_payload="$AMUX_ERROR_OUTPUT"
-    if [[ -z "${err_payload// }" ]] && [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$AMUX_ERROR_CAPTURE_FILE" ]]; then
-      err_payload="$(cat "$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
+    err_payload="$TUMUXI_ERROR_OUTPUT"
+    if [[ -z "${err_payload// }" ]] && [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$TUMUXI_ERROR_CAPTURE_FILE" ]]; then
+      err_payload="$(cat "$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
     fi
     err_code=""
     err_message=""
@@ -2430,9 +2430,9 @@ cmd_workspace_create() {
     fi
     if workspace_create_needs_initial_commit "$err_code" "$err_message"; then
       local retry_cmd
-      retry_cmd="skills/amux/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --project $(shell_quote "$project") --scope $(shell_quote "$scope") --assistant $(shell_quote "${assistant:-codex}")"
+      retry_cmd="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --project $(shell_quote "$project") --scope $(shell_quote "$scope") --assistant $(shell_quote "${assistant:-codex}")"
       if [[ -n "$from_workspace" ]]; then
-        retry_cmd="skills/amux/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --from-workspace $(shell_quote "$from_workspace") --scope $(shell_quote "$scope") --assistant $(shell_quote "${assistant:-codex}")"
+        retry_cmd="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --from-workspace $(shell_quote "$from_workspace") --scope $(shell_quote "$scope") --assistant $(shell_quote "${assistant:-codex}")"
       fi
       if [[ -n "$base" ]]; then
         retry_cmd+=" --base $(shell_quote "$base")"
@@ -2445,7 +2445,7 @@ cmd_workspace_create() {
         return
       fi
     fi
-    emit_amux_error "workspace.create" "$err_payload"
+    emit_tumuxi_error "workspace.create" "$err_payload"
     return
   fi
 
@@ -2460,12 +2460,12 @@ cmd_workspace_create() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Workspace ready: $ws_id"
   RESULT_NEXT_ACTION="Start coding in this workspace, or run terminal setup commands."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$ws_id") --assistant $(shell_quote "${assistant_out:-codex}") --prompt \"Analyze the biggest debt item and implement the fix.\""
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$ws_id") --assistant $(shell_quote "${assistant_out:-codex}") --prompt \"Analyze the biggest debt item and implement the fix.\""
 
   local actions='[]'
   actions="$(append_action "$actions" "start" "Start" "$RESULT_SUGGESTED_COMMAND" "success" "Start a coding turn in this workspace")"
-  actions="$(append_action "$actions" "term" "Terminal" "skills/amux/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$ws_id") --text \"pwd\" --enter" "primary" "Run a terminal command in this workspace")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$ws_id")" "primary" "Show workspace status")"
+  actions="$(append_action "$actions" "term" "Terminal" "skills/tumuxi/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$ws_id") --text \"pwd\" --enter" "primary" "Run a terminal command in this workspace")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$ws_id")" "primary" "Show workspace status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg scope "$scope" --arg requested_name "$name" --arg final_name "$final_name" --arg parent_workspace "$from_workspace" --argjson workspace "$(jq -c '.data' <<<"$out")" '{scope: $scope, requested_name: $requested_name, final_name: $final_name, parent_workspace: $parent_workspace, workspace: $workspace}')"
@@ -2517,8 +2517,8 @@ cmd_workspace_list() {
   if [[ -n "$project" ]]; then
     ws_args+=(--repo "$project")
   fi
-  if ! ws_out="$(amux_ok_json "${ws_args[@]}")"; then
-    emit_amux_error "workspace.list"
+  if ! ws_out="$(tumuxi_ok_json "${ws_args[@]}")"; then
+    emit_tumuxi_error "workspace.list"
     return
   fi
 
@@ -2529,12 +2529,12 @@ cmd_workspace_list() {
   fi
 
   local agents_out terminals_out agents_json terminals_json
-  if ! agents_out="$(amux_ok_json agent list)"; then
+  if ! agents_out="$(tumuxi_ok_json agent list)"; then
     agents_json='[]'
   else
     agents_json="$(jq -c '.data // []' <<<"$agents_out")"
   fi
-  if ! terminals_out="$(amux_ok_json terminal list)"; then
+  if ! terminals_out="$(tumuxi_ok_json terminal list)"; then
     terminals_json='[]'
   else
     terminals_json="$(jq -c '.data // []' <<<"$terminals_out")"
@@ -2587,7 +2587,7 @@ cmd_workspace_list() {
   local first_ws
   first_ws="$(jq -r '.[0].id // ""' <<<"$preview")"
   if [[ -n "$first_ws" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$first_ws") --assistant codex --prompt \"Summarize current objectives and pick the next coding task.\""
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$first_ws") --assistant codex --prompt \"Summarize current objectives and pick the next coding task.\""
   fi
 
   if [[ -n "$project" ]]; then
@@ -2619,9 +2619,9 @@ cmd_workspace_list() {
   local actions='[]'
   if [[ -n "$first_ws" ]]; then
     actions="$(append_action "$actions" "start" "Start #1" "$RESULT_SUGGESTED_COMMAND" "success" "Start coding in the first listed workspace")"
-    actions="$(append_action "$actions" "status" "Status #1" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$first_ws")" "primary" "Check status for the first listed workspace")"
+    actions="$(append_action "$actions" "status" "Status #1" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$first_ws")" "primary" "Check status for the first listed workspace")"
   fi
-  local list_cmd_base="skills/amux/scripts/openclaw-dx.sh workspace list --limit $limit"
+  local list_cmd_base="skills/tumuxi/scripts/openclaw-dx.sh workspace list --limit $limit"
   if [[ -n "$project" ]]; then
     list_cmd_base+=" --project $(shell_quote "$project")"
   fi
@@ -2634,7 +2634,7 @@ cmd_workspace_list() {
   if [[ "$has_next" == "true" ]]; then
     actions="$(append_action "$actions" "next_page" "Next" "$list_cmd_base --page $((page + 1))" "primary" "Show next workspaces page")"
   fi
-  actions="$(append_action "$actions" "global" "Global" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
+  actions="$(append_action "$actions" "global" "Global" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Show global coding status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg project "$project" --argjson project_from_context "$project_from_context" --argjson count "$count" --argjson page "$page" --argjson limit "$limit" --argjson total_pages "$total_pages" --argjson has_prev "$has_prev" --argjson has_next "$has_next" --argjson workspaces "$sorted" --argjson workspaces_page "$preview" '{project: $project, project_from_context: $project_from_context, count: $count, page: $page, limit: $limit, total_pages: $total_pages, has_prev: $has_prev, has_next: $has_next, workspaces: $workspaces, workspaces_page: $workspaces_page}')"
@@ -2705,7 +2705,7 @@ cmd_workspace_decide() {
   local parent_id=""
   if [[ -n "$from_workspace" ]]; then
     if ! parent_row="$(workspace_row_by_id "$from_workspace")"; then
-      emit_amux_error "workspace.decide"
+      emit_tumuxi_error "workspace.decide"
       return
     fi
     if [[ -z "${parent_row// }" ]]; then
@@ -2727,16 +2727,16 @@ cmd_workspace_decide() {
   context_set_project "$project" ""
 
   local ws_out
-  if ! ws_out="$(amux_ok_json workspace list --repo "$project")"; then
-    emit_amux_error "workspace.decide"
+  if ! ws_out="$(tumuxi_ok_json workspace list --repo "$project")"; then
+    emit_tumuxi_error "workspace.decide"
     return
   fi
   local ws_json
   ws_json="$(jq -c '.data // []' <<<"$ws_out")"
 
   local agents_out
-  if ! agents_out="$(amux_ok_json agent list)"; then
-    emit_amux_error "workspace.decide"
+  if ! agents_out="$(tumuxi_ok_json agent list)"; then
+    emit_tumuxi_error "workspace.decide"
     return
   fi
   local agents_json
@@ -2798,9 +2798,9 @@ cmd_workspace_decide() {
   fi
 
   local project_create_cmd="" nested_create_cmd="" kickoff_prompt="" recommended_command="" alternate_command=""
-  project_create_cmd="skills/amux/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$final_project_name") --project $(shell_quote "$project") --assistant $(shell_quote "$assistant")"
+  project_create_cmd="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$final_project_name") --project $(shell_quote "$project") --assistant $(shell_quote "$assistant")"
   if [[ -n "$parent_id" ]]; then
-    nested_create_cmd="skills/amux/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --from-workspace $(shell_quote "$parent_id") --scope nested --assistant $(shell_quote "$assistant")"
+    nested_create_cmd="skills/tumuxi/scripts/openclaw-dx.sh workspace create --name $(shell_quote "$name") --from-workspace $(shell_quote "$parent_id") --scope nested --assistant $(shell_quote "$assistant")"
   else
     nested_create_cmd=""
   fi
@@ -2811,12 +2811,12 @@ cmd_workspace_decide() {
   fi
 
   if [[ "$recommendation" == "nested" && -n "$parent_id" ]]; then
-    recommended_command="skills/amux/scripts/openclaw-dx.sh workflow kickoff --from-workspace $(shell_quote "$parent_id") --scope nested --name $(shell_quote "$name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
-    alternate_command="skills/amux/scripts/openclaw-dx.sh workflow kickoff --project $(shell_quote "$project") --name $(shell_quote "$final_project_name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+    recommended_command="skills/tumuxi/scripts/openclaw-dx.sh workflow kickoff --from-workspace $(shell_quote "$parent_id") --scope nested --name $(shell_quote "$name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+    alternate_command="skills/tumuxi/scripts/openclaw-dx.sh workflow kickoff --project $(shell_quote "$project") --name $(shell_quote "$final_project_name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
   else
-    recommended_command="skills/amux/scripts/openclaw-dx.sh workflow kickoff --project $(shell_quote "$project") --name $(shell_quote "$final_project_name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+    recommended_command="skills/tumuxi/scripts/openclaw-dx.sh workflow kickoff --project $(shell_quote "$project") --name $(shell_quote "$final_project_name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
     if [[ -n "$parent_id" ]]; then
-      alternate_command="skills/amux/scripts/openclaw-dx.sh workflow kickoff --from-workspace $(shell_quote "$parent_id") --scope nested --name $(shell_quote "$name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
+      alternate_command="skills/tumuxi/scripts/openclaw-dx.sh workflow kickoff --from-workspace $(shell_quote "$parent_id") --scope nested --name $(shell_quote "$name") --assistant $(shell_quote "$assistant") --prompt $(shell_quote "$kickoff_prompt")"
     fi
   fi
 
@@ -3074,7 +3074,7 @@ cmd_continue() {
   fi
   if [[ -z "$agent" && -z "$workspace" ]]; then
     local active_agents_out active_agents_json active_count
-    if active_agents_out="$(amux_ok_json agent list)"; then
+    if active_agents_out="$(tumuxi_ok_json agent list)"; then
       active_agents_json="$(jq -c '.data // []' <<<"$active_agents_out")"
       active_count="$(jq -r 'length' <<<"$active_agents_json")"
       if [[ "$active_count" == "1" ]]; then
@@ -3092,9 +3092,9 @@ cmd_continue() {
         RESULT_NEXT_ACTION="Choose one active agent to continue."
         RESULT_SUGGESTED_COMMAND=""
         if [[ -n "$first_agent" ]]; then
-          RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_agent") --text \"Continue from current state and report status plus next action.\" --enter"
+          RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_agent") --text \"Continue from current state and report status plus next action.\" --enter"
         elif [[ -n "$first_workspace" ]]; then
-          RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$first_workspace") --text \"Continue from current state and report status plus next action.\" --enter"
+          RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$first_workspace") --text \"Continue from current state and report status plus next action.\" --enter"
         fi
 
         local actions='[]'
@@ -3108,11 +3108,11 @@ cmd_continue() {
           if [[ -z "$row_agent" ]]; then
             continue
           fi
-          continue_cmd="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$row_agent") --text \"Continue from current state and report status plus next action.\" --enter"
+          continue_cmd="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$row_agent") --text \"Continue from current state and report status plus next action.\" --enter"
           label="Continue #$row_index"
           actions="$(append_action "$actions" "continue_${row_index}" "$label" "$continue_cmd" "primary" "Continue $row_agent in $row_workspace $row_session")"
         done < <(jq -c 'to_entries | map({index: (.key + 1), agent_id: (.value.agent_id // ""), workspace_id: (.value.workspace_id // ""), session_name: (.value.session_name // "")}) | .[0:6][]' <<<"$active_agents_json")
-        actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "See all active agents and alerts")"
+        actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "See all active agents and alerts")"
         RESULT_QUICK_ACTIONS="$actions"
 
         RESULT_DATA="$(jq -cn --argjson active_count "$active_count" --argjson agents "$active_agents_json" '{reason: "multiple_active_agents", active_count: $active_count, agents: $agents}')"
@@ -3165,10 +3165,10 @@ cmd_continue() {
       RESULT_STATUS="attention"
       RESULT_SUMMARY="No active agent found for workspace $workspace"
       RESULT_NEXT_ACTION="Start a new agent turn in this workspace, then continue. You can also use --auto-start."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$workspace") --auto-start --assistant codex --text \"Resume work and provide status plus next action.\""
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$workspace") --auto-start --assistant codex --text \"Resume work and provide status plus next action.\""
       RESULT_DATA="$(jq -cn --arg workspace "$workspace" '{workspace: $workspace, reason: "no_active_agent"}')"
       local start_cmd
-      start_cmd="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant codex --prompt \"Resume work and provide status plus next action.\""
+      start_cmd="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant codex --prompt \"Resume work and provide status plus next action.\""
       RESULT_QUICK_ACTIONS="$(jq -cn --arg cmd "$RESULT_SUGGESTED_COMMAND" --arg start_cmd "$start_cmd" '
         [
           {id:"auto_start", label:"Auto Start", command:$cmd, style:"success", prompt:"Auto-start and continue in one command"},
@@ -3287,8 +3287,8 @@ cmd_status() {
   fi
 
   local projects_out ws_out agents_out terms_out sessions_out prune_out
-  if ! projects_out="$(amux_ok_json project list)"; then
-    emit_amux_error "$result_command"
+  if ! projects_out="$(tumuxi_ok_json project list)"; then
+    emit_tumuxi_error "$result_command"
     return
   fi
 
@@ -3296,8 +3296,8 @@ cmd_status() {
   if [[ -n "$project" ]]; then
     ws_args+=(--repo "$project")
   fi
-  if ! ws_out="$(amux_ok_json "${ws_args[@]}")"; then
-    emit_amux_error "$result_command"
+  if ! ws_out="$(tumuxi_ok_json "${ws_args[@]}")"; then
+    emit_tumuxi_error "$result_command"
     return
   fi
 
@@ -3305,8 +3305,8 @@ cmd_status() {
   if [[ -n "$workspace" ]]; then
     agents_args+=(--workspace "$workspace")
   fi
-  if ! agents_out="$(amux_ok_json "${agents_args[@]}")"; then
-    emit_amux_error "$result_command"
+  if ! agents_out="$(tumuxi_ok_json "${agents_args[@]}")"; then
+    emit_tumuxi_error "$result_command"
     return
   fi
 
@@ -3314,17 +3314,17 @@ cmd_status() {
   if [[ -n "$workspace" ]]; then
     term_args+=(--workspace "$workspace")
   fi
-  if ! terms_out="$(amux_ok_json "${term_args[@]}")"; then
-    emit_amux_error "$result_command"
+  if ! terms_out="$(tumuxi_ok_json "${term_args[@]}")"; then
+    emit_tumuxi_error "$result_command"
     return
   fi
 
-  if ! sessions_out="$(amux_ok_json session list)"; then
-    emit_amux_error "$result_command"
+  if ! sessions_out="$(tumuxi_ok_json session list)"; then
+    emit_tumuxi_error "$result_command"
     return
   fi
 
-  if ! prune_out="$(amux_ok_json session prune --older-than "$older_than")"; then
+  if ! prune_out="$(tumuxi_ok_json session prune --older-than "$older_than")"; then
     prune_out='{"ok":true,"data":{"dry_run":true,"pruned":[],"total":0,"errors":[]}}'
   fi
 
@@ -3373,7 +3373,7 @@ cmd_status() {
     [[ -z "$session_name" ]] && continue
 
     local capture_out
-    if ! capture_out="$(amux_ok_json agent capture "$session_name" --lines "$capture_lines")"; then
+    if ! capture_out="$(tumuxi_ok_json agent capture "$session_name" --lines "$capture_lines")"; then
       continue
     fi
 
@@ -3444,7 +3444,7 @@ cmd_status() {
   local next_action suggested_command
   next_action="Review active agents and continue where needed."
   local refresh_cmd
-  refresh_cmd="skills/amux/scripts/openclaw-dx.sh $result_command"
+  refresh_cmd="skills/tumuxi/scripts/openclaw-dx.sh $result_command"
   if [[ -n "$project" ]]; then
     refresh_cmd+=" --project $(shell_quote "$project")"
   fi
@@ -3468,17 +3468,17 @@ cmd_status() {
   first_completed_agent="$(jq -r '.[] | select(.type == "completed") | .agent_id // empty' <<<"$alerts" | head -n 1)"
   if [[ -n "$first_needs_input_agent" ]]; then
     next_action="Reply to the blocked agent prompt first."
-    suggested_command="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_needs_input_agent") --text \"Continue using the safest option and then report status plus next action.\" --enter"
+    suggested_command="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_needs_input_agent") --text \"Continue using the safest option and then report status plus next action.\" --enter"
   elif [[ "$completed_count" -gt 0 ]]; then
     next_action="Review recently completed agent work and ship if clean."
     if [[ -n "$first_completed_workspace" ]]; then
-      suggested_command="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$first_completed_workspace") --assistant codex"
+      suggested_command="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$first_completed_workspace") --assistant codex"
     elif [[ -n "$first_completed_agent" ]]; then
-      suggested_command="skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_completed_agent") --text \"Summarize final changes, tests, and remaining risks in 5 bullets.\" --enter"
+      suggested_command="skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_completed_agent") --text \"Summarize final changes, tests, and remaining risks in 5 bullets.\" --enter"
     fi
   elif [[ "$stale_alert_count" -gt 0 ]]; then
     next_action="Clean stale sessions to reduce noise."
-    suggested_command="skills/amux/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes"
+    suggested_command="skills/tumuxi/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes"
   fi
 
   local ws_enriched ws_preview ws_lines
@@ -3515,23 +3515,23 @@ cmd_status() {
   local actions='[]'
   actions="$(append_action "$actions" "refresh" "Refresh" "$refresh_cmd" "primary" "Refresh agent/workspace status")"
   if [[ -n "$first_needs_input_agent" ]]; then
-    actions="$(append_action "$actions" "reply" "Reply" "skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_needs_input_agent") --text \"Continue using the safest option and report status and blockers.\" --enter" "danger" "Reply to blocked agent")"
+    actions="$(append_action "$actions" "reply" "Reply" "skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_needs_input_agent") --text \"Continue using the safest option and report status and blockers.\" --enter" "danger" "Reply to blocked agent")"
   fi
   if [[ "$completed_count" -gt 0 ]]; then
     if [[ -n "$first_completed_workspace" ]]; then
-      actions="$(append_action "$actions" "review_done" "Review Done" "skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$first_completed_workspace") --assistant codex" "success" "Review completed workspace changes")"
-      actions="$(append_action "$actions" "ship_done" "Ship Done" "skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$first_completed_workspace") --push" "primary" "Commit and push completed workspace changes")"
+      actions="$(append_action "$actions" "review_done" "Review Done" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$first_completed_workspace") --assistant codex" "success" "Review completed workspace changes")"
+      actions="$(append_action "$actions" "ship_done" "Ship Done" "skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$first_completed_workspace") --push" "primary" "Commit and push completed workspace changes")"
     elif [[ -n "$first_completed_agent" ]]; then
-      actions="$(append_action "$actions" "summary_done" "Summarize" "skills/amux/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_completed_agent") --text \"Summarize final changes, tests, and risks.\" --enter" "primary" "Capture final summary for completed agent")"
+      actions="$(append_action "$actions" "summary_done" "Summarize" "skills/tumuxi/scripts/openclaw-dx.sh continue --agent $(shell_quote "$first_completed_agent") --text \"Summarize final changes, tests, and risks.\" --enter" "primary" "Capture final summary for completed agent")"
     fi
   fi
   if [[ "$stale_alert_count" -gt 0 ]]; then
-    actions="$(append_action "$actions" "cleanup" "Cleanup" "skills/amux/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes" "danger" "Prune stale sessions")"
+    actions="$(append_action "$actions" "cleanup" "Cleanup" "skills/tumuxi/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes" "danger" "Prune stale sessions")"
   fi
   local first_ws
   first_ws="$(jq -r '.[0].id // ""' <<<"$ws_enriched")"
   if [[ -n "$first_ws" ]]; then
-    actions="$(append_action "$actions" "continue_ws" "Continue WS" "skills/amux/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$first_ws") --text \"Status update and next action.\" --enter" "success" "Continue active work in top workspace")"
+    actions="$(append_action "$actions" "continue_ws" "Continue WS" "skills/tumuxi/scripts/openclaw-dx.sh continue --workspace $(shell_quote "$first_ws") --text \"Status update and next action.\" --enter" "success" "Continue active work in top workspace")"
   fi
 
   RESULT_OK=true
@@ -3626,8 +3626,8 @@ cmd_terminal_run() {
   fi
 
   local out
-  if ! out="$(amux_ok_json "${args[@]}")"; then
-    emit_amux_error "terminal.run"
+  if ! out="$(tumuxi_ok_json "${args[@]}")"; then
+    emit_tumuxi_error "terminal.run"
     return
   fi
 
@@ -3640,12 +3640,12 @@ cmd_terminal_run() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Terminal command sent to workspace $workspace"
   RESULT_NEXT_ACTION="Check terminal logs for command output."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$workspace") --lines 120"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$workspace") --lines 120"
   RESULT_DATA="$(jq -cn --argjson result "$(jq -c '.data' <<<"$out")" '{terminal: $result}')"
 
   local actions='[]'
   actions="$(append_action "$actions" "logs" "Logs" "$RESULT_SUGGESTED_COMMAND" "primary" "Capture terminal output")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_MESSAGE="✅ Terminal command sent"$'\n'"Workspace: $workspace"$'\n'"Session: $session_name"$'\n'"Created: $created"$'\n'"Command: $text"$'\n'"Next: $RESULT_NEXT_ACTION"
@@ -3723,8 +3723,8 @@ cmd_terminal_preset() {
   esac
 
   local out
-  if ! out="$(amux_ok_json terminal run --workspace "$workspace" --text "$launch_cmd" --enter=true)"; then
-    emit_amux_error "terminal.preset"
+  if ! out="$(tumuxi_ok_json terminal run --workspace "$workspace" --text "$launch_cmd" --enter=true)"; then
+    emit_tumuxi_error "terminal.preset"
     return
   fi
 
@@ -3737,13 +3737,13 @@ cmd_terminal_preset() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Started $kind preset in workspace $workspace"
   RESULT_NEXT_ACTION="Watch logs for server readiness and continue coding."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$workspace") --lines 120"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh terminal logs --workspace $(shell_quote "$workspace") --lines 120"
   RESULT_DATA="$(jq -cn --arg workspace "$workspace" --arg kind "$kind" --arg manager "$manager" --arg host "$host" --argjson port "$port" --arg command "$launch_cmd" --arg session_name "$session_name" --argjson created "$created" --argjson terminal "$(jq -c '.data' <<<"$out")" '{workspace: $workspace, kind: $kind, manager: $manager, host: $host, port: $port, command: $command, session_name: $session_name, created: $created, terminal: $terminal}')"
 
   local actions='[]'
   actions="$(append_action "$actions" "logs" "Logs" "$RESULT_SUGGESTED_COMMAND" "primary" "Tail terminal logs for startup")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
-  actions="$(append_action "$actions" "alerts" "Alerts" "skills/amux/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$workspace")" "primary" "Check blockers requiring attention")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+  actions="$(append_action "$actions" "alerts" "Alerts" "skills/tumuxi/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$workspace")" "primary" "Check blockers requiring attention")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_MESSAGE="✅ Terminal preset started: $kind"$'\n'"Workspace: $workspace"$'\n'"Session: $session_name"$'\n'"Created: $created"$'\n'"Host/Port: $host:$port"$'\n'"Next: $RESULT_NEXT_ACTION"
@@ -3788,13 +3788,13 @@ cmd_terminal_logs() {
   local out
   local attempt=1
   while true; do
-    if out="$(amux_ok_json terminal logs --workspace "$workspace" --lines "$lines")"; then
+    if out="$(tumuxi_ok_json terminal logs --workspace "$workspace" --lines "$lines")"; then
       break
     fi
     local err_out err_code err_message
-    err_out="$AMUX_ERROR_OUTPUT"
-    if [[ -z "${err_out// }" ]] && [[ -n "${AMUX_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$AMUX_ERROR_CAPTURE_FILE" ]]; then
-      err_out="$(cat "$AMUX_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
+    err_out="$TUMUXI_ERROR_OUTPUT"
+    if [[ -z "${err_out// }" ]] && [[ -n "${TUMUXI_ERROR_CAPTURE_FILE:-}" ]] && [[ -f "$TUMUXI_ERROR_CAPTURE_FILE" ]]; then
+      err_out="$(cat "$TUMUXI_ERROR_CAPTURE_FILE" 2>/dev/null || true)"
     fi
     err_code=""
     err_message=""
@@ -3813,19 +3813,19 @@ cmd_terminal_logs() {
       RESULT_STATUS="attention"
       RESULT_SUMMARY="No terminal session found for workspace $workspace"
       RESULT_NEXT_ACTION="Start a terminal command or preset first, then fetch logs."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$workspace") --text \"pwd\" --enter"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$workspace") --text \"pwd\" --enter"
       RESULT_DATA="$(jq -cn --arg workspace "$workspace" --argjson error "$(normalize_json_or_default "$err_out" '{}')" '{workspace: $workspace, error: $error, reason: "no_terminal_session"}')"
 
       local actions='[]'
       actions="$(append_action "$actions" "term_run" "Run Cmd" "$RESULT_SUGGESTED_COMMAND" "primary" "Start a terminal session with a quick command")"
-      actions="$(append_action "$actions" "preset" "Preset" "skills/amux/scripts/openclaw-dx.sh terminal preset --workspace $(shell_quote "$workspace") --kind nextjs" "success" "Start a Next.js dev terminal preset")"
-      actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+      actions="$(append_action "$actions" "preset" "Preset" "skills/tumuxi/scripts/openclaw-dx.sh terminal preset --workspace $(shell_quote "$workspace") --kind nextjs" "success" "Start a Next.js dev terminal preset")"
+      actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
       RESULT_QUICK_ACTIONS="$actions"
       RESULT_MESSAGE="⚠️ No terminal session found for workspace $workspace"$'\n'"Next: $RESULT_NEXT_ACTION"
       emit_result
       return
     fi
-    emit_amux_error "terminal.logs"
+    emit_tumuxi_error "terminal.logs"
     return
   done
 
@@ -3838,12 +3838,12 @@ cmd_terminal_logs() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Captured terminal logs for workspace $workspace"
   RESULT_NEXT_ACTION="Continue coding or run another terminal command."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$workspace") --text \"npm test\" --enter"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh terminal run --workspace $(shell_quote "$workspace") --text \"npm test\" --enter"
   RESULT_DATA="$(jq -cn --argjson result "$(jq -c '.data' <<<"$out")" '{terminal: $result}')"
 
   local actions='[]'
   actions="$(append_action "$actions" "term_run" "Run Cmd" "$RESULT_SUGGESTED_COMMAND" "primary" "Run a follow-up terminal command")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_MESSAGE="✅ Terminal logs captured"$'\n'"Workspace: $workspace"
@@ -3877,8 +3877,8 @@ cmd_cleanup() {
   fi
 
   local out
-  if ! out="$(amux_ok_json "${args[@]}")"; then
-    emit_amux_error "cleanup"
+  if ! out="$(tumuxi_ok_json "${args[@]}")"; then
+    emit_tumuxi_error "cleanup"
     return
   fi
 
@@ -3895,14 +3895,14 @@ cmd_cleanup() {
     RESULT_SUMMARY="Session cleanup result: $total"
   fi
   RESULT_NEXT_ACTION="Refresh status to verify active sessions and agents."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh status"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh status"
   RESULT_DATA="$(jq -cn --argjson prune "$(jq -c '.data' <<<"$out")" '{prune: $prune}')"
 
   local actions='[]'
   if [[ "$dry_run" == "true" && "$total" -gt 0 ]]; then
-    actions="$(append_action "$actions" "confirm" "Confirm" "skills/amux/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes" "danger" "Prune stale sessions now")"
+    actions="$(append_action "$actions" "confirm" "Confirm" "skills/tumuxi/scripts/openclaw-dx.sh cleanup --older-than $(shell_quote "$older_than") --yes" "danger" "Prune stale sessions now")"
   fi
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Refresh global status")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Refresh global status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_MESSAGE="✅ Cleanup $(if [[ "$dry_run" == "true" ]]; then printf '(dry run)'; else printf 'completed'; fi)"$'\n'"Older than: $older_than"$'\n'"Total: $total"$'\n'"Next: $RESULT_NEXT_ACTION"
@@ -4011,7 +4011,7 @@ cmd_git_ship() {
 
   local ws_row
   if ! ws_row="$(workspace_row_by_id "$workspace")"; then
-    emit_amux_error "git.ship"
+    emit_tumuxi_error "git.ship"
     return
   fi
   if [[ -z "${ws_row// }" ]]; then
@@ -4078,17 +4078,17 @@ cmd_git_ship() {
     RESULT_STATUS="ok"
     RESULT_SUMMARY="No changes to commit in workspace $workspace"
     RESULT_NEXT_ACTION="Continue coding or run a review workflow."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
 
     if [[ "$push" == "true" && "$pushed" == "true" ]]; then
       RESULT_SUMMARY="No new changes to commit; pushed existing commits for $workspace"
       RESULT_NEXT_ACTION="Run review or continue implementation."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
     elif [[ "$push" == "true" && -n "$push_error" ]]; then
       RESULT_STATUS="attention"
       RESULT_SUMMARY="No new changes to commit; push failed for $workspace"
       RESULT_NEXT_ACTION="Fix push issues, then retry push."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
     elif [[ "$push" == "true" && "$has_upstream" == "true" && "$ahead_count" -eq 0 ]]; then
       RESULT_SUMMARY="No new changes to commit; branch is already pushed"
       RESULT_NEXT_ACTION="Continue coding or run review."
@@ -4100,15 +4100,15 @@ cmd_git_ship() {
         RESULT_SUMMARY="No new changes to commit; branch has no upstream push target"
       fi
       RESULT_NEXT_ACTION="Push current commits to remote."
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
     fi
 
     local actions='[]'
     if [[ "$push" != "true" && "$suggest_push" == "true" ]]; then
-      actions="$(append_action "$actions" "push" "Push" "skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push" "success" "Push existing commits to remote")"
+      actions="$(append_action "$actions" "push" "Push" "skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push" "success" "Push existing commits to remote")"
     fi
-    actions="$(append_action "$actions" "review" "Review" "skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")" "primary" "Run review workflow")"
-    actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+    actions="$(append_action "$actions" "review" "Review" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")" "primary" "Run review workflow")"
+    actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
     RESULT_QUICK_ACTIONS="$actions"
 
     RESULT_DATA="$(jq -cn \
@@ -4149,7 +4149,7 @@ cmd_git_ship() {
   local file_count
   file_count="$(printf '%s\n' "$porcelain" | sed '/^$/d' | wc -l | tr -d ' ')"
   if [[ -z "$message" ]]; then
-    message="chore(amux): update $workspace ($file_count files)"
+    message="chore(tumuxi): update $workspace ($file_count files)"
   fi
 
   if ! git -C "$ws_root" add -A >/dev/null 2>&1; then
@@ -4196,17 +4196,17 @@ cmd_git_ship() {
   fi
 
   RESULT_NEXT_ACTION="Run a review pass or continue implementation."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")"
   if [[ "$pushed" != "true" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push"
   fi
 
   local actions='[]'
   if [[ "$pushed" != "true" ]]; then
-    actions="$(append_action "$actions" "push" "Push" "skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push" "success" "Push latest commit")"
+    actions="$(append_action "$actions" "push" "Push" "skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace") --push" "success" "Push latest commit")"
   fi
-  actions="$(append_action "$actions" "review" "Review" "skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")" "primary" "Run review workflow")"
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+  actions="$(append_action "$actions" "review" "Review" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace")" "primary" "Run review workflow")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
   RESULT_QUICK_ACTIONS="$actions"
 
   RESULT_DATA="$(jq -cn --arg workspace "$workspace" --arg root "$ws_root" --arg commit_hash "$commit_hash" --arg branch "$branch" --arg message "$message" --argjson file_count "$file_count" --argjson pushed "$pushed" --arg push_error "$push_error" '{workspace: $workspace, root: $root, commit_hash: $commit_hash, branch: $branch, message: $message, file_count: $file_count, pushed: $pushed, push_error: $push_error}')"
@@ -4299,7 +4299,7 @@ cmd_workflow_kickoff() {
   if [[ -n "$project" ]]; then
     local ensured_project
     if ! ensured_project="$(ensure_project_registered "$project")"; then
-      emit_amux_error "workflow.kickoff"
+      emit_tumuxi_error "workflow.kickoff"
       return
     fi
     project_data="$(normalize_json_or_default "$ensured_project" 'null')"
@@ -4402,14 +4402,14 @@ cmd_workflow_kickoff() {
         {
           id: "status_ws",
           label: "Status",
-          command: ("skills/amux/scripts/openclaw-dx.sh status --workspace " + $workspace_id),
+          command: ("skills/tumuxi/scripts/openclaw-dx.sh status --workspace " + $workspace_id),
           style: "primary",
           prompt: "Check workspace status"
         },
         {
           id: "review_ws",
           label: "Review",
-          command: ("skills/amux/scripts/openclaw-dx.sh review --workspace " + $workspace_id + " --assistant codex"),
+          command: ("skills/tumuxi/scripts/openclaw-dx.sh review --workspace " + $workspace_id + " --assistant codex"),
           style: "primary",
           prompt: "Run review on uncommitted changes"
         }
@@ -4728,9 +4728,9 @@ cmd_workflow_dual() {
   RESULT_STATUS="ok"
   RESULT_SUMMARY="Dual-pass finished: implement=$impl_status review=$review_status"
   RESULT_NEXT_ACTION="Ship or continue implementation based on review findings."
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace")"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace")"
   local codex_continue_cmd
-  codex_continue_cmd="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant codex --prompt \"Continue from current state and provide concise status plus next action.\""
+  codex_continue_cmd="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant codex --prompt \"Continue from current state and provide concise status plus next action.\""
   local impl_needs_input_prefers_codex=false
 
   if [[ "$impl_ok" != "true" ]]; then
@@ -4740,7 +4740,7 @@ cmd_workflow_dual() {
     if [[ -n "$impl_cmd" ]]; then
       RESULT_SUGGESTED_COMMAND="$impl_cmd"
     else
-      RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$implement_assistant") --prompt $(shell_quote "$implement_prompt")"
+      RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$implement_assistant") --prompt $(shell_quote "$implement_prompt")"
     fi
   elif [[ "$impl_status" == "needs_input" ]]; then
     RESULT_STATUS="needs_input"
@@ -4772,7 +4772,7 @@ cmd_workflow_dual() {
     RESULT_STATUS="attention"
     RESULT_SUMMARY="Implementation finished, but review phase did not run."
     RESULT_NEXT_ACTION="Run review to validate uncommitted changes."
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$effective_review_assistant")"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$effective_review_assistant")"
   elif [[ "$review_ok" != "true" ]]; then
     RESULT_STATUS="attention"
     RESULT_SUMMARY="Review phase failed."
@@ -4812,16 +4812,16 @@ cmd_workflow_dual() {
     actions="$(append_action "$actions" "switch_codex" "Switch Codex" "$codex_continue_cmd" "danger" "Switch to a non-interactive implementation assistant")"
   fi
   if [[ "$review_json" == "null" && "$review_skipped_reason" != "implementation_not_ready" ]]; then
-    actions="$(append_action "$actions" "run_review" "Run Review" "skills/amux/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$effective_review_assistant")" "primary" "Run review phase now")"
+    actions="$(append_action "$actions" "run_review" "Run Review" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$effective_review_assistant")" "primary" "Run review phase now")"
   elif [[ "$review_status" == "needs_input" && -n "$review_cmd" ]]; then
     actions="$(append_action "$actions" "continue_review" "Continue Review" "$review_cmd" "danger" "Reply to review prompt")"
   elif [[ ("$review_status" == "timed_out" || "$review_status" == "partial" || "$review_status" == "partial_budget") && -n "$review_cmd" ]]; then
     actions="$(append_action "$actions" "finish_review" "Finish Review" "$review_cmd" "primary" "Continue review to completion")"
   fi
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
-  actions="$(append_action "$actions" "alerts" "Alerts" "skills/amux/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$workspace")" "primary" "Check blocking alerts")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status --workspace $(shell_quote "$workspace")" "primary" "Check workspace status")"
+  actions="$(append_action "$actions" "alerts" "Alerts" "skills/tumuxi/scripts/openclaw-dx.sh alerts --workspace $(shell_quote "$workspace")" "primary" "Check blocking alerts")"
   if [[ "$RESULT_STATUS" == "ok" ]]; then
-    actions="$(append_action "$actions" "ship" "Ship" "skills/amux/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace")" "success" "Commit current changes")"
+    actions="$(append_action "$actions" "ship" "Ship" "skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace $(shell_quote "$workspace")" "success" "Commit current changes")"
   fi
   RESULT_QUICK_ACTIONS="$actions"
 
@@ -4900,7 +4900,7 @@ cmd_workflow() {
 
 cmd_assistants() {
   local config_path
-  config_path="${AMUX_HOME:-$HOME/.amux}/config.json"
+  config_path="${TUMUXI_HOME:-$HOME/.tumuxi}/config.json"
   local workspace=""
   local probe=false
   local limit="${OPENCLAW_DX_ASSISTANTS_LIMIT:-6}"
@@ -5091,7 +5091,7 @@ cmd_assistants() {
   fi
   RESULT_NEXT_ACTION="Use ready assistants for implementation/review handoffs."
   if [[ "$missing_count" -gt 0 ]]; then
-    RESULT_NEXT_ACTION="Install or remap missing assistant binaries in ~/.amux/config.json."
+    RESULT_NEXT_ACTION="Install or remap missing assistant binaries in ~/.tumuxi/config.json."
   fi
   if [[ "$probe_needs_input" -gt 0 ]]; then
     RESULT_NEXT_ACTION="Some assistants need interactive permission input. Use codex for non-interactive mobile flows."
@@ -5119,27 +5119,27 @@ cmd_assistants() {
     preferred_assistant="$first_ready"
   fi
 
-  RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh status"
+  RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh status"
   if [[ -n "$workspace" && "$dual_ready" == "true" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$workspace") --implement-assistant claude --review-assistant codex"
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$workspace") --implement-assistant claude --review-assistant codex"
   elif [[ -n "$workspace" && -n "$preferred_assistant" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$preferred_assistant") --prompt \"Summarize current status and next action in one line.\""
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$preferred_assistant") --prompt \"Summarize current status and next action in one line.\""
   elif [[ -n "$workspace" && -n "$first_ready" ]]; then
-    RESULT_SUGGESTED_COMMAND="skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$first_ready") --prompt \"Summarize current status and next action in one line.\""
+    RESULT_SUGGESTED_COMMAND="skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$first_ready") --prompt \"Summarize current status and next action in one line.\""
   fi
 
   local actions='[]'
-  actions="$(append_action "$actions" "status" "Status" "skills/amux/scripts/openclaw-dx.sh status" "primary" "Show current work/agent status")"
-  actions="$(append_action "$actions" "review" "Review" "skills/amux/scripts/openclaw-dx.sh review --workspace <workspace_id> --assistant codex" "primary" "Run a review workflow")"
+  actions="$(append_action "$actions" "status" "Status" "skills/tumuxi/scripts/openclaw-dx.sh status" "primary" "Show current work/agent status")"
+  actions="$(append_action "$actions" "review" "Review" "skills/tumuxi/scripts/openclaw-dx.sh review --workspace <workspace_id> --assistant codex" "primary" "Run a review workflow")"
   if [[ "$probe" != "true" && -n "$workspace" ]]; then
-    actions="$(append_action "$actions" "probe" "Probe" "skills/amux/scripts/openclaw-dx.sh assistants --workspace $(shell_quote "$workspace") --probe --limit $(shell_quote "$limit")" "primary" "Run readiness probes for ready assistants")"
+    actions="$(append_action "$actions" "probe" "Probe" "skills/tumuxi/scripts/openclaw-dx.sh assistants --workspace $(shell_quote "$workspace") --probe --limit $(shell_quote "$limit")" "primary" "Run readiness probes for ready assistants")"
   fi
   if [[ -n "$workspace" && "$dual_ready" == "true" ]]; then
-    actions="$(append_action "$actions" "dual" "Dual Pass" "skills/amux/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$workspace") --implement-assistant claude --review-assistant codex" "success" "Implement with claude and review with codex")"
+    actions="$(append_action "$actions" "dual" "Dual Pass" "skills/tumuxi/scripts/openclaw-dx.sh workflow dual --workspace $(shell_quote "$workspace") --implement-assistant claude --review-assistant codex" "success" "Implement with claude and review with codex")"
   elif [[ -n "$workspace" && -n "$preferred_assistant" ]]; then
-    actions="$(append_action "$actions" "start_ready" "Start Ready" "skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$preferred_assistant") --prompt \"Summarize current status and next action in one line.\"" "primary" "Start with best probe-passed assistant")"
+    actions="$(append_action "$actions" "start_ready" "Start Ready" "skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$preferred_assistant") --prompt \"Summarize current status and next action in one line.\"" "primary" "Start with best probe-passed assistant")"
   elif [[ -n "$workspace" && -n "$first_ready" ]]; then
-    actions="$(append_action "$actions" "start_ready" "Start Ready" "skills/amux/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$first_ready") --prompt \"Summarize current status and next action in one line.\"" "primary" "Start with first ready assistant")"
+    actions="$(append_action "$actions" "start_ready" "Start Ready" "skills/tumuxi/scripts/openclaw-dx.sh start --workspace $(shell_quote "$workspace") --assistant $(shell_quote "$first_ready") --prompt \"Summarize current status and next action in one line.\"" "primary" "Start with first ready assistant")"
   fi
   RESULT_QUICK_ACTIONS="$actions"
 
@@ -5190,8 +5190,8 @@ require_prereqs() {
     printf '{"ok":false,"command":"unknown","status":"command_error","summary":"jq is required","error":"missing binary: jq"}\n'
     exit 0
   fi
-  if ! command -v amux >/dev/null 2>&1; then
-    printf '{"ok":false,"command":"unknown","status":"command_error","summary":"amux is required","error":"missing binary: amux"}\n'
+  if ! command -v tumuxi >/dev/null 2>&1; then
+    printf '{"ok":false,"command":"unknown","status":"command_error","summary":"tumuxi is required","error":"missing binary: tumuxi"}\n'
     exit 0
   fi
 }
@@ -5222,9 +5222,9 @@ if [[ ! -x "$STEP_SCRIPT_PATH" ]]; then
 fi
 OPENCLAW_PRESENT_SCRIPT="${OPENCLAW_PRESENT_SCRIPT:-$SCRIPT_DIR/openclaw-present.sh}"
 
-DX_CMD_REF="${OPENCLAW_DX_CMD_REF:-skills/amux/scripts/openclaw-dx.sh}"
-TURN_CMD_REF="${OPENCLAW_DX_TURN_CMD_REF:-skills/amux/scripts/openclaw-turn.sh}"
-STEP_CMD_REF="${OPENCLAW_DX_STEP_CMD_REF:-skills/amux/scripts/openclaw-step.sh}"
+DX_CMD_REF="${OPENCLAW_DX_CMD_REF:-skills/tumuxi/scripts/openclaw-dx.sh}"
+TURN_CMD_REF="${OPENCLAW_DX_TURN_CMD_REF:-skills/tumuxi/scripts/openclaw-turn.sh}"
+STEP_CMD_REF="${OPENCLAW_DX_STEP_CMD_REF:-skills/tumuxi/scripts/openclaw-step.sh}"
 
 top_cmd="$1"
 shift

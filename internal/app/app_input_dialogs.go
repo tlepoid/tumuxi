@@ -6,12 +6,12 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/ui/common"
-	"github.com/andyrewlee/amux/internal/ui/sidebar"
-	"github.com/andyrewlee/amux/internal/update"
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
+	"github.com/tlepoid/tumuxi/internal/update"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 func (a *App) handleDialogResultMsg(msg tea.Msg) (bool, tea.Cmd) {
@@ -227,7 +227,7 @@ func (a *App) showQuitDialog() {
 	}
 	a.dialog = common.NewConfirmDialog(
 		DialogQuit,
-		"Quit AMUX",
+		"Quit TUMUXI",
 		"Are you sure you want to quit?",
 	)
 	a.dialog.SetSize(a.width, a.height)
@@ -307,7 +307,7 @@ func (a *App) handleUpgradeComplete(msg messages.UpgradeComplete) tea.Cmd {
 		a.settingsDialog.SetUpdateInfo(msg.NewVersion, "", false)
 	}
 	logging.Info("Upgrade complete: %s", msg.NewVersion)
-	return a.toast.ShowSuccess("Upgraded to " + msg.NewVersion + " - restart amux to use new version")
+	return a.toast.ShowSuccess("Upgraded to " + msg.NewVersion + " - restart tumuxi to use new version")
 }
 
 // handleOpenFileInEditor handles the OpenFileInEditor message from the project tree.

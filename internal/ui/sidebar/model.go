@@ -6,9 +6,9 @@ import (
 
 	"charm.land/bubbles/v2/textinput"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 // displayItem represents a single item in the flat display list

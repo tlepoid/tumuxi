@@ -12,8 +12,8 @@ import (
 
 	"github.com/creack/pty"
 
-	"github.com/andyrewlee/amux/internal/process"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/process"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 // pollInterval is the fallback polling interval for WaitFor* methods.
@@ -68,7 +68,7 @@ func StartPTYSession(opts PTYOptions) (*PTYSession, func(), error) {
 	ownHome := false
 	if home == "" {
 		var err error
-		home, err = os.MkdirTemp("", "amux-e2e-home-*")
+		home, err = os.MkdirTemp("", "tumuxi-e2e-home-*")
 		if err != nil {
 			cleanupBin()
 			return nil, nil, err
@@ -92,8 +92,8 @@ func StartPTYSession(opts PTYOptions) (*PTYSession, func(), error) {
 	cmd.Env = append(stripGitEnv(os.Environ()),
 		"HOME="+home,
 		"TERM=xterm-256color",
-		"AMUX_PROFILE=0",
-		"AMUX_PROFILE_INTERVAL_MS=0",
+		"TUMUXI_PROFILE=0",
+		"TUMUXI_PROFILE_INTERVAL_MS=0",
 	)
 	if len(opts.Env) > 0 {
 		cmd.Env = append(cmd.Env, opts.Env...)
@@ -269,23 +269,23 @@ func (s *PTYSession) WaitForExit(timeout time.Duration) error {
 }
 
 func buildAmuxBinary() (string, func(), error) {
-	if path := os.Getenv("AMUX_E2E_BIN"); path != "" {
+	if path := os.Getenv("TUMUXI_E2E_BIN"); path != "" {
 		return path, func() {}, nil
 	}
 
 	buildOnce.Do(func() {
-		tmp, err := os.MkdirTemp("", "amux-e2e-bin-*")
+		tmp, err := os.MkdirTemp("", "tumuxi-e2e-bin-*")
 		if err != nil {
 			buildErr = err
 			return
 		}
-		out := filepath.Join(tmp, "amux")
+		out := filepath.Join(tmp, "tumuxi")
 		root, err := repoRoot()
 		if err != nil {
 			buildErr = err
 			return
 		}
-		cmd := exec.Command("go", "build", "-o", out, "./cmd/amux")
+		cmd := exec.Command("go", "build", "-o", out, "./cmd/tumuxi")
 		cmd.Dir = root
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -304,7 +304,7 @@ func buildAmuxBinary() (string, func(), error) {
 		if buildPath == "" {
 			return
 		}
-		if os.Getenv("AMUX_E2E_CLEANUP_BIN") == "" {
+		if os.Getenv("TUMUXI_E2E_CLEANUP_BIN") == "" {
 			return
 		}
 		_ = os.RemoveAll(filepath.Dir(buildPath))

@@ -27,7 +27,7 @@ func TestRunNoCommandJSONReturnsUsageErrorEnvelope(t *testing.T) {
 	if env.Error == nil || env.Error.Code != "usage_error" {
 		t.Fatalf("expected usage_error, got %#v", env.Error)
 	}
-	if env.Error == nil || !strings.Contains(env.Error.Message, "Usage: amux <command> [flags]") {
+	if env.Error == nil || !strings.Contains(env.Error.Message, "Usage: tumuxi <command> [flags]") {
 		t.Fatalf("unexpected error message: %#v", env.Error)
 	}
 }
@@ -108,7 +108,7 @@ func TestRunHelpJSONReturnsEnvelope(t *testing.T) {
 		t.Fatalf("expected data object, got %T", env.Data)
 	}
 	usage, _ := data["usage"].(string)
-	if !strings.Contains(usage, "Usage: amux <command> [flags]") {
+	if !strings.Contains(usage, "Usage: tumuxi <command> [flags]") {
 		t.Fatalf("usage data missing expected header: %q", usage)
 	}
 }

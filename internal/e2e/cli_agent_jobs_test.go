@@ -31,10 +31,10 @@ func TestCLIAgentSendAsyncQueueOrdering(t *testing.T) {
 	skipIfNoTmux(t)
 
 	home := t.TempDir()
-	server := fmt.Sprintf("amux-e2e-cli-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumuxi-e2e-cli-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
-	sessionName := "amux-e2e-order"
+	sessionName := "tumuxi-e2e-order"
 	logPath := filepath.Join(t.TempDir(), "ordered.log")
 	createTmuxSessionWithCommand(t, server, sessionName, "cat >> "+shellQuote(logPath))
 
@@ -80,10 +80,10 @@ func TestCLIAgentSendCancelRacePendingJob(t *testing.T) {
 	skipIfNoTmux(t)
 
 	home := t.TempDir()
-	server := fmt.Sprintf("amux-e2e-cli-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumuxi-e2e-cli-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
-	sessionName := "amux-e2e-cancel-race"
+	sessionName := "tumuxi-e2e-cancel-race"
 	logPath := filepath.Join(t.TempDir(), "cancel.log")
 	createTmuxSessionWithCommand(t, server, sessionName, "cat >> "+shellQuote(logPath))
 
@@ -131,10 +131,10 @@ func TestCLIAgentSendIdempotentErrorReplay(t *testing.T) {
 	skipIfNoTmux(t)
 
 	home := t.TempDir()
-	server := fmt.Sprintf("amux-e2e-cli-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumuxi-e2e-cli-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
-	sessionName := "amux-e2e-replay"
+	sessionName := "tumuxi-e2e-replay"
 	logPath := filepath.Join(t.TempDir(), "replay.log")
 	idemKey := "e2e-idem-send-not-found"
 
@@ -174,10 +174,10 @@ func TestCLIAgentStopGracefulFallbackKillsIgnoredInterrupt(t *testing.T) {
 	skipIfNoTmux(t)
 
 	home := t.TempDir()
-	server := fmt.Sprintf("amux-e2e-cli-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumuxi-e2e-cli-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
-	sessionName := "amux-e2e-stop-fallback"
+	sessionName := "tumuxi-e2e-stop-fallback"
 	createTmuxSessionWithCommand(
 		t,
 		server,
@@ -213,15 +213,15 @@ func runAmux(t *testing.T, home, server string, args ...string) (int, string, st
 
 	bin, cleanup, err := buildAmuxBinary()
 	if err != nil {
-		t.Fatalf("build amux binary: %v", err)
+		t.Fatalf("build tumuxi binary: %v", err)
 	}
 	defer cleanup()
 
 	cmd := exec.Command(bin, args...)
 	cmd.Env = append(stripGitEnv(os.Environ()),
 		"HOME="+home,
-		"AMUX_TMUX_SERVER="+server,
-		"AMUX_TMUX_CONFIG=/dev/null",
+		"TUMUXI_TMUX_SERVER="+server,
+		"TUMUXI_TMUX_CONFIG=/dev/null",
 	)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
@@ -234,7 +234,7 @@ func runAmux(t *testing.T, home, server string, args ...string) (int, string, st
 		if errors.As(err, &exitErr) {
 			exitCode = exitErr.ExitCode()
 		} else {
-			t.Fatalf("run amux %v: %v", args, err)
+			t.Fatalf("run tumuxi %v: %v", args, err)
 		}
 	}
 	return exitCode, stdout.String(), stderr.String()
@@ -296,7 +296,7 @@ func tmuxSessionExists(server, sessionName string) bool {
 func lockSendQueueFile(t *testing.T, home, sessionName string) *os.File {
 	t.Helper()
 	sum := sha1.Sum([]byte(sessionName))
-	lockPath := filepath.Join(home, ".amux", "cli-send-queue-"+hex.EncodeToString(sum[:8])+".lock")
+	lockPath := filepath.Join(home, ".tumuxi", "cli-send-queue-"+hex.EncodeToString(sum[:8])+".lock")
 	if err := os.MkdirAll(filepath.Dir(lockPath), 0o755); err != nil {
 		t.Fatalf("mkdir lock dir: %v", err)
 	}

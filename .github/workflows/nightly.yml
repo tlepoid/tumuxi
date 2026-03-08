@@ -45,4 +45,4 @@ jobs:
       - name: Soak (harness PTY)
         run: go test -tags=soak ./internal/app -run TestSoakHarnessPTY -count=1 -timeout 20m
         env:
-          AMUX_SOAK_DURATION: 5m
+          TUMUXI_SOAK_DURATION: 5m

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestCaptureAgentPaneWithRetry_EventualSuccess(t *testing.T) {

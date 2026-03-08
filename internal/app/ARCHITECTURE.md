@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the core runtime flow of amux and the invariants that
+This document describes the core runtime flow of tumuxi and the invariants that
 keep Bubble Tea, tmux, and PTY state consistent.
 
 ## App Lifecycle
@@ -39,7 +39,7 @@ This makes PTY delivery observable, debounced, and safe for UI state.
 
 ## tmux Lifecycle and Tagging
 
-- Sessions are created with tags that identify amux ownership and workspace.
+- Sessions are created with tags that identify tumuxi ownership and workspace.
 - Discovery scans tmux for tagged sessions, then hydrates missing tabs/terminals.
 - Sync reconciles session state to persisted tab metadata.
 - GC removes orphaned sessions not associated with any known workspace.

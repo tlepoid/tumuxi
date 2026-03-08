@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/process"
+	"github.com/tlepoid/tumuxi/internal/process"
 )
 
 type Options struct {
@@ -41,11 +41,11 @@ type SessionTags struct {
 const tmuxCommandTimeout = 5 * time.Second
 
 func DefaultOptions() Options {
-	server := strings.TrimSpace(os.Getenv("AMUX_TMUX_SERVER"))
+	server := strings.TrimSpace(os.Getenv("TUMUXI_TMUX_SERVER"))
 	if server == "" {
-		server = "amux"
+		server = "tumuxi"
 	}
-	config := strings.TrimSpace(os.Getenv("AMUX_TMUX_CONFIG"))
+	config := strings.TrimSpace(os.Getenv("TUMUXI_TMUX_CONFIG"))
 	if config == "" {
 		config = "/dev/null"
 	}
@@ -89,7 +89,7 @@ func SessionName(parts ...string) string {
 		}
 	}
 	if len(cleaned) == 0 {
-		return "amux"
+		return "tumuxi"
 	}
 	return strings.Join(cleaned, "-")
 }
@@ -460,7 +460,7 @@ func sanitize(value string) string {
 
 // exactTarget returns a tmux target string that forces exact session-name
 // matching.  Without the "=" prefix tmux falls back to prefix matching,
-// which can cause commands aimed at "amux-ws-tab-1" to hit "amux-ws-tab-10".
+// which can cause commands aimed at "tumuxi-ws-tab-1" to hit "tumuxi-ws-tab-10".
 func exactTarget(name string) string { return "=" + name }
 
 // sessionTarget returns a tmux target for session-level commands.
@@ -470,7 +470,7 @@ func sessionTarget(name string) string { return "=" + name }
 // exactSessionOptionTarget returns a tmux target for session-scoped options.
 // Unlike has-session and send-keys, tmux set-option and show-options do not
 // support the "=" exact-match prefix (tmux 3.6a returns "no such session").
-// Bare names are safe here because amux session names include workspace ID +
+// Bare names are safe here because tumuxi session names include workspace ID +
 // tab ID, making prefix collisions practically impossible.
 func exactSessionOptionTarget(name string) string { return name }
 

@@ -37,7 +37,7 @@ linters-settings:
           - pkg: io/ioutil
             desc: Use os or io packages instead of io/ioutil.
   goimports:
-    local-prefixes: github.com/andyrewlee/amux
+    local-prefixes: github.com/tlepoid/tumuxi
   errcheck:
     check-type-assertions: true
   errorlint:

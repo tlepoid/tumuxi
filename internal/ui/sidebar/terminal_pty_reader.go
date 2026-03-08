@@ -3,8 +3,8 @@ package sidebar
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 func (m *TerminalModel) forwardPTYMsgs(msgCh <-chan tea.Msg) {

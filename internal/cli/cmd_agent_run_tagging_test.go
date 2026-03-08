@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestCmdAgentRunTagFailureReturnsInternalErrorAndCleansSession(t *testing.T) {
@@ -50,7 +50,7 @@ func TestCmdAgentRunTagFailureReturnsInternalErrorAndCleansSession(t *testing.T)
 		return exec.Command("true"), func() {}
 	}
 	tmuxSetSessionTag = func(_, key, _ string, _ tmux.Options) error {
-		if key == "@amux_workspace" {
+		if key == "@tumuxi_workspace" {
 			return errors.New("tag write failed")
 		}
 		return nil

@@ -30,11 +30,11 @@ func TestSettingsRenderUpdateHiddenWhenUnavailable(t *testing.T) {
 func TestSettingsRenderHomebrewHint(t *testing.T) {
 	dialog := NewSettingsDialog(ThemeAyuDark)
 	dialog.SetUpdateInfo("v0.0.10", "", false)
-	dialog.SetUpdateHint("Installed via Homebrew - update with brew upgrade amux")
+	dialog.SetUpdateHint("Installed via Homebrew - update with brew upgrade tumuxi")
 
 	lines := dialog.renderLines()
 	joined := strings.Join(lines, "\n")
-	if !strings.Contains(joined, "Installed via Homebrew - update with brew upgrade amux") {
+	if !strings.Contains(joined, "Installed via Homebrew - update with brew upgrade tumuxi") {
 		t.Fatalf("expected Homebrew hint to be rendered, got:\n%s", joined)
 	}
 }

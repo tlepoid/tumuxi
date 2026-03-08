@@ -1,13 +1,13 @@
 ---
-name: amux
-description: Orchestrate AI coding agents via amux with managed workspaces, git worktrees, and async job queues.
+name: tumuxi
+description: Orchestrate AI coding agents via tumuxi with managed workspaces, git worktrees, and async job queues.
 metadata:
-  { "openclaw": { "emoji": "🔀", "os": ["darwin", "linux"], "requires": { "bins": ["amux", "tmux"] } } }
+  { "openclaw": { "emoji": "🔀", "os": ["darwin", "linux"], "requires": { "bins": ["tumuxi", "tmux"] } } }
 ---
 
-# amux Skill
+# tumuxi Skill
 
-Orchestrate AI coding agents using `amux` — a workspace and agent lifecycle manager built on tmux. All commands support `--json` for structured output.
+Orchestrate AI coding agents using `tumuxi` — a workspace and agent lifecycle manager built on tmux. All commands support `--json` for structured output.
 
 ## CRITICAL: Always Monitor and Report Back
 
@@ -22,14 +22,14 @@ Orchestrate AI coding agents using `amux` — a workspace and agent lifecycle ma
 
 ### OpenClaw Runtime Guardrails
 
-When running `amux` through OpenClaw `exec`/`process` tools, avoid monitor deadlocks:
+When running `tumuxi` through OpenClaw `exec`/`process` tools, avoid monitor deadlocks:
 
 1. Prefer `scripts/openclaw-step.sh` for `run`/`send` steps. It performs exactly one bounded wait and returns normalized JSON with `status`, `summary`, `next_action`, and `suggested_command`.
 2. For multi-step coding turns, prefer `scripts/openclaw-turn.sh` to enforce step caps, timeout-streak stops, milestone coalescing, and a guaranteed final summary payload.
 3. For `agent run --wait` and `agent send --wait`, set tool `timeout` to at least `--wait-timeout + 90s` (minimum 180s) to cover startup + wait.
 4. When calling through OpenClaw `exec`, set `yieldMs` to at least `wait-timeout + 60000` (milliseconds). Use `timeout` at least 45s larger than `yieldMs`.
 5. Prefer `--wait` over `agent watch` for normal coding steps. `agent watch` is long-lived and can be killed by tool timeouts.
-6. If `exec` returns `Command still running`, keep polling the same process until it reaches a terminal status (`completed`/`failed`/`killed`); do not launch a second overlapping `amux` command for that step.
+6. If `exec` returns `Command still running`, keep polling the same process until it reaches a terminal status (`completed`/`failed`/`killed`); do not launch a second overlapping `tumuxi` command for that step.
 7. If the process exits with timeout/SIGKILL and no output, retry once with a higher tool timeout and immediately send an interim user update.
 8. If `response.status` is `timed_out`, summarize `response.summary` (fallback: `latest_line`/`delta`), then continue with one follow-up `agent send --wait` step (prefer send over raw capture in chat loops).
 9. Never pass workspace **name** to `--workspace`. Always use `workspace create` JSON `data.id` (workspace_id).
@@ -38,7 +38,7 @@ When running `amux` through OpenClaw `exec`/`process` tools, avoid monitor deadl
 12. If the same process remains `running` after 3 polls with no new output, send one interim status update and continue polling every 10-15s until terminal status.
 13. Use `process log` for additional visibility when needed, but keep one authoritative process per step.
 14. Always finish with a user-facing completion message before overall run timeout, even when partial: include what completed, what timed out, and one clear next action.
-15. Keep each OpenClaw turn short: target at most 2-3 bounded amux steps per turn. If more work remains, stop and return a partial summary plus one explicit "continue" command.
+15. Keep each OpenClaw turn short: target at most 2-3 bounded tumuxi steps per turn. If more work remains, stop and return a partial summary plus one explicit "continue" command.
 16. Reserve time for the final response: after ~180s of tool work, stop launching new tools and emit a final text summary immediately.
 17. On two consecutive `timed_out` step statuses, stop the turn and return a concise partial result + `suggested_command` instead of continuing loops.
 18. If `response.status` is `needs_input` and the hint indicates local permission-mode selection (e.g. bypass permissions prompt), tell the user it is blocked by interactive permissions and switch to a non-interactive assistant (typically `codex`) for continuation.
@@ -49,13 +49,13 @@ When running `amux` through OpenClaw `exec`/`process` tools, avoid monitor deadl
 23. With `openclaw agent --deliver`, `status: ok` plus empty `result.payloads` is expected when updates were sent through `message` tool; treat this as success, not failure.
 24. Even when delivering updates to a chat channel, always end with a final plain-text assistant summary so local operators also get a non-empty terminal result.
 25. Do not run concurrent long agent turns on the same OpenClaw agent lane/session key; queueing can add large delays and confuse progress reporting.
-26. If you must call `amux --json agent capture`, branch on `data.status`; treat `session_exited` as a terminal state to summarize, not an orchestration crash.
+26. If you must call `tumuxi --json agent capture`, branch on `data.status`; treat `session_exited` as a terminal state to summarize, not an orchestration crash.
 
 ### OpenClaw one-step wrapper (recommended)
 
 ```bash
 # 1. Start a bounded step (run) and read normalized fields
-step=$(skills/amux/scripts/openclaw-step.sh run \
+step=$(skills/tumuxi/scripts/openclaw-step.sh run \
   --workspace <workspace_id> \
   --assistant codex \
   --prompt "Add dark mode support" \
@@ -74,7 +74,7 @@ agent_id=$(echo "$step" | jq -r '.agent_id')
 
 ```bash
 # 1. Send one bounded follow-up step
-step=$(skills/amux/scripts/openclaw-step.sh send \
+step=$(skills/tumuxi/scripts/openclaw-step.sh send \
   --agent <agent_id> \
   --text "Also add tests" \
   --enter \
@@ -108,7 +108,7 @@ Use response fields in this order for mobile updates:
 ### Multi-step turn wrapper (recommended)
 
 ```bash
-turn=$(skills/amux/scripts/openclaw-turn.sh run \
+turn=$(skills/tumuxi/scripts/openclaw-turn.sh run \
   --workspace <workspace_id> \
   --assistant codex \
   --prompt "Refactor the parser and add tests" \
@@ -134,47 +134,47 @@ echo "$turn" | jq -r '.openclaw.presentation.chunks[]'
 
 ### OpenClaw DX control plane (project/workspace lifecycle)
 
-Use `skills/amux/scripts/openclaw-dx.sh` when the user is coding through OpenClaw on any channel and needs end-to-end lifecycle UX (not just one prompt turn):
+Use `skills/tumuxi/scripts/openclaw-dx.sh` when the user is coding through OpenClaw on any channel and needs end-to-end lifecycle UX (not just one prompt turn):
 
 ```bash
 # Guided next-step recommendation (best for first-time mobile users)
-skills/amux/scripts/openclaw-dx.sh guide [--project /abs/repo/path] [--workspace <workspace_id>] [--task "refactor ..."] [--assistant codex] [--channel slack]
+skills/tumuxi/scripts/openclaw-dx.sh guide [--project /abs/repo/path] [--workspace <workspace_id>] [--task "refactor ..."] [--assistant codex] [--channel slack]
 
 # Add/select project
-skills/amux/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant codex
-skills/amux/scripts/openclaw-dx.sh project add --path /abs/repo/path
-skills/amux/scripts/openclaw-dx.sh project list --query api
-skills/amux/scripts/openclaw-dx.sh project pick --name api
+skills/tumuxi/scripts/openclaw-dx.sh project add --cwd --workspace mobile --assistant codex
+skills/tumuxi/scripts/openclaw-dx.sh project add --path /abs/repo/path
+skills/tumuxi/scripts/openclaw-dx.sh project list --query api
+skills/tumuxi/scripts/openclaw-dx.sh project pick --name api
 
 # One-shot kickoff (register project -> create workspace -> start coding turn)
-skills/amux/scripts/openclaw-dx.sh workflow kickoff --project /abs/repo/path --name refactor --assistant codex --prompt "Fix highest-impact tech debt"
+skills/tumuxi/scripts/openclaw-dx.sh workflow kickoff --project /abs/repo/path --name refactor --assistant codex --prompt "Fix highest-impact tech debt"
 
 # Project or nested workspace decision
-skills/amux/scripts/openclaw-dx.sh workspace decide --project /abs/repo/path --task "Refactor checkout state" --assistant codex --name refactor
-skills/amux/scripts/openclaw-dx.sh workspace create --name mobile --project /abs/repo/path --assistant codex
-skills/amux/scripts/openclaw-dx.sh workspace create --name refactor --from-workspace <workspace_id> --scope nested --assistant codex
+skills/tumuxi/scripts/openclaw-dx.sh workspace decide --project /abs/repo/path --task "Refactor checkout state" --assistant codex --name refactor
+skills/tumuxi/scripts/openclaw-dx.sh workspace create --name mobile --project /abs/repo/path --assistant codex
+skills/tumuxi/scripts/openclaw-dx.sh workspace create --name refactor --from-workspace <workspace_id> --scope nested --assistant codex
 
 # Start/continue coding turns
-skills/amux/scripts/openclaw-dx.sh start --workspace <workspace_id> --assistant codex --prompt "..."
-skills/amux/scripts/openclaw-dx.sh continue --workspace <workspace_id> --text "..." --enter
+skills/tumuxi/scripts/openclaw-dx.sh start --workspace <workspace_id> --assistant codex --prompt "..."
+skills/tumuxi/scripts/openclaw-dx.sh continue --workspace <workspace_id> --text "..." --enter
 
 # Status/alerts and terminal flows
-skills/amux/scripts/openclaw-dx.sh status
-skills/amux/scripts/openclaw-dx.sh alerts
-skills/amux/scripts/openclaw-dx.sh status --include-stale   # include stale-session alerts when explicitly desired
-skills/amux/scripts/openclaw-dx.sh terminal run --workspace <workspace_id> --text "npm run dev" --enter
-skills/amux/scripts/openclaw-dx.sh terminal logs --workspace <workspace_id> --lines 120
+skills/tumuxi/scripts/openclaw-dx.sh status
+skills/tumuxi/scripts/openclaw-dx.sh alerts
+skills/tumuxi/scripts/openclaw-dx.sh status --include-stale   # include stale-session alerts when explicitly desired
+skills/tumuxi/scripts/openclaw-dx.sh terminal run --workspace <workspace_id> --text "npm run dev" --enter
+skills/tumuxi/scripts/openclaw-dx.sh terminal logs --workspace <workspace_id> --lines 120
 
 # Cleanup, review, ship
-skills/amux/scripts/openclaw-dx.sh cleanup --older-than 24h
-skills/amux/scripts/openclaw-dx.sh review --workspace <workspace_id> --assistant codex
-skills/amux/scripts/openclaw-dx.sh git ship --workspace <workspace_id> --message "feat: ..." [--push]
+skills/tumuxi/scripts/openclaw-dx.sh cleanup --older-than 24h
+skills/tumuxi/scripts/openclaw-dx.sh review --workspace <workspace_id> --assistant codex
+skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace <workspace_id> --message "feat: ..." [--push]
 
 # Dual-pass multi-agent handoff (implement -> review)
-skills/amux/scripts/openclaw-dx.sh workflow dual --workspace <workspace_id> --implement-assistant claude --review-assistant codex
+skills/tumuxi/scripts/openclaw-dx.sh workflow dual --workspace <workspace_id> --implement-assistant claude --review-assistant codex
 
 # Assistant readiness
-skills/amux/scripts/openclaw-dx.sh assistants
+skills/tumuxi/scripts/openclaw-dx.sh assistants
 ```
 
 `openclaw-dx.sh` emits normalized JSON with:
@@ -190,8 +190,8 @@ skills/amux/scripts/openclaw-dx.sh assistants
 ```json
 {
   "tool": "exec",
-  "command": "skills/amux/scripts/openclaw-step.sh run --workspace <workspace_id> --assistant codex --prompt \"...\" --wait-timeout 60s --idle-threshold 10s",
-  "workdir": "/Users/andrewlee/founding/amux",
+  "command": "skills/tumuxi/scripts/openclaw-step.sh run --workspace <workspace_id> --assistant codex --prompt \"...\" --wait-timeout 60s --idle-threshold 10s",
+  "workdir": "/Users/andrewlee/founding/tumuxi",
   "yieldMs": 120000,
   "timeout": 180
 }
@@ -205,11 +205,11 @@ If this backgrounds, continue polling the returned `sessionId`:
 
 Only move to the next step after terminal process status and a user-facing summary.
 
-### The standard flow (direct amux --wait)
+### The standard flow (direct tumuxi --wait)
 
 ```bash
 # Start and wait in one command
-result=$(amux --json agent run --workspace <workspace_id> --assistant codex --prompt "Add dark mode support" --wait --wait-timeout 300s --idle-threshold 10s)
+result=$(tumuxi --json agent run --workspace <workspace_id> --assistant codex --prompt "Add dark mode support" --wait --wait-timeout 300s --idle-threshold 10s)
 agent_id=$(echo "$result" | jq -r '.data.agent_id')
 summary=$(echo "$result" | jq -r '.data.response.summary // .data.response.latest_line // .data.response.delta // ""')
 ```
@@ -255,8 +255,8 @@ All `--json` commands return a structured envelope:
   "ok": true,
   "data": { ... },
   "error": null,
-  "meta": { "generated_at": "...", "amux_version": "..." },
-  "schema_version": "amux.cli.v1"
+  "meta": { "generated_at": "...", "tumuxi_version": "..." },
+  "schema_version": "tumuxi.cli.v1"
 }
 ```
 
@@ -269,17 +269,17 @@ On error: `ok` is `false`, `error` has `code`, `message`, and optional `details`
 ### Create a workspace
 
 ```bash
-amux --json workspace create <name> --project <path> [--assistant <name>]
+tumuxi --json workspace create <name> --project <path> [--assistant <name>]
 ```
 
-Returns `data.id` (workspace id) and `data.root` (the worktree path). **Save the workspace id** — you need it for all agent commands. If `--assistant` is omitted, amux uses the configured default assistant.
+Returns `data.id` (workspace id) and `data.root` (the worktree path). **Save the workspace id** — you need it for all agent commands. If `--assistant` is omitted, tumuxi uses the configured default assistant.
 
 The `root` path is the filesystem path to the workspace. Use it to read/write files directly.
 
 ### List workspaces
 
 ```bash
-amux --json workspace list [--repo <path>]
+tumuxi --json workspace list [--repo <path>]
 ```
 
 (`--project` is accepted as a compatibility alias, but prefer `--repo`.)
@@ -287,7 +287,7 @@ amux --json workspace list [--repo <path>]
 ### Remove a workspace
 
 ```bash
-amux --json workspace remove <workspace_id>
+tumuxi --json workspace remove <workspace_id>
 ```
 
 ## Agent Lifecycle
@@ -295,7 +295,7 @@ amux --json workspace remove <workspace_id>
 ### Start an agent
 
 ```bash
-amux --json agent run --workspace <workspace_id> --assistant claude [--prompt "..."] [--wait] [--wait-timeout 120s] [--idle-threshold 10s]
+tumuxi --json agent run --workspace <workspace_id> --assistant claude [--prompt "..."] [--wait] [--wait-timeout 120s] [--idle-threshold 10s]
 ```
 
 Returns `data.session_name` and `data.agent_id`. **Save both** — `session_name` is used for capture/watch, `agent_id` for send/stop.
@@ -307,13 +307,13 @@ Supported assistants: `claude`, `codex`, `aider`, `goose`, `amp`, `cline`, `roo`
 ### List running agents
 
 ```bash
-amux --json agent list [--workspace <workspace_id>]
+tumuxi --json agent list [--workspace <workspace_id>]
 ```
 
 ### Capture agent output (point-in-time snapshot)
 
 ```bash
-amux --json agent capture <session_name> [--lines 50]
+tumuxi --json agent capture <session_name> [--lines 50]
 ```
 
 Returns `data.content` with the terminal output.
@@ -326,7 +326,7 @@ Returns `data.content` with the terminal output.
 ### Send text to an agent
 
 ```bash
-amux --json agent send --agent <agent_id> --text "your instructions" --enter [--wait] [--wait-timeout 120s] [--idle-threshold 10s]
+tumuxi --json agent send --agent <agent_id> --text "your instructions" --enter [--wait] [--wait-timeout 120s] [--idle-threshold 10s]
 ```
 
 Use `--enter` to simulate pressing Enter after the text. Use `--wait` to block until the agent responds and goes idle (returns response in `data.response`). Use `--async` for non-blocking send with job tracking. `--wait` and `--async` are mutually exclusive.
@@ -338,7 +338,7 @@ Use `--enter` to simulate pressing Enter after the text. Use `--wait` to block u
 ### Stop an agent
 
 ```bash
-amux --json agent stop --agent <agent_id> --graceful
+tumuxi --json agent stop --agent <agent_id> --graceful
 ```
 
 `--graceful` sends Ctrl-C first, waits for clean exit, then force-kills if needed.
@@ -351,10 +351,10 @@ The `--wait` flag on `agent run` and `agent send` is the simplest way to wait fo
 
 ```bash
 # Start and wait in one command
-amux --json agent run --workspace <ws_id> --assistant claude --prompt "fix the bug" --wait --wait-timeout 300s --idle-threshold 10s
+tumuxi --json agent run --workspace <ws_id> --assistant claude --prompt "fix the bug" --wait --wait-timeout 300s --idle-threshold 10s
 
 # Send and wait in one command
-amux --json agent send --agent <agent_id> --text "add tests" --enter --wait --wait-timeout 300s --idle-threshold 10s
+tumuxi --json agent send --agent <agent_id> --text "add tests" --enter --wait --wait-timeout 300s --idle-threshold 10s
 ```
 
 - `--wait-timeout 120s` — max time to wait (default 120s). Returns `response.timed_out: true` on timeout.
@@ -365,7 +365,7 @@ amux --json agent send --agent <agent_id> --text "add tests" --enter --wait --wa
 For cases where you need to wait separately from the send:
 
 ```bash
-skills/amux/scripts/wait-for-idle.sh --session <session_name> [--timeout 300] [--idle-threshold 10]
+skills/tumuxi/scripts/wait-for-idle.sh --session <session_name> [--timeout 300] [--idle-threshold 10]
 ```
 
 ### agent watch (NDJSON streaming)
@@ -373,7 +373,7 @@ skills/amux/scripts/wait-for-idle.sh --session <session_name> [--timeout 300] [-
 For real-time monitoring. Emits events as they happen:
 
 ```bash
-amux agent watch <session_name> [--lines 100] [--interval 500ms] [--idle-threshold 5s] [--heartbeat 10s]
+tumuxi agent watch <session_name> [--lines 100] [--interval 500ms] [--idle-threshold 5s] [--heartbeat 10s]
 ```
 
 **Event types:**
@@ -403,7 +403,7 @@ For mobile/chat users, keep updates push-style so they never need to ask for sta
 If `agent watch` is unavailable:
 
 ```bash
-skills/amux/scripts/poll-agent.sh --session <session_name> --timeout 120
+skills/tumuxi/scripts/poll-agent.sh --session <session_name> --timeout 120
 ```
 
 ### format-capture.sh
@@ -411,7 +411,7 @@ skills/amux/scripts/poll-agent.sh --session <session_name> --timeout 120
 Strip ANSI escape codes from captured output for cleaner reading:
 
 ```bash
-amux --json agent capture <session> --lines 80 | jq -r '.data.content' | skills/amux/scripts/format-capture.sh --strip-ansi --trim
+tumuxi --json agent capture <session> --lines 80 | jq -r '.data.content' | skills/tumuxi/scripts/format-capture.sh --strip-ansi --trim
 ```
 
 ## Async Jobs
@@ -420,16 +420,16 @@ For non-blocking send operations:
 
 ```bash
 # Send asynchronously — returns a job_id immediately
-amux --json agent send --agent <agent_id> --text "..." --enter --async
+tumuxi --json agent send --agent <agent_id> --text "..." --enter --async
 
 # Check job status
-amux --json agent job status <job_id>
+tumuxi --json agent job status <job_id>
 
 # Wait for completion (blocks until done)
-amux --json agent job wait <job_id>
+tumuxi --json agent job wait <job_id>
 
 # Cancel a pending job
-amux --json agent job cancel <job_id>
+tumuxi --json agent job cancel <job_id>
 ```
 
 Use `--idempotency-key <key>` on any mutating command for safe retries (7-day retention).
@@ -440,14 +440,14 @@ Access workspace files directly via the filesystem path returned by `workspace c
 
 ```bash
 # Get workspace root path
-root=$(amux --json workspace list | jq -r '.data[] | select(.workspace_id == "my-ws") | .root')
+root=$(tumuxi --json workspace list | jq -r '.data[] | select(.workspace_id == "my-ws") | .root')
 
 # Read/write files directly
 cat "$root/src/main.ts"
 echo "new content" > "$root/src/config.ts"
 ```
 
-No special amux command is needed for file access.
+No special tumuxi command is needed for file access.
 
 ## Multi-Agent Orchestration
 
@@ -455,12 +455,12 @@ Run multiple agents on different workspaces simultaneously:
 
 ```bash
 # Create separate workspaces
-amux --json workspace create frontend --project ~/app --assistant claude
-amux --json workspace create backend --project ~/app --assistant claude
+tumuxi --json workspace create frontend --project ~/app --assistant claude
+tumuxi --json workspace create backend --project ~/app --assistant claude
 
 # Start agents in each
-amux --json agent run --workspace ws-frontend --assistant claude --prompt "Add dark mode to React components"
-amux --json agent run --workspace ws-backend --assistant claude --prompt "Add /api/theme endpoint"
+tumuxi --json agent run --workspace ws-frontend --assistant claude --prompt "Add dark mode to React components"
+tumuxi --json agent run --workspace ws-backend --assistant claude --prompt "Add /api/theme endpoint"
 
 # Monitor both (wait for each to finish, then summarize)
 scripts/wait-for-idle.sh --session <frontend-session> --timeout 300 &
@@ -473,9 +473,9 @@ Each workspace gets its own git worktree branch, so agents don't conflict.
 ## Diagnostics
 
 ```bash
-amux --json status        # Health check
-amux --json doctor        # Full diagnostics
-amux --json capabilities  # Machine-readable feature list
+tumuxi --json status        # Health check
+tumuxi --json doctor        # Full diagnostics
+tumuxi --json capabilities  # Machine-readable feature list
 ```
 
 ## Error Handling
@@ -483,7 +483,7 @@ amux --json capabilities  # Machine-readable feature list
 Always check the `ok` field in JSON responses:
 
 ```bash
-result=$(amux --json agent run --workspace bad-id --assistant claude 2>&1)
+result=$(tumuxi --json agent run --workspace bad-id --assistant claude 2>&1)
 if echo "$result" | jq -e '.ok' > /dev/null 2>&1; then
   session=$(echo "$result" | jq -r '.data.session_name')
 else
@@ -497,12 +497,12 @@ Common error codes: `init_failed`, `not_found`, `usage_error`, `capture_failed`.
 ## Rules & Best Practices
 
 1. **Always monitor and report back** — never fire-and-forget. Prefer `--wait` for bounded steps; use `agent watch --heartbeat` for long tasks, then summarize results to the user.
-2. **Always use `--json`** for all amux commands when calling from scripts or agents
+2. **Always use `--json`** for all tumuxi commands when calling from scripts or agents
 3. **Save `workspace_id`, `session_name`, and `agent_id`** from creation responses — you need them for subsequent commands
 4. **Use `--graceful`** when stopping agents to allow clean shutdown
 5. **Use `--idempotency-key`** on mutating commands when retries are possible
 6. **Check `ok` field** in every JSON response before accessing `data`
 7. **Use `--async`** for send operations when you don't need to block on delivery
-8. **Access files via the workspace root path** — no special amux command needed
+8. **Access files via the workspace root path** — no special tumuxi command needed
 9. **One workspace per task** — create separate workspaces for independent work items
 10. **Stop agents when done** — don't leave idle agents running

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 func TestRouteProjectNoSubcommand(t *testing.T) {
@@ -332,7 +332,7 @@ func TestCmdProjectRemoveMatchesStoredPathWithoutSymlinks(t *testing.T) {
 		t.Fatalf("Symlink() error = %v", err)
 	}
 
-	registry := data.NewRegistry(filepath.Join(home, ".amux", "projects.json"))
+	registry := data.NewRegistry(filepath.Join(home, ".tumuxi", "projects.json"))
 	if err := registry.AddProject(storedLink); err != nil {
 		t.Fatalf("registry.AddProject(%q) error = %v", storedLink, err)
 	}

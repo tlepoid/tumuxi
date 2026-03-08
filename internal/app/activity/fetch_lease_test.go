@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 type leaseTagFetcher struct {
@@ -27,9 +27,9 @@ func TestFetchTaggedSessions_UsesLeaseTagWhenOutputTagMissing(t *testing.T) {
 			{
 				Name: "tagged-session",
 				Tags: map[string]string{
-					"@amux":                "1",
-					"@amux_workspace":      "ws-tagged",
-					"@amux_type":           "agent",
+					"@tumuxi":                "1",
+					"@tumuxi_workspace":      "ws-tagged",
+					"@tumuxi_type":           "agent",
 					tmux.TagSessionLeaseAt: strconv.FormatInt(leaseMS, 10),
 				},
 			},

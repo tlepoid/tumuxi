@@ -47,7 +47,7 @@ func Run(args []string, version, commit, date string) int {
 
 	if len(rest) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: amux <command> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumuxi <command> [flags]", nil, version)
 		} else {
 			PrintUsage(wErr)
 		}
@@ -85,7 +85,7 @@ func Run(args []string, version, commit, date string) int {
 			}, version)
 			return ExitOK
 		}
-		fmt.Fprintf(w, "amux %s (commit: %s, built: %s)\n", version, commit, date)
+		fmt.Fprintf(w, "tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
 		return ExitOK
 	case "help":
 		if gf.JSON {
@@ -140,9 +140,9 @@ func applyRunGlobals(gf GlobalFlags) (func(), error) {
 func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: amux workspace <list|create|remove> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumuxi workspace <list|create|remove> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: amux workspace <list|create|remove> [flags]")
+			fmt.Fprintln(wErr, "Usage: tumuxi workspace <list|create|remove> [flags]")
 		}
 		return ExitUsage
 	}
@@ -168,9 +168,9 @@ func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 func routeAgent(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: amux agent <list|capture|run|send|stop|watch|job> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: amux agent <list|capture|run|send|stop|watch|job> [flags]")
+			fmt.Fprintln(wErr, "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]")
 		}
 		return ExitUsage
 	}
@@ -207,13 +207,13 @@ func PrintUsage(w io.Writer) {
 }
 
 func usageText() string {
-	return `Usage: amux <command> [flags]
+	return `Usage: tumuxi <command> [flags]
 
 Commands:
   status              Health check and summary
   doctor              Diagnostics check list
   capabilities        Machine-readable CLI capabilities
-  logs tail           Tail the amux log file
+  logs tail           Tail the tumuxi log file
   workspace list      List workspaces
   workspace create    Create a workspace
   workspace remove    Remove a workspace

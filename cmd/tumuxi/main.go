@@ -19,10 +19,10 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/charmbracelet/x/term"
 
-	"github.com/andyrewlee/amux/internal/app"
-	"github.com/andyrewlee/amux/internal/cli"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/safego"
+	"github.com/tlepoid/tumuxi/internal/app"
+	"github.com/tlepoid/tumuxi/internal/cli"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/safego"
 )
 
 // Version info set by GoReleaser via ldflags
@@ -44,7 +44,7 @@ var cliCommands = map[string]bool{
 func main() {
 	// Handle --version flag
 	if len(os.Args) > 1 && (os.Args[1] == "--version" || os.Args[1] == "-v") {
-		fmt.Printf("amux %s (commit: %s, built: %s)\n", version, commit, date)
+		fmt.Printf("tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
 		os.Exit(0)
 	}
 
@@ -120,7 +120,7 @@ func handleNoSubcommand(args []string, launchTUI bool) (bool, int) {
 func runTUI() {
 	// Initialize logging
 	home, _ := os.UserHomeDir()
-	logDir := filepath.Join(home, ".amux", "logs")
+	logDir := filepath.Join(home, ".tumuxi", "logs")
 	if err := logging.Initialize(logDir, logging.LevelInfo); err != nil {
 		fmt.Fprintf(os.Stderr, "Warning: could not initialize logging: %v\n", err)
 	}
@@ -128,7 +128,7 @@ func runTUI() {
 
 	cleanupStaleTestTmuxSockets()
 
-	logging.Info("Starting amux")
+	logging.Info("Starting tumuxi")
 
 	startSignalDebug()
 
@@ -156,7 +156,7 @@ func runTUI() {
 	a.CleanupTmuxOnExit()
 	a.Shutdown()
 
-	logging.Info("amux shutdown complete")
+	logging.Info("tumuxi shutdown complete")
 }
 
 var (
@@ -192,7 +192,7 @@ func mouseEventFilter(m tea.Model, msg tea.Msg) tea.Msg {
 }
 
 func startPprof() {
-	raw := strings.TrimSpace(os.Getenv("AMUX_PPROF"))
+	raw := strings.TrimSpace(os.Getenv("TUMUXI_PPROF"))
 	if raw == "" {
 		return
 	}
@@ -218,9 +218,9 @@ func startPprof() {
 
 // startSignalDebug registers a SIGUSR1 handler for debug goroutine dumps.
 // The goroutine and signal handler intentionally live for the process lifetime
-// since this is only active in dev builds or when AMUX_DEBUG_SIGNALS is set.
+// since this is only active in dev builds or when TUMUXI_DEBUG_SIGNALS is set.
 func startSignalDebug() {
-	if version != "dev" && strings.TrimSpace(os.Getenv("AMUX_DEBUG_SIGNALS")) == "" {
+	if version != "dev" && strings.TrimSpace(os.Getenv("TUMUXI_DEBUG_SIGNALS")) == "" {
 		return
 	}
 	ch := make(chan os.Signal, 1)

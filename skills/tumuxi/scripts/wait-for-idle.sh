@@ -44,7 +44,7 @@ while true; do
     exit 1
   fi
 
-  result=$(amux --json agent capture "$SESSION" --lines 100 2>&1) || true
+  result=$(tumuxi --json agent capture "$SESSION" --lines 100 2>&1) || true
 
   ok=$(echo "$result" | jq -r '.ok // false' 2>/dev/null) || ok="false"
   if [[ "$ok" != "true" ]]; then

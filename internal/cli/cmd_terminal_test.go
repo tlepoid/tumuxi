@@ -6,17 +6,17 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestResolveTerminalSessionForWorkspacePrefersAttachedThenNewest(t *testing.T) {
 	queryFn := func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
-			{name: "amux-ws-a-term-tab-1", tags: map[string]string{"@amux_workspace": "ws-a", "@amux_type": "terminal"}, attached: false, createdAt: 100},
-			{name: "amux-ws-a-term-tab-2", tags: map[string]string{"@amux_workspace": "ws-a", "@amux_type": "terminal"}, attached: false, createdAt: 200},
-			{name: "amux-ws-a-term-tab-3", tags: map[string]string{"@amux_workspace": "ws-a", "@amux_type": "terminal"}, attached: true, createdAt: 50},
-			{name: "amux-ws-b-term-tab-1", tags: map[string]string{"@amux_workspace": "ws-b", "@amux_type": "terminal"}, attached: true, createdAt: 999},
+			{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: false, createdAt: 100},
+			{name: "tumuxi-ws-a-term-tab-2", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: false, createdAt: 200},
+			{name: "tumuxi-ws-a-term-tab-3", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: true, createdAt: 50},
+			{name: "tumuxi-ws-b-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-b", "@tumuxi_type": "terminal"}, attached: true, createdAt: 999},
 		}, nil
 	}
 
@@ -27,8 +27,8 @@ func TestResolveTerminalSessionForWorkspacePrefersAttachedThenNewest(t *testing.
 	if !ok {
 		t.Fatal("expected session to be found")
 	}
-	if got != "amux-ws-a-term-tab-3" {
-		t.Fatalf("session = %q, want %q", got, "amux-ws-a-term-tab-3")
+	if got != "tumuxi-ws-a-term-tab-3" {
+		t.Fatalf("session = %q, want %q", got, "tumuxi-ws-a-term-tab-3")
 	}
 }
 
@@ -129,8 +129,8 @@ func TestCmdTerminalRunPreservesWhitespaceInTextPayload(t *testing.T) {
 	if errOut.Len() != 0 {
 		t.Fatalf("expected no stderr output in JSON mode, got %q", errOut.String())
 	}
-	if gotSession != "amux-test-term-tab-1" {
-		t.Fatalf("session = %q, want %q", gotSession, "amux-test-term-tab-1")
+	if gotSession != "tumuxi-test-term-tab-1" {
+		t.Fatalf("session = %q, want %q", gotSession, "tumuxi-test-term-tab-1")
 	}
 	if gotText != raw {
 		t.Fatalf("text = %q, want %q", gotText, raw)

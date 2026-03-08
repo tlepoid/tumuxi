@@ -3,7 +3,7 @@ package center
 import (
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/messages"
 )
 
 func TestAutoReattachActiveTabOnSelection_SkipsAttachedTab(t *testing.T) {

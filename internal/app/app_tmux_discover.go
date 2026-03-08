@@ -7,9 +7,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/ui/sidebar"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
 )
 
 type tmuxTabsDiscoverResult struct {
@@ -53,11 +53,11 @@ func (a *App) discoverWorkspaceTabsFromTmux(ws *data.Workspace) tea.Cmd {
 			return nil
 		}
 		match := map[string]string{
-			"@amux":           "1",
-			"@amux_workspace": wsID,
-			"@amux_type":      "agent",
+			"@tumuxi":           "1",
+			"@tumuxi_workspace": wsID,
+			"@tumuxi_type":      "agent",
 		}
-		rows, err := svc.SessionsWithTags(match, []string{"@amux_assistant", "@amux_created_at"}, opts)
+		rows, err := svc.SessionsWithTags(match, []string{"@tumuxi_assistant", "@tumuxi_created_at"}, opts)
 		if err != nil {
 			logging.Warn("tmux session discovery failed: %v", err)
 			return nil
@@ -70,7 +70,7 @@ func (a *App) discoverWorkspaceTabsFromTmux(ws *data.Workspace) tea.Cmd {
 			if _, ok := existing[row.Name]; ok {
 				continue
 			}
-			assistantName := strings.TrimSpace(row.Tags["@amux_assistant"])
+			assistantName := strings.TrimSpace(row.Tags["@tumuxi_assistant"])
 			if assistantName == "" {
 				assistantName = assistant
 			}
@@ -79,7 +79,7 @@ func (a *App) discoverWorkspaceTabsFromTmux(ws *data.Workspace) tea.Cmd {
 				name = "agent"
 			}
 			var createdAt int64
-			if raw := strings.TrimSpace(row.Tags["@amux_created_at"]); raw != "" {
+			if raw := strings.TrimSpace(row.Tags["@tumuxi_created_at"]); raw != "" {
 				createdAt, _ = strconv.ParseInt(raw, 10, 64)
 			}
 			if createdAt == 0 {
@@ -135,11 +135,11 @@ func (a *App) discoverSidebarTerminalsFromTmux(ws *data.Workspace) tea.Cmd {
 			return tmuxSidebarDiscoverResult{WorkspaceID: wsID}
 		}
 		match := map[string]string{
-			"@amux":           "1",
-			"@amux_workspace": wsID,
-			"@amux_type":      "terminal",
+			"@tumuxi":           "1",
+			"@tumuxi_workspace": wsID,
+			"@tumuxi_type":      "terminal",
 		}
-		rows, err := svc.SessionsWithTags(match, []string{"@amux_instance", "@amux_created_at"}, opts)
+		rows, err := svc.SessionsWithTags(match, []string{"@tumuxi_instance", "@tumuxi_created_at"}, opts)
 		if err != nil {
 			logging.Warn("tmux sidebar discovery failed: %v", err)
 			return tmuxSidebarDiscoverResult{WorkspaceID: wsID}
@@ -158,9 +158,9 @@ func (a *App) discoverSidebarTerminalsFromTmux(ws *data.Workspace) tea.Cmd {
 			if value, err := svc.SessionHasClients(row.Name, opts); err == nil {
 				attached = value
 			}
-			rowInstanceID := strings.TrimSpace(row.Tags["@amux_instance"])
+			rowInstanceID := strings.TrimSpace(row.Tags["@tumuxi_instance"])
 			var createdAt int64
-			if raw := strings.TrimSpace(row.Tags["@amux_created_at"]); raw != "" {
+			if raw := strings.TrimSpace(row.Tags["@tumuxi_created_at"]); raw != "" {
 				createdAt, _ = strconv.ParseInt(raw, 10, 64)
 			}
 			if createdAt == 0 {

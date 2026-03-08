@@ -5,10 +5,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/messages"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func (a *App) cleanupWorkspaceTmuxSessions(ws *data.Workspace) tea.Cmd {
@@ -23,15 +23,15 @@ func (a *App) cleanupWorkspaceTmuxSessions(ws *data.Workspace) tea.Cmd {
 			return nil
 		}
 		tags := map[string]string{
-			"@amux":           "1",
-			"@amux_workspace": wsID,
+			"@tumuxi":           "1",
+			"@tumuxi_workspace": wsID,
 		}
 		cleaned, err := svc.KillSessionsMatchingTags(tags, opts)
 		if err != nil {
 			logging.Warn("Failed to cleanup tmux sessions for workspace %s: %v", ws.Name, err)
 		}
 		if cleaned {
-			logging.Info("Cleaned up @amux tmux sessions for workspace %s", ws.Name)
+			logging.Info("Cleaned up @tumuxi tmux sessions for workspace %s", ws.Name)
 		}
 		if err := svc.KillWorkspaceSessions(wsID, opts); err != nil {
 			logging.Warn("Failed to cleanup tmux sessions for workspace %s: %v", ws.Name, err)
@@ -47,18 +47,18 @@ func (a *App) cleanupAllTmuxSessions() tea.Cmd {
 		if svc == nil {
 			return messages.Toast{Message: "tmux cleanup unavailable", Level: messages.ToastWarning}
 		}
-		cleanedTagged, err := svc.KillSessionsMatchingTags(map[string]string{"@amux": "1"}, opts)
+		cleanedTagged, err := svc.KillSessionsMatchingTags(map[string]string{"@tumuxi": "1"}, opts)
 		if err != nil {
 			logging.Warn("Failed to cleanup tmux sessions by tag: %v", err)
 		} else if cleanedTagged {
-			logging.Info("Cleaned up @amux tmux sessions")
+			logging.Info("Cleaned up @tumuxi tmux sessions")
 		}
-		prefix := tmux.SessionName("amux") + "-"
+		prefix := tmux.SessionName("tumuxi") + "-"
 		if err := svc.KillSessionsWithPrefix(prefix, opts); err != nil {
 			return messages.Toast{Message: fmt.Sprintf("tmux cleanup failed: %v", err), Level: messages.ToastWarning}
 		}
 		if cleanedTagged {
-			return messages.Toast{Message: fmt.Sprintf("Cleaned up @amux and %s* tmux sessions", prefix), Level: messages.ToastSuccess}
+			return messages.Toast{Message: fmt.Sprintf("Cleaned up @tumuxi and %s* tmux sessions", prefix), Level: messages.ToastSuccess}
 		}
 		return messages.Toast{Message: fmt.Sprintf("Cleaned up %s* tmux sessions", prefix), Level: messages.ToastSuccess}
 	}

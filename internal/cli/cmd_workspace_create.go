@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/git"
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 )
 
 func cmdWorkspaceCreate(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux workspace create <name> --project <path> [--assistant <name>] [--base <branch>] [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumuxi workspace create <name> --project <path> [--assistant <name>] [--base <branch>] [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("workspace create")
 	project := fs.String("project", "", "project repo path (required)")
 	assistant := fs.String("assistant", "", "assistant name (defaults to configured default assistant)")
@@ -137,7 +137,7 @@ func cmdWorkspaceCreate(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 		return ExitInternalError
 	}
 	if !isProjectRegistered(registered, projectPath) {
-		msg := fmt.Sprintf("project %s is not registered; run `amux project add %s` first", projectPath, projectPath)
+		msg := fmt.Sprintf("project %s is not registered; run `tumuxi project add %s` first", projectPath, projectPath)
 		if gf.JSON {
 			return returnJSONErrorMaybeIdempotent(
 				w, wErr, gf, version, "workspace.create", *idempotencyKey,

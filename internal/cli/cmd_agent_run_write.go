@@ -10,13 +10,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/tmux"
-	"github.com/andyrewlee/amux/internal/validation"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/validation"
 )
 
 func cmdAgentRun(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux agent run --workspace <id> --assistant <name> [--prompt <text>] [--wait] [--wait-timeout <duration>] [--idle-threshold <duration>] [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumuxi agent run --workspace <id> --assistant <name> [--prompt <text>] [--wait] [--wait-timeout <duration>] [--idle-threshold <duration>] [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("agent run")
 	wsFlag := fs.String("workspace", "", "workspace ID (required)")
 	assistant := fs.String("assistant", "", "assistant name (required)")
@@ -120,7 +120,7 @@ func cmdAgentRun(w, wErr io.Writer, gf GlobalFlags, args []string, version strin
 
 	// Generate tab ID and session name.
 	tabID := newAgentTabID()
-	sessionName := tmux.SessionName("amux", string(wsID), tabID)
+	sessionName := tmux.SessionName("tumuxi", string(wsID), tabID)
 
 	// Create detached tmux session
 	createArgs := []string{
@@ -145,13 +145,13 @@ func cmdAgentRun(w, wErr io.Writer, gf GlobalFlags, args []string, version strin
 		Key   string
 		Value string
 	}{
-		{Key: "@amux", Value: "1"},
-		{Key: "@amux_workspace", Value: string(wsID)},
-		{Key: "@amux_tab", Value: tabID},
-		{Key: "@amux_type", Value: "agent"},
-		{Key: "@amux_assistant", Value: agentAssistant},
-		{Key: "@amux_created_at", Value: strconv.FormatInt(now.Unix(), 10)},
-		{Key: "@amux_instance", Value: "cli"},
+		{Key: "@tumuxi", Value: "1"},
+		{Key: "@tumuxi_workspace", Value: string(wsID)},
+		{Key: "@tumuxi_tab", Value: tabID},
+		{Key: "@tumuxi_type", Value: "agent"},
+		{Key: "@tumuxi_assistant", Value: agentAssistant},
+		{Key: "@tumuxi_created_at", Value: strconv.FormatInt(now.Unix(), 10)},
+		{Key: "@tumuxi_instance", Value: "cli"},
 		{Key: tmux.TagSessionOwner, Value: "cli"},
 		{Key: tmux.TagSessionLeaseAt, Value: strconv.FormatInt(now.UnixMilli(), 10)},
 	}

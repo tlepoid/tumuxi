@@ -47,11 +47,11 @@ func TestCmdLogsTailEmptyFileReportsZeroLines(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	logDir := filepath.Join(home, ".amux", "logs")
+	logDir := filepath.Join(home, ".tumuxi", "logs")
 	if err := os.MkdirAll(logDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
-	logFile := filepath.Join(logDir, "amux-2025-01-01.log")
+	logFile := filepath.Join(logDir, "tumuxi-2025-01-01.log")
 	if err := os.WriteFile(logFile, []byte{}, 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -84,11 +84,11 @@ func TestCmdLogsTailEmptyFileHumanNoOutput(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	logDir := filepath.Join(home, ".amux", "logs")
+	logDir := filepath.Join(home, ".tumuxi", "logs")
 	if err := os.MkdirAll(logDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
-	logFile := filepath.Join(logDir, "amux-2025-01-01.log")
+	logFile := filepath.Join(logDir, "tumuxi-2025-01-01.log")
 	if err := os.WriteFile(logFile, []byte{}, 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}

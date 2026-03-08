@@ -3,8 +3,8 @@ package sidebar
 import (
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 func setupTerminalOwnerModel(t *testing.T) *TerminalModel {

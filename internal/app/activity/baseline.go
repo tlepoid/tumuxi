@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 // SeedFreshTagFallbackBaseline initializes hysteresis state for sessions that

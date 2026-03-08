@@ -32,9 +32,9 @@ type terminalLogsResult struct {
 func routeTerminal(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: amux terminal <list|run|logs> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumuxi terminal <list|run|logs> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: amux terminal <list|run|logs> [flags]")
+			fmt.Fprintln(wErr, "Usage: tumuxi terminal <list|run|logs> [flags]")
 		}
 		return ExitUsage
 	}
@@ -58,7 +58,7 @@ func routeTerminal(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 }
 
 func cmdTerminalList(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: amux terminal list [--workspace <id>] [--json]"
+	const usage = "Usage: tumuxi terminal list [--workspace <id>] [--json]"
 	fs := newFlagSet("terminal list")
 	workspace := fs.String("workspace", "", "filter by workspace ID")
 	if err := fs.Parse(args); err != nil {
@@ -97,14 +97,14 @@ func cmdTerminalList(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 	now := time.Now()
 	var terminals []terminalInfo
 	for _, row := range rows {
-		sessionType := strings.TrimSpace(row.tags["@amux_type"])
+		sessionType := strings.TrimSpace(row.tags["@tumuxi_type"])
 		if sessionType == "" {
 			sessionType = inferSessionType(row.name)
 		}
 		if !isTermTabType(sessionType) {
 			continue
 		}
-		wsID := strings.TrimSpace(row.tags["@amux_workspace"])
+		wsID := strings.TrimSpace(row.tags["@tumuxi_workspace"])
 		if wsID == "" {
 			wsID = inferWorkspaceID(row.name)
 		}

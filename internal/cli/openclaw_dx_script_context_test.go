@@ -11,9 +11,9 @@ func TestOpenClawDXProjectPick_NameSupportsDisambiguation(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -80,9 +80,9 @@ func TestOpenClawDXGuide_RecommendsReplyWhenAgentNeedsInput(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -161,7 +161,7 @@ func TestOpenClawDXStart_UsesSiblingTurnScriptWhenInvokedOutsideRepoRoot(t *test
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	sourceScriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	sourceScriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	src, err := os.ReadFile(sourceScriptPath)
 	if err != nil {
 		t.Fatalf("read source script: %v", err)
@@ -183,7 +183,7 @@ printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed
 `)
 
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
@@ -230,9 +230,9 @@ func TestOpenClawDXStart_UsesContextWorkspaceAndAssistant(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	turnArgsPath := filepath.Join(fakeBinDir, "turn-args.log")
 	contextPath := filepath.Join(t.TempDir(), "context.json")

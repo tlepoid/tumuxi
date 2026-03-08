@@ -9,11 +9,11 @@ import (
 func TestPathsEnsureDirectories(t *testing.T) {
 	tmp := t.TempDir()
 	paths := &Paths{
-		Home:           filepath.Join(tmp, "amux"),
-		WorkspacesRoot: filepath.Join(tmp, "amux", "workspaces"),
-		RegistryPath:   filepath.Join(tmp, "amux", "projects.json"),
-		MetadataRoot:   filepath.Join(tmp, "amux", "workspaces-metadata"),
-		ConfigPath:     filepath.Join(tmp, "amux", "config.json"),
+		Home:           filepath.Join(tmp, "tumuxi"),
+		WorkspacesRoot: filepath.Join(tmp, "tumuxi", "workspaces"),
+		RegistryPath:   filepath.Join(tmp, "tumuxi", "projects.json"),
+		MetadataRoot:   filepath.Join(tmp, "tumuxi", "workspaces-metadata"),
+		ConfigPath:     filepath.Join(tmp, "tumuxi", "config.json"),
 	}
 
 	if err := paths.EnsureDirectories(); err != nil {

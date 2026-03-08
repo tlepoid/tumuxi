@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/app"
-	"github.com/andyrewlee/amux/internal/perf"
+	"github.com/tlepoid/tumuxi/internal/app"
+	"github.com/tlepoid/tumuxi/internal/perf"
 )
 
 type stats struct {
@@ -140,7 +140,7 @@ func fps(durations []time.Duration) float64 {
 }
 
 func startPprof() {
-	raw := strings.TrimSpace(os.Getenv("AMUX_PPROF"))
+	raw := strings.TrimSpace(os.Getenv("TUMUXI_PPROF"))
 	if raw == "" {
 		return
 	}

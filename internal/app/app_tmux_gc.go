@@ -7,9 +7,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/app/activity"
-	"github.com/andyrewlee/amux/internal/logging"
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/app/activity"
+	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 const orphanSessionGracePeriod = 30 * time.Second
@@ -66,7 +66,7 @@ func (a *App) gcOrphanedTmuxSessions() tea.Cmd {
 		if svc == nil {
 			return orphanGCResult{Err: errTmuxUnavailable}
 		}
-		byWorkspace, err := a.amuxSessionsByWorkspace(opts)
+		byWorkspace, err := a.tumuxiSessionsByWorkspace(opts)
 		if err != nil {
 			return orphanGCResult{Err: err}
 		}
@@ -92,16 +92,16 @@ func (a *App) gcStaleDetachedAgentSessions() tea.Cmd {
 			return staleDetachedAgentGCResult{Err: errTmuxUnavailable}
 		}
 
-		match := map[string]string{"@amux": "1", "@amux_type": "agent"}
+		match := map[string]string{"@tumuxi": "1", "@tumuxi_type": "agent"}
 		if instanceID := strings.TrimSpace(a.instanceID); instanceID != "" {
-			// Detached-agent GC is instance-scoped so multiple amux instances do
+			// Detached-agent GC is instance-scoped so multiple tumuxi instances do
 			// not race to kill each other's managed sessions.
-			match["@amux_instance"] = instanceID
+			match["@tumuxi_instance"] = instanceID
 		}
 		rows, err := svc.SessionsWithTags(
 			match,
 			[]string{
-				"@amux_created_at",
+				"@tumuxi_created_at",
 				"session_activity",
 				tmux.TagLastOutputAt,
 				tmux.TagLastInputAt,
@@ -161,7 +161,7 @@ func (a *App) gcStaleDetachedAgentSessions() tea.Cmd {
 			lastActiveAt := activityTagTime(row.Tags)
 			if lastActiveAt.IsZero() {
 				// SessionCreatedAt is a tmux-native fallback for sessions whose
-				// @amux_created_at tag is absent from list output.
+				// @tumuxi_created_at tag is absent from list output.
 				if createdAt, err := svc.SessionCreatedAt(sessionName, opts); err == nil && createdAt > 0 {
 					lastActiveAt = time.Unix(createdAt, 0)
 				}
@@ -199,26 +199,26 @@ type workspaceSession struct {
 	CreatedAt int64
 }
 
-func (a *App) amuxSessionsByWorkspace(opts tmux.Options) (map[string][]workspaceSession, error) {
+func (a *App) tumuxiSessionsByWorkspace(opts tmux.Options) (map[string][]workspaceSession, error) {
 	if a.tmuxService == nil {
 		return nil, errTmuxUnavailable
 	}
-	match := map[string]string{"@amux": "1"}
+	match := map[string]string{"@tumuxi": "1"}
 	if a.instanceID != "" {
-		match["@amux_instance"] = a.instanceID
+		match["@tumuxi_instance"] = a.instanceID
 	}
-	rows, err := a.tmuxService.SessionsWithTags(match, []string{"@amux_workspace", "@amux_created_at"}, opts)
+	rows, err := a.tmuxService.SessionsWithTags(match, []string{"@tumuxi_workspace", "@tumuxi_created_at"}, opts)
 	if err != nil {
 		return nil, err
 	}
 	out := make(map[string][]workspaceSession)
 	for _, row := range rows {
-		wsID := strings.TrimSpace(row.Tags["@amux_workspace"])
+		wsID := strings.TrimSpace(row.Tags["@tumuxi_workspace"])
 		if wsID == "" {
 			continue
 		}
 		var createdAt int64
-		if raw := strings.TrimSpace(row.Tags["@amux_created_at"]); raw != "" {
+		if raw := strings.TrimSpace(row.Tags["@tumuxi_created_at"]); raw != "" {
 			createdAt, _ = strconv.ParseInt(raw, 10, 64)
 		}
 		out[wsID] = append(out[wsID], workspaceSession{Name: row.Name, CreatedAt: createdAt})
@@ -317,13 +317,13 @@ func (a *App) handleStaleDetachedAgentGCResult(msg staleDetachedAgentGCResult) {
 	}
 }
 
-// sessionCountResult is returned after counting amux tmux sessions.
+// sessionCountResult is returned after counting tumuxi tmux sessions.
 type sessionCountResult struct {
 	Count int
 	Err   error
 }
 
-// logSessionCount returns a Cmd that counts @amux=1 sessions and logs the result.
+// logSessionCount returns a Cmd that counts @tumuxi=1 sessions and logs the result.
 func (a *App) logSessionCount() tea.Cmd {
 	if !a.tmuxAvailable {
 		return nil
@@ -334,7 +334,7 @@ func (a *App) logSessionCount() tea.Cmd {
 		if svc == nil {
 			return sessionCountResult{Err: errTmuxUnavailable}
 		}
-		match := map[string]string{"@amux": "1"}
+		match := map[string]string{"@tumuxi": "1"}
 		rows, err := svc.SessionsWithTags(match, nil, opts)
 		if err != nil {
 			return sessionCountResult{Err: err}
@@ -389,7 +389,7 @@ func activityTagTime(tags map[string]string) time.Time {
 			updateBest(parsed)
 		}
 	}
-	if raw := strings.TrimSpace(tags["@amux_created_at"]); raw != "" {
+	if raw := strings.TrimSpace(tags["@tumuxi_created_at"]); raw != "" {
 		if sec, err := strconv.ParseInt(raw, 10, 64); err == nil && sec > 0 {
 			updateBest(time.Unix(sec, 0))
 		}

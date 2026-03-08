@@ -1,5 +1,5 @@
-BINARY_NAME := amux
-MAIN_PACKAGE := ./cmd/amux
+BINARY_NAME := tumuxi
+MAIN_PACKAGE := ./cmd/tumuxi
 .DEFAULT_GOAL := build
 
 HARNESS_FRAMES ?= 300
@@ -29,13 +29,13 @@ bench:
 	go test -bench=. -benchmem ./internal/ui/compositor/ -run=^$$
 
 harness-center:
-	go run ./cmd/amux-harness -mode center -tabs 16 -hot-tabs 2 -payload-bytes 64 -frames $(HARNESS_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
+	go run ./cmd/tumuxi-harness -mode center -tabs 16 -hot-tabs 2 -payload-bytes 64 -frames $(HARNESS_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
 
 harness-monitor:
-	go run ./cmd/amux-harness -mode monitor -tabs 16 -hot-tabs 4 -payload-bytes 64 -frames $(HARNESS_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
+	go run ./cmd/tumuxi-harness -mode monitor -tabs 16 -hot-tabs 4 -payload-bytes 64 -frames $(HARNESS_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
 
 harness-sidebar:
-	go run ./cmd/amux-harness -mode sidebar -tabs 16 -hot-tabs 1 -payload-bytes 64 -newline-every 1 -frames $(HARNESS_SCROLLBACK_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
+	go run ./cmd/tumuxi-harness -mode sidebar -tabs 16 -hot-tabs 1 -payload-bytes 64 -newline-every 1 -frames $(HARNESS_SCROLLBACK_FRAMES) -warmup $(HARNESS_WARMUP) -width $(HARNESS_WIDTH) -height $(HARNESS_HEIGHT)
 
 harness-presets: harness-center harness-sidebar harness-monitor
 
@@ -148,9 +148,9 @@ help:
 	@echo "  release       - release-check + release-tag + release-push"
 
 release-check: test
-	go run ./cmd/amux-harness -mode center -frames 5 -warmup 1
-	go run ./cmd/amux-harness -mode sidebar -frames 5 -warmup 1
-	go run ./cmd/amux-harness -mode monitor -frames 5 -warmup 1
+	go run ./cmd/tumuxi-harness -mode center -frames 5 -warmup 1
+	go run ./cmd/tumuxi-harness -mode sidebar -frames 5 -warmup 1
+	go run ./cmd/tumuxi-harness -mode monitor -frames 5 -warmup 1
 
 release-tag:
 	@test -n "$(VERSION)" || (echo "VERSION is required (e.g. VERSION=v0.0.5)" && exit 1)

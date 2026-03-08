@@ -3,7 +3,7 @@ package sidebar
 import (
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 func TestAddTabsFromSessionsDedupes(t *testing.T) {

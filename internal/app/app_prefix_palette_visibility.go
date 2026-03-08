@@ -1,6 +1,6 @@
 package app
 
-import "github.com/andyrewlee/amux/internal/messages"
+import "github.com/tlepoid/tumuxi/internal/messages"
 
 func (a *App) prefixActionVisible(action string) bool {
 	// Keep behavior permissive in lightweight tests that don't fully initialize App state.

@@ -133,7 +133,7 @@ func TestCmdWorkspaceListJSONReturnsInternalErrorOnCorruptMetadata(t *testing.T)
 	t.Setenv("HOME", home)
 
 	wsID := "0123456789abcdef"
-	metaDir := filepath.Join(home, ".amux", "workspaces-metadata", wsID)
+	metaDir := filepath.Join(home, ".tumuxi", "workspaces-metadata", wsID)
 	if err := os.MkdirAll(metaDir, 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}

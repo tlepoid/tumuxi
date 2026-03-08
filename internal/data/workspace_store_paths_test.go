@@ -28,7 +28,7 @@ func TestWorkspaceStore_ListByRepoHandlesQuotedRepoHintFromCorruptMetadata(t *te
 	base := t.TempDir()
 	targetRepo := filepath.Join(base, `target"repo`)
 	otherRepo := filepath.Join(base, "other")
-	otherRoot := filepath.Join(otherRepo, ".amux", "workspaces", "ws1")
+	otherRoot := filepath.Join(otherRepo, ".tumuxi", "workspaces", "ws1")
 	for _, dir := range []string{targetRepo, otherRoot} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatalf("MkdirAll(%s) error = %v", dir, err)
@@ -74,7 +74,7 @@ func TestWorkspaceStore_ListByRepo_IgnoresUnrelatedCorruptMetadata(t *testing.T)
 	base := t.TempDir()
 	corruptRepo := filepath.Join(base, "corrupt-repo")
 	validRepo := filepath.Join(base, "valid-repo")
-	validRoot := filepath.Join(validRepo, ".amux", "workspaces", "ws1")
+	validRoot := filepath.Join(validRepo, ".tumuxi", "workspaces", "ws1")
 	for _, dir := range []string{corruptRepo, validRoot} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatalf("MkdirAll(%s) error = %v", dir, err)
@@ -121,7 +121,7 @@ func TestWorkspaceStore_ListByRepo_SurfacesUnknownCorruptMetadata(t *testing.T) 
 	base := t.TempDir()
 	targetRepo := filepath.Join(base, "target-repo")
 	otherRepo := filepath.Join(base, "other-repo")
-	otherRoot := filepath.Join(otherRepo, ".amux", "workspaces", "ws1")
+	otherRoot := filepath.Join(otherRepo, ".tumuxi", "workspaces", "ws1")
 	for _, dir := range []string{targetRepo, otherRoot} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatalf("MkdirAll(%s) error = %v", dir, err)

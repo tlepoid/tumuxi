@@ -6,8 +6,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/andyrewlee/amux/internal/safego"
-	"github.com/andyrewlee/amux/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/safego"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 func (m *Model) startPTYReader(wtID string, tab *Tab) tea.Cmd {

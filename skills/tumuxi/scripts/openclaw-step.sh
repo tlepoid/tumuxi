@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# openclaw-step.sh — Bounded amux step runner for chat/orchestrator flows.
+# openclaw-step.sh — Bounded tumuxi step runner for chat/orchestrator flows.
 #
 # Usage:
 #   openclaw-step.sh run  --workspace <id> --assistant <name> --prompt <text> [--wait-timeout 60s] [--idle-threshold 10s]
@@ -28,7 +28,7 @@ shell_quote() {
 SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" >/dev/null 2>&1 && pwd -P)"
 SCRIPT_PATH="$SCRIPT_DIR/$(basename "$SCRIPT_SOURCE")"
-STEP_SCRIPT_REF="${OPENCLAW_STEP_CMD_REF:-skills/amux/scripts/openclaw-step.sh}"
+STEP_SCRIPT_REF="${OPENCLAW_STEP_CMD_REF:-skills/tumuxi/scripts/openclaw-step.sh}"
 STEP_SCRIPT_CMD="$(shell_quote "$STEP_SCRIPT_REF")"
 OPENCLAW_PRESENT_SCRIPT="${OPENCLAW_PRESENT_SCRIPT:-$SCRIPT_DIR/openclaw-present.sh}"
 
@@ -183,7 +183,7 @@ trim_line() {
 is_chrome_line() {
   local line="$1"
   case "$line" in
-    ""|"|"|✻|"╭"*|"╰"*|"│"*|"─"*|"└ "*|"⎿ "*|"↳ Interacted with "*|"› "*|"❯ "*|"? for shortcuts"*|"✶ "*|"✻ "*|"▟"*|"▐"*|"▝"*|"▘"*|"Tip:"*|"model:"*|"directory:"*|"cwd:"*|"workspace:"*|"• Explored"|"• Exploring"|"• Working ("*|"Working ("*|"Thinking "*|*" no sandbox "*|*"/model "*|"~/.amux/"*|*"sandbox   "*|*"sandbox "*")"|"shift+tab to accept edits"*|"/ commands · @ files · ! shell"*|*"? for help"*|*"▄▄▄▄"*|*"███"*|*"▀▀▀"*|">   Type your message or @path/to/file"*)
+    ""|"|"|✻|"╭"*|"╰"*|"│"*|"─"*|"└ "*|"⎿ "*|"↳ Interacted with "*|"› "*|"❯ "*|"? for shortcuts"*|"✶ "*|"✻ "*|"▟"*|"▐"*|"▝"*|"▘"*|"Tip:"*|"model:"*|"directory:"*|"cwd:"*|"workspace:"*|"• Explored"|"• Exploring"|"• Working ("*|"Working ("*|"Thinking "*|*" no sandbox "*|*"/model "*|"~/.tumuxi/"*|*"sandbox   "*|*"sandbox "*")"|"shift+tab to accept edits"*|"/ commands · @ files · ! shell"*|*"? for help"*|*"▄▄▄▄"*|*"███"*|*"▀▀▀"*|">   Type your message or @path/to/file"*)
       return 0
       ;;
     *)
@@ -589,8 +589,8 @@ if [[ -z "$IDEMPOTENCY_KEY" && "$AUTO_IDEMPOTENCY" != "false" ]]; then
   IDEMPOTENCY_KEY="tgstep-${idempotency_hash:0:20}"
 fi
 
-if ! command -v amux >/dev/null 2>&1; then
-  print_json_error "$MODE" "command_error" "amux is not installed" "missing binary: amux"
+if ! command -v tumuxi >/dev/null 2>&1; then
+  print_json_error "$MODE" "command_error" "tumuxi is not installed" "missing binary: tumuxi"
   exit 127
 fi
 
@@ -599,7 +599,7 @@ if ! command -v jq >/dev/null 2>&1; then
   exit 127
 fi
 
-cmd=(amux --json)
+cmd=(tumuxi --json)
 case "$MODE" in
   run)
     if [[ -z "$WORKSPACE" || -z "$ASSISTANT" || -z "$PROMPT" ]]; then
@@ -648,21 +648,21 @@ COMMAND_TIMED_OUT=false
 run_with_deadline "$HARD_TIMEOUT_SECONDS" "${cmd[@]}"
 
 if [[ "$COMMAND_TIMED_OUT" == "true" ]]; then
-  detail="hard timeout (${HARD_TIMEOUT_SECONDS}s) exceeded while running amux step"
+  detail="hard timeout (${HARD_TIMEOUT_SECONDS}s) exceeded while running tumuxi step"
   if [[ -n "${RAW_OUTPUT// }" ]]; then
     detail="$detail"$'\n'"$RAW_OUTPUT"
   fi
-  print_json_error "$MODE" "command_error" "amux command exceeded hard timeout" "$detail"
+  print_json_error "$MODE" "command_error" "tumuxi command exceeded hard timeout" "$detail"
   exit 124
 fi
 
 if [[ $CMD_EXIT -ne 0 ]]; then
-  print_json_error "$MODE" "command_error" "amux command failed" "$RAW_OUTPUT"
+  print_json_error "$MODE" "command_error" "tumuxi command failed" "$RAW_OUTPUT"
   exit "$CMD_EXIT"
 fi
 
 if ! jq -e . >/dev/null 2>&1 <<<"$RAW_OUTPUT"; then
-  print_json_error "$MODE" "command_error" "amux returned non-JSON output" "$RAW_OUTPUT"
+  print_json_error "$MODE" "command_error" "tumuxi returned non-JSON output" "$RAW_OUTPUT"
   exit 65
 fi
 
@@ -789,7 +789,7 @@ if [[ "$STATUS" == "timed_out" && "$SUBSTANTIVE_OUTPUT" != "true" && -n "$SESSIO
     if [[ "$RECOVERY_INTERVAL" -gt 0 ]]; then
       sleep "$RECOVERY_INTERVAL"
     fi
-    capture_json="$(amux --json agent capture "$SESSION_NAME" --lines "$RECOVERY_LINES" 2>/dev/null || true)"
+    capture_json="$(tumuxi --json agent capture "$SESSION_NAME" --lines "$RECOVERY_LINES" 2>/dev/null || true)"
     if ! jq -e '.ok == true' >/dev/null 2>&1 <<<"$capture_json"; then
       continue
     fi

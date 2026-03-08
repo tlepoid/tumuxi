@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/vterm"
+	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 
 func TestUpdatePTYOutput_DoesNotExtendBootstrapOnEachChunk(t *testing.T) {
@@ -16,7 +16,7 @@ func TestUpdatePTYOutput_DoesNotExtendBootstrapOnEachChunk(t *testing.T) {
 		ID:                    TabID("tab-1"),
 		Assistant:             "codex",
 		Workspace:             ws,
-		SessionName:           "amux-test-session",
+		SessionName:           "tumuxi-test-session",
 		Terminal:              vterm.New(80, 24),
 		Running:               true,
 		bootstrapActivity:     true,

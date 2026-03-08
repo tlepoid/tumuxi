@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 func TestCmdAgentSendParseErrorJSON(t *testing.T) {

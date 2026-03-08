@@ -11,7 +11,7 @@ usage() {
 Usage:
   openclaw-dogfood.sh [--repo <path>] [--workspace <name>] [--assistant <name>] [--report-dir <path>] [--keep-temp] [--cleanup-temp]
 
-Runs a real OpenClaw/amux dogfood flow end-to-end:
+Runs a real OpenClaw/tumuxi dogfood flow end-to-end:
   - project add
   - start coding
   - continue coding
@@ -71,7 +71,7 @@ SECONDARY_WORKSPACE="${WORKSPACE_NAME}-parallel-${RUN_TAG}"
 
 require_bin jq
 require_bin git
-require_bin amux
+require_bin tumuxi
 require_bin openclaw
 
 if [[ ! -x "$DX_SCRIPT" ]]; then
@@ -81,7 +81,7 @@ fi
 
 TMP_ROOT=""
 if [[ -z "${REPO_PATH// }" ]]; then
-  TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/amux-openclaw-dogfood-script.XXXXXX")"
+  TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/tumuxi-openclaw-dogfood-script.XXXXXX")"
   REPO_PATH="$TMP_ROOT/repo"
   mkdir -p "$REPO_PATH"
   cat >"$REPO_PATH/main.go" <<'EOF'
@@ -108,13 +108,13 @@ EOF
 fi
 
 if [[ -z "${REPORT_DIR// }" ]]; then
-  REPORT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/amux-openclaw-dogfood-report.XXXXXX")"
+  REPORT_DIR="$(mktemp -d "${TMPDIR:-/tmp}/tumuxi-openclaw-dogfood-report.XXXXXX")"
   REPORT_DIR_CREATED=true
 fi
 mkdir -p "$REPORT_DIR"
 DX_CONTEXT_FILE="$REPORT_DIR/openclaw-dx-context.json"
 CHANNEL_AGENT_CREATED=false
-CHANNEL_AGENT_ID="${OPENCLAW_DOGFOOD_OPENCLAW_AGENT:-amux-dx}"
+CHANNEL_AGENT_ID="${OPENCLAW_DOGFOOD_OPENCLAW_AGENT:-tumuxi-dx}"
 CHANNEL_AGENT_WORKSPACE="${OPENCLAW_DOGFOOD_CHANNEL_AGENT_WORKSPACE:-}"
 CHANNEL_AGENT_MODEL="${OPENCLAW_DOGFOOD_CHANNEL_AGENT_MODEL:-openai-codex/gpt-5.3-codex}"
 CHANNEL_EPHEMERAL_ENABLED="${OPENCLAW_DOGFOOD_CHANNEL_EPHEMERAL_AGENT:-true}"
@@ -127,7 +127,7 @@ prepare_channel_agent() {
   fi
 
   local base_id candidate add_json workspace_path
-  base_id="${CHANNEL_AGENT_ID:-amux-dx}"
+  base_id="${CHANNEL_AGENT_ID:-tumuxi-dx}"
   candidate="${base_id}-dogfood-${RUN_TAG}"
   add_json="$REPORT_DIR/openclaw-channel-agent-add.json"
   workspace_path="$CHANNEL_AGENT_WORKSPACE"
@@ -136,7 +136,7 @@ prepare_channel_agent() {
     mkdir -p "$workspace_path"
     cat >"$workspace_path/AGENTS.md" <<'EOF'
 # AGENTS
-- You are a strict terminal command runner for amux workflows.
+- You are a strict terminal command runner for tumuxi workflows.
 - For command requests, execute the exact shell command via the exec tool.
 - Return only raw stdout/stderr from that command.
 - Do not summarize, paraphrase, or fabricate output.
@@ -148,7 +148,7 @@ EOF
     mkdir -p "$workspace_path"
     cat >"$workspace_path/AGENTS.md" <<'EOF'
 # AGENTS
-- You are a strict terminal command runner for amux workflows.
+- You are a strict terminal command runner for tumuxi workflows.
 - Execute exact shell commands and return only raw stdout/stderr.
 EOF
   fi
@@ -243,7 +243,7 @@ run_openclaw_channel_command() {
   local command_text="$4"
   local expected_token="${5:-}"
   local retry_on_missing_markers="${6:-true}"
-  local primary_agent="${OPENCLAW_DOGFOOD_OPENCLAW_AGENT:-amux-dx}"
+  local primary_agent="${OPENCLAW_DOGFOOD_OPENCLAW_AGENT:-tumuxi-dx}"
   local fallback_agent="${OPENCLAW_DOGFOOD_CHANNEL_FALLBACK_AGENT:-main}"
   local agent_used="$primary_agent"
   local require_nonce="${OPENCLAW_DOGFOOD_CHANNEL_REQUIRE_NONCE:-false}"

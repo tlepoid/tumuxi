@@ -11,7 +11,7 @@ func TestCompactAgentOutput_DropsChromeLines(t *testing.T) {
 }
 
 func TestCompactAgentOutput_DropsToolExecutionNoise(t *testing.T) {
-	raw := "• Ran go test ./...\n└ ok github.com/andyrewlee/amux/internal/cli\n↳ Interacted with background terminal · go test ./...\n⎿ waiting\n• Final summary line"
+	raw := "• Ran go test ./...\n└ ok github.com/tlepoid/tumuxi/internal/cli\n↳ Interacted with background terminal · go test ./...\n⎿ waiting\n• Final summary line"
 	got := compactAgentOutput(raw)
 	if got != "• Final summary line" {
 		t.Fatalf("compactAgentOutput() = %q, want %q", got, "• Final summary line")
@@ -27,7 +27,7 @@ func TestCompactAgentOutput_DropsBulletedWorkingNoise(t *testing.T) {
 }
 
 func TestCompactAgentOutput_DropsClaudeBannerNoise(t *testing.T) {
-	raw := "✻\n|\n▟█▙     Claude Code v2.1.45\n▐▛███▜▌   Opus 4.6 · Claude Max\n▝▜█████▛▘  ~/.amux/workspaces/amux/refactor\n▘▘ ▝▝\n❯ Review files\n✻ Baking…\n✶ Fermenting…\n• useful line"
+	raw := "✻\n|\n▟█▙     Claude Code v2.1.45\n▐▛███▜▌   Opus 4.6 · Claude Max\n▝▜█████▛▘  ~/.tumuxi/workspaces/tumuxi/refactor\n▘▘ ▝▝\n❯ Review files\n✻ Baking…\n✶ Fermenting…\n• useful line"
 	got := compactAgentOutput(raw)
 	if got != "• useful line" {
 		t.Fatalf("compactAgentOutput() = %q, want %q", got, "• useful line")

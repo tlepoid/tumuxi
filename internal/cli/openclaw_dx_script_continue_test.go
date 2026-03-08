@@ -11,9 +11,9 @@ func TestOpenClawDXStatus_SurfacesNeedsInputAndStaleSessions(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -93,9 +93,9 @@ func TestOpenClawDXStatus_DefaultOmitsStaleSessionAlerts(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -155,9 +155,9 @@ func TestOpenClawDXContinue_ResolvesWorkspaceAgentAndCallsTurnScript(t *testing.
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	argsLog := filepath.Join(fakeBinDir, "turn-args.log")
 
@@ -217,9 +217,9 @@ func TestOpenClawDXContinue_PassthroughSanitizesNeedsInputAndAddsFallbackCommand
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -264,9 +264,9 @@ func TestOpenClawDXContinue_AutoStartsWhenNoActiveAgent(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	argsLog := filepath.Join(fakeBinDir, "turn-args.log")
 
@@ -335,9 +335,9 @@ func TestOpenClawDXContinue_NoTargetUsesSingleActiveAgent(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	argsLog := filepath.Join(fakeBinDir, "turn-args.log")
 	contextPath := filepath.Join(t.TempDir(), "context.json")
@@ -399,9 +399,9 @@ func TestOpenClawDXContinue_NoTargetWithMultipleAgentsPromptsSelection(t *testin
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "amux", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "amux")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
 	contextPath := filepath.Join(t.TempDir(), "context.json")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash

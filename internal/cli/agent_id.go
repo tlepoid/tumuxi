@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/tlepoid/tumuxi/internal/tmux"
 )
 
 var (
@@ -42,9 +42,9 @@ func resolveSessionNameForAgentID(agentID string, opts tmux.Options) (string, er
 	}
 	rows, err := tmuxSessionsWithTagsForAgentID(
 		map[string]string{
-			"@amux":           "1",
-			"@amux_workspace": workspaceID,
-			"@amux_tab":       tabID,
+			"@tumuxi":           "1",
+			"@tumuxi_workspace": workspaceID,
+			"@tumuxi_tab":       tabID,
 		},
 		nil,
 		opts,

@@ -3,8 +3,8 @@ package center
 import (
 	"testing"
 
-	"github.com/andyrewlee/amux/internal/messages"
-	appPty "github.com/andyrewlee/amux/internal/pty"
+	"github.com/tlepoid/tumuxi/internal/messages"
+	appPty "github.com/tlepoid/tumuxi/internal/pty"
 )
 
 func TestDetachTab_EmitsWorkspaceAwareMessage(t *testing.T) {

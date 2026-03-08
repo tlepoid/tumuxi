@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/andyrewlee/amux/internal/data"
+	"github.com/tlepoid/tumuxi/internal/data"
 )
 
 func TestCanonicalizeProjectPathRelative(t *testing.T) {
@@ -71,7 +71,7 @@ func TestCmdWorkspaceCreateRelativeProjectRemoveFromDifferentDir(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "amux-test")
+	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -157,7 +157,7 @@ func TestCmdWorkspaceCreateWithoutBaseFallsBackToHead(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "amux-test")
+	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -245,7 +245,7 @@ func TestCmdWorkspaceCreateDefaultsAssistantWhenOmitted(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "amux-test")
+	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -306,7 +306,7 @@ func TestCmdWorkspaceCreateRejectsUnregisteredProject(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "amux-test")
+	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -336,8 +336,8 @@ func TestCmdWorkspaceCreateRejectsUnregisteredProject(t *testing.T) {
 	if env.Error == nil || env.Error.Code != "project_not_registered" {
 		t.Fatalf("expected project_not_registered error, got %#v", env.Error)
 	}
-	if !strings.Contains(env.Error.Message, "amux project add") {
-		t.Fatalf("expected error message to mention 'amux project add', got %q", env.Error.Message)
+	if !strings.Contains(env.Error.Message, "tumuxi project add") {
+		t.Fatalf("expected error message to mention 'tumuxi project add', got %q", env.Error.Message)
 	}
 }
 
@@ -355,7 +355,7 @@ func TestCmdWorkspaceCreateReusesExistingWorkspacePath(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "amux-test")
+	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -422,7 +422,7 @@ func TestCmdWorkspaceCreateReusesExistingWorkspacePath(t *testing.T) {
 
 func registerProject(t *testing.T, home, repoRoot string) {
 	t.Helper()
-	registryPath := filepath.Join(home, ".amux", "projects.json")
+	registryPath := filepath.Join(home, ".tumuxi", "projects.json")
 	reg := data.NewRegistry(registryPath)
 	if err := reg.AddProject(repoRoot); err != nil {
 		t.Fatalf("AddProject(%q) error = %v", repoRoot, err)
