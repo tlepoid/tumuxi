@@ -1,7 +1,7 @@
 package app
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path/filepath"
 	"sync"
@@ -178,7 +178,7 @@ func TestStateWatcher_IgnoresChildWatchFailure(t *testing.T) {
 		metadataDirs: make(map[string]struct{}),
 		addWatchFn: func(w *fsnotify.Watcher, dir string) error {
 			if dir == newDir {
-				return fmt.Errorf("injected watch error")
+				return errors.New("injected watch error")
 			}
 			return nil
 		},

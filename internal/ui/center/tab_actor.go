@@ -410,7 +410,7 @@ func (m *Model) handleTabEvent(ev tabEvent) {
 }
 
 // sendToTerminal sends data to the tab's terminal and handles errors.
-func (m *Model) sendToTerminal(tab *Tab, data string, tabID TabID, workspaceID string, label string) {
+func (m *Model) sendToTerminal(tab *Tab, data string, tabID TabID, workspaceID, label string) {
 	if tab == nil || tab.Agent == nil || tab.Agent.Terminal == nil {
 		return
 	}
