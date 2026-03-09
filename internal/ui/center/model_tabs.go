@@ -13,6 +13,7 @@ import (
 	"github.com/andyrewlee/amux/internal/messages"
 	appPty "github.com/andyrewlee/amux/internal/pty"
 	"github.com/andyrewlee/amux/internal/tmux"
+	"github.com/andyrewlee/amux/internal/ui/common"
 	"github.com/andyrewlee/amux/internal/vterm"
 )
 
@@ -56,6 +57,7 @@ type ptyTabCreateResult struct {
 	Rows              int
 	Cols              int
 	ScrollbackCapture []byte
+	InitialPrompt     string
 }
 
 type ptyTabReattachResult struct {
@@ -129,6 +131,11 @@ func (m *Model) createAgentTabWithSession(assistant string, ws *data.Workspace, 
 		// For newly created sessions this returns empty content (harmless no-op).
 		scrollback, _ := tmux.CapturePane(sessionName, m.getTmuxOptions())
 
+		initialPrompt := ""
+		if ws.Issue != nil {
+			initialPrompt = "Read ISSUE.md and summarize the issue for me, then propose your approach to solving it."
+		}
+
 		return ptyTabCreateResult{
 			Workspace:         ws,
 			Assistant:         assistant,
@@ -139,6 +146,7 @@ func (m *Model) createAgentTabWithSession(assistant string, ws *data.Workspace, 
 			Rows:              termHeight,
 			Cols:              termWidth,
 			ScrollbackCapture: scrollback,
+			InitialPrompt:     initialPrompt,
 		}
 	}
 }
@@ -270,9 +278,9 @@ func (m *Model) handlePtyTabCreated(msg ptyTabCreateResult) tea.Cmd {
 		}
 		m.noteTabsChanged()
 
-		return func() tea.Msg {
+		return common.SafeBatch(func() tea.Msg {
 			return messages.TabCreated{Index: existingIdx, Name: tab.Name}
-		}
+		}, m.delayedPromptCmd(msg.Agent, msg.InitialPrompt))
 	}
 
 	if displayName == "" {
@@ -338,7 +346,24 @@ func (m *Model) handlePtyTabCreated(msg ptyTabCreateResult) tea.Cmd {
 	}
 	m.noteTabsChanged()
 
-	return func() tea.Msg {
+	return common.SafeBatch(func() tea.Msg {
 		return messages.TabCreated{Index: createdIdx, Name: displayName}
+	}, m.delayedPromptCmd(msg.Agent, msg.InitialPrompt))
+}
+
+// delayedPromptCmd returns a cmd that sends an initial prompt to the agent's tmux
+// session after a startup delay. Returns nil if prompt is empty.
+func (m *Model) delayedPromptCmd(agent *appPty.Agent, prompt string) tea.Cmd {
+	if prompt == "" || agent == nil || agent.Session == "" {
+		return nil
 	}
+	sessionName := agent.Session
+	opts := m.getTmuxOptions()
+	const startupDelay = 3 * time.Second
+	return common.SafeTick(startupDelay, func(time.Time) tea.Msg {
+		if err := tmux.SendKeys(sessionName, prompt, true, opts); err != nil {
+			logging.Warn("Failed to send initial prompt to %s: %v", sessionName, err)
+		}
+		return nil
+	})
 }
