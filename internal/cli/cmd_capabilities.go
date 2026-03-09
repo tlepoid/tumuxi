@@ -112,14 +112,14 @@ func cmdCapabilities(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "schema: %s\n", result.SchemaVersion)
-		fmt.Fprintln(w, "commands:")
+		_, _ = fmt.Fprintf(w, "schema: %s\n", result.SchemaVersion)
+		_, _ = fmt.Fprintln(w, "commands:")
 		for _, cmd := range result.Commands {
-			fmt.Fprintf(w, "  - %s\n", cmd)
+			_, _ = fmt.Fprintf(w, "  - %s\n", cmd)
 		}
-		fmt.Fprintln(w, "mutating:")
+		_, _ = fmt.Fprintln(w, "mutating:")
 		for _, cmd := range result.Mutating {
-			fmt.Fprintf(w, "  - %s\n", cmd)
+			_, _ = fmt.Fprintf(w, "  - %s\n", cmd)
 		}
 	})
 	return ExitOK

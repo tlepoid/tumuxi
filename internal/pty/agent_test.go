@@ -218,7 +218,7 @@ func TestAgentManager_CloseAll(t *testing.T) {
 	}
 	term2, err := New("sleep 10", t.TempDir(), nil)
 	if err != nil {
-		term1.Close()
+		_ = term1.Close()
 		t.Fatalf("failed to create term2: %v", err)
 	}
 
@@ -264,7 +264,7 @@ func TestAgentManager_CloseWorkspaceAgents(t *testing.T) {
 	}
 	term2, err := New("sleep 10", t.TempDir(), nil)
 	if err != nil {
-		term1.Close()
+		_ = term1.Close()
 		t.Fatalf("failed to create term2: %v", err)
 	}
 
@@ -296,7 +296,7 @@ func TestAgentManager_CloseWorkspaceAgents(t *testing.T) {
 	m.mu.Unlock()
 
 	// Cleanup
-	term2.Close()
+	_ = term2.Close()
 }
 
 func TestAgentManager_CloseWorkspaceAgents_NilWorkspace(t *testing.T) {
@@ -321,7 +321,7 @@ func TestAgentManager_SendInterrupt(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create terminal: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	agent := &Agent{
 		Type:     AgentCodex,
@@ -344,7 +344,7 @@ func TestAgentManager_SendInterrupt_MultipleWithDelay(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create terminal: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	agent := &Agent{
 		Type:     AgentClaude,
@@ -386,7 +386,7 @@ func TestAgentManager_SendInterrupt_ZeroCount(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create terminal: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	agent := &Agent{
 		Type:     AgentClaude,
@@ -412,7 +412,7 @@ func TestAgentManager_MultipleAgentsPerWorkspace(t *testing.T) {
 	}
 	term2, err := New("sleep 10", t.TempDir(), nil)
 	if err != nil {
-		term1.Close()
+		_ = term1.Close()
 		t.Fatalf("failed to create term2: %v", err)
 	}
 
@@ -439,7 +439,7 @@ func TestAgentManager_MultipleAgentsPerWorkspace(t *testing.T) {
 	}
 
 	// Cleanup
-	term2.Close()
+	_ = term2.Close()
 }
 
 func TestAgentType_Constants(t *testing.T) {

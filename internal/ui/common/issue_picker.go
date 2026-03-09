@@ -1,8 +1,6 @@
 package common
 
 import (
-	"strings"
-
 	"charm.land/lipgloss/v2"
 )
 
@@ -56,13 +54,4 @@ func (d *Dialog) renderIssuePickerLines() []string {
 	}
 
 	return lines
-}
-
-// issuePickerCursorOffset returns the number of rendered lines before the input
-// field inside a DialogIssuePicker, for correct terminal cursor placement.
-func (d *Dialog) issuePickerCursorOffset() int {
-	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(ColorPrimary()).MarginBottom(1)
-	title := titleStyle.Render(d.title)
-	// title renders with MarginBottom(1) which adds one blank line.
-	return strings.Count(title, "\n") + 2 // title lines + the blank line after
 }

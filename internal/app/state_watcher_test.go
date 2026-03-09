@@ -123,7 +123,7 @@ func TestStateWatcher_NotifiesOnRegistryWrite(t *testing.T) {
 		t.Fatal(err)
 	}
 	sw.debounce = 10 * time.Millisecond
-	defer sw.Close()
+	defer func() { _ = sw.Close() }()
 
 	go func() { _ = sw.Run(t.Context()) }()
 

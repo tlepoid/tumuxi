@@ -136,5 +136,5 @@ func PrintHuman(w io.Writer, fn func(io.Writer)) {
 
 // Errorf prints a human-readable error to w.
 func Errorf(w io.Writer, format string, args ...any) {
-	fmt.Fprintf(w, "Error: "+format+"\n", args...)
+	_, _ = fmt.Fprintf(w, "Error: "+format+"\n", args...)
 }

@@ -51,7 +51,7 @@ func routeProject(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi project <list|add|remove> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi project <list|add|remove> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi project <list|add|remove> [flags]")
 		}
 		return ExitUsage
 	}
@@ -68,7 +68,7 @@ func routeProject(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown project subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown project subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown project subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}
@@ -122,11 +122,11 @@ func cmdProjectList(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(entries) == 0 {
-			fmt.Fprintln(w, "No projects registered.")
+			_, _ = fmt.Fprintln(w, "No projects registered.")
 			return
 		}
 		for _, e := range entries {
-			fmt.Fprintf(w, "  %s\t%s\n", e.Name, e.Path)
+			_, _ = fmt.Fprintf(w, "  %s\t%s\n", e.Name, e.Path)
 		}
 	})
 	return ExitOK
@@ -194,7 +194,7 @@ func cmdProjectAdd(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Added project %s (%s)\n", entry.Name, entry.Path)
+		_, _ = fmt.Fprintf(w, "Added project %s (%s)\n", entry.Name, entry.Path)
 	})
 	return ExitOK
 }
@@ -261,7 +261,7 @@ func cmdProjectRemove(w, wErr io.Writer, gf GlobalFlags, args []string, version 
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Removed project %s (%s)\n", entry.Name, entry.Path)
+		_, _ = fmt.Fprintf(w, "Removed project %s (%s)\n", entry.Name, entry.Path)
 	})
 	return ExitOK
 }

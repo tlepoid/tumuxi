@@ -13,7 +13,7 @@ func TestNew_EchoCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	// Read output until we see "hello" or timeout
 	buf := make([]byte, 1024)
@@ -47,7 +47,7 @@ func TestNewWithSize(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewWithSize failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	// Verify it's running
 	if !term.Running() {
@@ -64,7 +64,7 @@ func TestNewWithSize_ZeroDimensions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewWithSize with zero dimensions failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 }
 
 func TestTerminal_Write(t *testing.T) {
@@ -73,7 +73,7 @@ func TestTerminal_Write(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	n, err := term.Write([]byte("test input\n"))
 	if err != nil {
@@ -90,7 +90,7 @@ func TestTerminal_WriteAfterClose(t *testing.T) {
 		t.Fatalf("New failed: %v", err)
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	_, err = term.Write([]byte("data"))
 	if err != io.ErrClosedPipe {
@@ -104,7 +104,7 @@ func TestTerminal_ReadAfterClose(t *testing.T) {
 		t.Fatalf("New failed: %v", err)
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	buf := make([]byte, 64)
 	_, err = term.Read(buf)
@@ -118,7 +118,7 @@ func TestTerminal_SendInterrupt(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	err = term.SendInterrupt()
 	if err != nil {
@@ -131,7 +131,7 @@ func TestTerminal_SendString(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	err = term.SendString("hello world")
 	if err != nil {
@@ -144,7 +144,7 @@ func TestTerminal_SetSize(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	err = term.SetSize(40, 120)
 	if err != nil {
@@ -158,7 +158,7 @@ func TestTerminal_SetSizeAfterClose(t *testing.T) {
 		t.Fatalf("New failed: %v", err)
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	// SetSize on a closed terminal should return nil (no-op)
 	err = term.SetSize(40, 120)
@@ -172,7 +172,7 @@ func TestTerminal_Running(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	if !term.Running() {
 		t.Error("expected terminal to be running")
@@ -185,7 +185,7 @@ func TestTerminal_RunningAfterClose(t *testing.T) {
 		t.Fatalf("New failed: %v", err)
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	if term.Running() {
 		t.Error("expected terminal not to be running after close")
@@ -202,7 +202,7 @@ func TestTerminal_IsClosed(t *testing.T) {
 		t.Error("terminal should not be closed after creation")
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	if !term.IsClosed() {
 		t.Error("terminal should be closed after Close()")
@@ -229,7 +229,7 @@ func TestTerminal_File(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	f := term.File()
 	if f == nil {
@@ -243,7 +243,7 @@ func TestTerminal_FileAfterClose(t *testing.T) {
 		t.Fatalf("New failed: %v", err)
 	}
 
-	term.Close()
+	_ = term.Close()
 
 	f := term.File()
 	if f != nil {
@@ -257,7 +257,7 @@ func TestTerminal_EnvPropagation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	buf := make([]byte, 4096)
 	var output strings.Builder
@@ -307,7 +307,7 @@ func TestTerminal_ConcurrentWriteAndClose(t *testing.T) {
 
 	// Close after a short delay
 	time.Sleep(10 * time.Millisecond)
-	term.Close()
+	_ = term.Close()
 
 	done := make(chan struct{})
 	go func() {
@@ -335,7 +335,7 @@ func TestTerminal_ConcurrentClose(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			term.Close()
+			_ = term.Close()
 		}()
 	}
 
@@ -361,7 +361,7 @@ func TestNew_InvalidCommand(t *testing.T) {
 		// This is also acceptable - depends on how sh handles it
 		return
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 }
 
 func TestTerminal_ReadEOFAfterProcessExit(t *testing.T) {
@@ -370,7 +370,7 @@ func TestTerminal_ReadEOFAfterProcessExit(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New failed: %v", err)
 	}
-	defer term.Close()
+	defer func() { _ = term.Close() }()
 
 	buf := make([]byte, 256)
 	deadline := time.After(2 * time.Second)

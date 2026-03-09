@@ -244,20 +244,20 @@ func cmdAgentRun(w, wErr io.Writer, gf GlobalFlags, args []string, version strin
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Started agent %s (session: %s)\n", agentAssistant, sessionName)
+		_, _ = fmt.Fprintf(w, "Started agent %s (session: %s)\n", agentAssistant, sessionName)
 		if result.Response != nil {
 			if result.Response.NeedsInput {
 				if strings.TrimSpace(result.Response.InputHint) != "" {
-					fmt.Fprintf(w, "Agent needs input: %s\n", strings.TrimSpace(result.Response.InputHint))
+					_, _ = fmt.Fprintf(w, "Agent needs input: %s\n", strings.TrimSpace(result.Response.InputHint))
 				} else {
-					fmt.Fprintf(w, "Agent needs input\n")
+					_, _ = fmt.Fprintf(w, "Agent needs input\n")
 				}
 			} else if result.Response.TimedOut {
-				fmt.Fprintf(w, "Timed out waiting for response\n")
+				_, _ = fmt.Fprintf(w, "Timed out waiting for response\n")
 			} else if result.Response.SessionExited {
-				fmt.Fprintf(w, "Session exited while waiting\n")
+				_, _ = fmt.Fprintf(w, "Session exited while waiting\n")
 			} else {
-				fmt.Fprintf(w, "Agent idle after %.1fs\n", result.Response.IdleSeconds)
+				_, _ = fmt.Fprintf(w, "Agent idle after %.1fs\n", result.Response.IdleSeconds)
 			}
 		}
 	})

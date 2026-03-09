@@ -106,7 +106,7 @@ func cmdWorkspaceList(w, wErr io.Writer, gf GlobalFlags, args []string, version 
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(infos) == 0 {
-			fmt.Fprintln(w, "No workspaces found.")
+			_, _ = fmt.Fprintln(w, "No workspaces found.")
 			return
 		}
 		for _, info := range infos {
@@ -114,7 +114,7 @@ func cmdWorkspaceList(w, wErr io.Writer, gf GlobalFlags, args []string, version 
 			if info.Archived {
 				status = " (archived)"
 			}
-			fmt.Fprintf(w, "  %-16s %-20s %-20s %s%s\n",
+			_, _ = fmt.Fprintf(w, "  %-16s %-20s %-20s %s%s\n",
 				info.ID, info.Name, info.Branch, info.Repo, status)
 		}
 	})

@@ -20,6 +20,6 @@ func returnUsageError(w, wErr io.Writer, gf GlobalFlags, usage, version string, 
 	if parseErr != nil {
 		Errorf(wErr, "%v", parseErr)
 	}
-	fmt.Fprintln(wErr, usage)
+	_, _ = fmt.Fprintln(wErr, usage)
 	return ExitUsage
 }

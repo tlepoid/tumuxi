@@ -69,7 +69,7 @@ func stopAllAgents(
 			Errorf(wErr, "failed to stop %s: %s", failure["session"], failure["error"])
 		}
 		PrintHuman(w, func(w io.Writer) {
-			fmt.Fprintf(w, "Stopped %d agent(s); %d failed\n", len(stopped), len(failed))
+			_, _ = fmt.Fprintf(w, "Stopped %d agent(s); %d failed\n", len(stopped), len(failed))
 		})
 		return ExitInternalError
 	}
@@ -83,7 +83,7 @@ func stopAllAgents(
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Stopped %d agent(s)\n", len(stopped))
+		_, _ = fmt.Fprintf(w, "Stopped %d agent(s)\n", len(stopped))
 	})
 	return ExitOK
 }

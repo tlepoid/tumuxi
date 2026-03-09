@@ -1,6 +1,6 @@
 module github.com/tlepoid/tumuxi
 
-go 1.24.13
+go 1.25.8
 
 require (
 	charm.land/bubbles/v2 v2.0.0

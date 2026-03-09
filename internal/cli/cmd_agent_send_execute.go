@@ -124,7 +124,7 @@ func dispatchAsyncAgentSend(
 		)
 	}
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Queued text to %s (job: %s)\n", sessionName, job.ID)
+		_, _ = fmt.Fprintf(w, "Queued text to %s (job: %s)\n", sessionName, job.ID)
 	})
 	return ExitOK
 }
@@ -328,31 +328,31 @@ func executeAgentSendJob(
 	PrintHuman(w, func(w io.Writer) {
 		switch {
 		case result.Status == string(sendJobCanceled):
-			fmt.Fprintf(w, "Send job %s canceled before execution\n", result.JobID)
+			_, _ = fmt.Fprintf(w, "Send job %s canceled before execution\n", result.JobID)
 		case result.Status == string(sendJobCompleted) && !result.Delivered:
-			fmt.Fprintf(w, "Send job %s already completed\n", result.JobID)
+			_, _ = fmt.Fprintf(w, "Send job %s already completed\n", result.JobID)
 		case result.Delivered:
-			fmt.Fprintf(w, "Sent text to %s (job: %s)\n", sessionName, result.JobID)
+			_, _ = fmt.Fprintf(w, "Sent text to %s (job: %s)\n", sessionName, result.JobID)
 		default:
 			if result.Error != "" {
-				fmt.Fprintf(w, "Send job %s is %s: %s\n", result.JobID, result.Status, result.Error)
+				_, _ = fmt.Fprintf(w, "Send job %s is %s: %s\n", result.JobID, result.Status, result.Error)
 			} else {
-				fmt.Fprintf(w, "Send job %s is %s and was not delivered\n", result.JobID, result.Status)
+				_, _ = fmt.Fprintf(w, "Send job %s is %s and was not delivered\n", result.JobID, result.Status)
 			}
 		}
 		if result.Response != nil {
 			if result.Response.NeedsInput {
 				if strings.TrimSpace(result.Response.InputHint) != "" {
-					fmt.Fprintf(w, "Agent needs input: %s\n", strings.TrimSpace(result.Response.InputHint))
+					_, _ = fmt.Fprintf(w, "Agent needs input: %s\n", strings.TrimSpace(result.Response.InputHint))
 				} else {
-					fmt.Fprintf(w, "Agent needs input\n")
+					_, _ = fmt.Fprintf(w, "Agent needs input\n")
 				}
 			} else if result.Response.TimedOut {
-				fmt.Fprintf(w, "Timed out waiting for response\n")
+				_, _ = fmt.Fprintf(w, "Timed out waiting for response\n")
 			} else if result.Response.SessionExited {
-				fmt.Fprintf(w, "Session exited while waiting\n")
+				_, _ = fmt.Fprintf(w, "Session exited while waiting\n")
 			} else {
-				fmt.Fprintf(w, "Agent idle after %.1fs\n", result.Response.IdleSeconds)
+				_, _ = fmt.Fprintf(w, "Agent idle after %.1fs\n", result.Response.IdleSeconds)
 			}
 		}
 	})

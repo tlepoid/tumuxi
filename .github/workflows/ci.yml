@@ -10,7 +10,7 @@ on:
 env:
   TERM: xterm-256color
   GOVULNCHECK_VERSION: v1.1.4
-  GOLANGCI_LINT_VERSION: v1.64.8
+  GOLANGCI_LINT_VERSION: v2.11.1
 
 jobs:
   test:
@@ -114,7 +114,7 @@ jobs:
           cache: true
 
       - name: Strict lint (changed code only)
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v7
         with:
           version: ${{ env.GOLANGCI_LINT_VERSION }}
           verify: false

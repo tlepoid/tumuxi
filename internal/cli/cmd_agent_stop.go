@@ -163,7 +163,7 @@ func cmdAgentStop(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Stopped %s\n", sessionName)
+		_, _ = fmt.Fprintf(w, "Stopped %s\n", sessionName)
 	})
 	return ExitOK
 }

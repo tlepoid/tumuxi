@@ -13,7 +13,7 @@ import (
 	"github.com/tlepoid/tumuxi/internal/messages"
 	appPty "github.com/tlepoid/tumuxi/internal/pty"
 	"github.com/tlepoid/tumuxi/internal/tmux"
-  "github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 	"github.com/tlepoid/tumuxi/internal/vterm"
 )
 

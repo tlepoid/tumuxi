@@ -189,7 +189,10 @@ func CanWrite(path string) bool {
 	if err != nil {
 		return false
 	}
-	f.Close()
+	if err := f.Close(); err != nil {
+		os.Remove(testFile)
+		return false
+	}
 	os.Remove(testFile)
 	return true
 }
