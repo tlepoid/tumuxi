@@ -87,7 +87,7 @@ func (m *TerminalModel) CloseActiveTab() tea.Cmd {
 		tab.State.mu.Lock()
 		sessionName = tab.State.SessionName
 		if tab.State.Terminal != nil {
-			_ = tab.State.Terminal.Close()
+			tab.State.Terminal.Close()
 		}
 		tab.State.Running = false
 		tab.State.ptyRestartBackoff = 0

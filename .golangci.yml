@@ -35,6 +35,10 @@ linters:
               desc: Use os or io packages instead of io/ioutil.
     errcheck:
       check-type-assertions: true
+      exclude-functions:
+        - (io.Closer).Close
+        - os.Remove
+        - os.RemoveAll
     errorlint:
       asserts: false
       comparison: false

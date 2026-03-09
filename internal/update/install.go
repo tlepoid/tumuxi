@@ -18,13 +18,13 @@ func ExtractBinary(archivePath, destDir string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("opening archive: %w", err)
 	}
-	defer func() { _ = f.Close() }()
+	defer f.Close()
 
 	gzr, err := gzip.NewReader(f)
 	if err != nil {
 		return "", fmt.Errorf("creating gzip reader: %w", err)
 	}
-	defer func() { _ = gzr.Close() }()
+	defer gzr.Close()
 
 	tr := tar.NewReader(gzr)
 	var binaryPath string
@@ -55,10 +55,10 @@ func ExtractBinary(archivePath, destDir string) (string, error) {
 		}
 
 		if _, err := io.Copy(outFile, tr); err != nil {
-			_ = outFile.Close()
+			outFile.Close()
 			return "", fmt.Errorf("extracting binary: %w", err)
 		}
-		_ = outFile.Close()
+		outFile.Close()
 		break
 	}
 
@@ -119,13 +119,13 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	defer func() { _ = srcFile.Close() }()
+	defer srcFile.Close()
 
 	dstFile, err := os.OpenFile(dst, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = dstFile.Close() }()
+	defer dstFile.Close()
 
 	if _, err := io.Copy(dstFile, srcFile); err != nil {
 		return err
@@ -178,7 +178,7 @@ func CanWrite(path string) bool {
 	// Try to open for writing
 	f, err := os.OpenFile(path, os.O_WRONLY, 0)
 	if err == nil {
-		_ = f.Close()
+		f.Close()
 		return true
 	}
 
@@ -189,7 +189,7 @@ func CanWrite(path string) bool {
 	if err != nil {
 		return false
 	}
-	_ = f.Close()
-	_ = os.Remove(testFile)
+	f.Close()             
+	os.Remove(testFile)   
 	return true
 }
