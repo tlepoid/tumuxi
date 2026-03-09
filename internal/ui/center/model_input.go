@@ -14,7 +14,7 @@ import (
 
 // directSendToTerminal sends data directly to the terminal, handling errors.
 // Returns whether data was actually sent and an optional command for failures.
-func (m *Model) directSendToTerminal(tab *Tab, data string, label string) (*Model, bool, tea.Cmd) {
+func (m *Model) directSendToTerminal(tab *Tab, data, label string) (*Model, bool, tea.Cmd) {
 	if tab.Agent == nil || tab.Agent.Terminal == nil {
 		return m, false, nil
 	}
