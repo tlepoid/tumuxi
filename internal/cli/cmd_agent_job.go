@@ -11,7 +11,7 @@ func routeAgentJob(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi agent job <status|cancel|wait> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi agent job <status|cancel|wait> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi agent job <status|cancel|wait> [flags]")
 		}
 		return ExitUsage
 	}
@@ -29,7 +29,7 @@ func routeAgentJob(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown agent job subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown agent job subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown agent job subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}
@@ -142,10 +142,10 @@ func cmdAgentJobCancel(w, wErr io.Writer, gf GlobalFlags, args []string, version
 
 	PrintHuman(w, func(w io.Writer) {
 		if canceled {
-			fmt.Fprintf(w, "Canceled job %s\n", job.ID)
+			_, _ = fmt.Fprintf(w, "Canceled job %s\n", job.ID)
 			return
 		}
-		fmt.Fprintf(w, "Job %s is %s; nothing canceled\n", job.ID, job.Status)
+		_, _ = fmt.Fprintf(w, "Job %s is %s; nothing canceled\n", job.ID, job.Status)
 	})
 	return ExitOK
 }

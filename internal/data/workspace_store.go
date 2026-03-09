@@ -176,7 +176,7 @@ func (s *WorkspaceStore) Save(ws *Workspace) error {
 		return err
 	}
 	if err := os.Rename(tempPath, path); err != nil {
-		os.Remove(tempPath) // Clean up temp file on rename failure
+		_ = os.Remove(tempPath) // Clean up temp file on rename failure
 		return err
 	}
 	if oldID != "" {

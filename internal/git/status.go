@@ -139,11 +139,11 @@ func countUntrackedLines(repoPath string, untracked []Change) int {
 		head := make([]byte, 8192)
 		n, _ := f.Read(head)
 		if n == 0 {
-			f.Close()
+			_ = f.Close()
 			continue
 		}
 		if bytes.ContainsRune(head[:n], 0) {
-			f.Close()
+			_ = f.Close()
 			continue
 		}
 		// Count newlines in head
@@ -161,7 +161,7 @@ func countUntrackedLines(repoPath string, untracked []Change) int {
 				break
 			}
 		}
-		f.Close()
+		_ = f.Close()
 		// Count final line if file is non-empty and lacks trailing newline
 		if n > 0 && lastByte != '\n' {
 			lines++

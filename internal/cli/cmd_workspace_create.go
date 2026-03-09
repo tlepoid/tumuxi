@@ -203,7 +203,7 @@ func cmdWorkspaceCreate(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 			)
 		}
 		PrintHuman(w, func(w io.Writer) {
-			fmt.Fprintf(w, "Using existing workspace %s (%s) at %s\n", info.Name, info.ID, info.Root)
+			_, _ = fmt.Fprintf(w, "Using existing workspace %s (%s) at %s\n", info.Name, info.ID, info.Root)
 		})
 		return ExitOK
 	}
@@ -287,7 +287,7 @@ func cmdWorkspaceCreate(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Created workspace %s (%s) at %s\n", info.Name, info.ID, info.Root)
+		_, _ = fmt.Fprintf(w, "Created workspace %s (%s) at %s\n", info.Name, info.ID, info.Root)
 	})
 	return ExitOK
 }

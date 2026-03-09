@@ -82,16 +82,16 @@ func cmdAgentList(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(agents) == 0 {
-			fmt.Fprintln(w, "No running agents.")
+			_, _ = fmt.Fprintln(w, "No running agents.")
 			return
 		}
 		for _, a := range agents {
 			if a.AgentID != "" {
-				fmt.Fprintf(w, "  %-40s id=%-24s ws=%-16s tab=%-10s type=%s\n",
+				_, _ = fmt.Fprintf(w, "  %-40s id=%-24s ws=%-16s tab=%-10s type=%s\n",
 					a.SessionName, a.AgentID, a.WorkspaceID, a.TabID, a.Type)
 				continue
 			}
-			fmt.Fprintf(w, "  %-40s ws=%-16s tab=%-10s type=%s\n",
+			_, _ = fmt.Fprintf(w, "  %-40s ws=%-16s tab=%-10s type=%s\n",
 				a.SessionName, a.WorkspaceID, a.TabID, a.Type)
 		}
 	})
@@ -177,9 +177,9 @@ func cmdAgentCapture(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprint(w, content)
+		_, _ = fmt.Fprint(w, content)
 		if content != "" && content[len(content)-1] != '\n' {
-			fmt.Fprintln(w)
+			_, _ = fmt.Fprintln(w)
 		}
 	})
 	return ExitOK

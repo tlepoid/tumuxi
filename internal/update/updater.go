@@ -141,10 +141,10 @@ func (u *Updater) Upgrade(release *Release) error {
 
 	logging.Info("Downloading %s", asset.Name)
 	if err := u.github.DownloadAsset(asset.BrowserDownloadURL, archiveFile); err != nil {
-		archiveFile.Close()
+		_ = archiveFile.Close()
 		return fmt.Errorf("downloading: %w", err)
 	}
-	archiveFile.Close()
+	_ = archiveFile.Close()
 
 	// Verify checksum
 	logging.Info("Verifying checksum")

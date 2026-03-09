@@ -177,9 +177,9 @@ func TestExtractBinary(t *testing.T) {
 		t.Fatalf("Failed to write tar content: %v", err)
 	}
 
-	tw.Close()
-	gzw.Close()
-	f.Close()
+	_ = tw.Close()
+	_ = gzw.Close()
+	_ = f.Close()
 
 	// Extract the binary
 	destDir := filepath.Join(tmpDir, "extracted")
@@ -233,9 +233,9 @@ func TestExtractBinaryMissing(t *testing.T) {
 		t.Fatalf("Failed to write tar content: %v", err)
 	}
 
-	tw.Close()
-	gzw.Close()
-	f.Close()
+	_ = tw.Close()
+	_ = gzw.Close()
+	_ = f.Close()
 
 	destDir := filepath.Join(tmpDir, "extracted")
 	if err := os.MkdirAll(destDir, 0o755); err != nil {

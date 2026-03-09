@@ -85,7 +85,7 @@ func Run(args []string, version, commit, date string) int {
 			}, version)
 			return ExitOK
 		}
-		fmt.Fprintf(w, "tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
+		_, _ = fmt.Fprintf(w, "tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
 		return ExitOK
 	case "help":
 		if gf.JSON {
@@ -100,7 +100,7 @@ func Run(args []string, version, commit, date string) int {
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown command: "+cmd, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown command: %s\n\n", cmd)
+			_, _ = fmt.Fprintf(wErr, "Unknown command: %s\n\n", cmd)
 			PrintUsage(wErr)
 		}
 		return ExitUsage
@@ -142,7 +142,7 @@ func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi workspace <list|create|remove> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi workspace <list|create|remove> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi workspace <list|create|remove> [flags]")
 		}
 		return ExitUsage
 	}
@@ -159,7 +159,7 @@ func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown workspace subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown workspace subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown workspace subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}
@@ -170,7 +170,7 @@ func routeAgent(w, wErr io.Writer, gf GlobalFlags, args []string, version string
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]")
 		}
 		return ExitUsage
 	}
@@ -195,7 +195,7 @@ func routeAgent(w, wErr io.Writer, gf GlobalFlags, args []string, version string
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown agent subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown agent subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown agent subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}
@@ -203,7 +203,7 @@ func routeAgent(w, wErr io.Writer, gf GlobalFlags, args []string, version string
 
 // PrintUsage writes CLI help text.
 func PrintUsage(w io.Writer) {
-	fmt.Fprint(w, usageText())
+	_, _ = fmt.Fprint(w, usageText())
 }
 
 func usageText() string {

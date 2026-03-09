@@ -60,7 +60,7 @@ func cmdSessionListWith(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(entries) == 0 {
-			fmt.Fprintln(w, "No sessions.")
+			_, _ = fmt.Fprintln(w, "No sessions.")
 			return
 		}
 		for _, e := range entries {
@@ -68,7 +68,7 @@ func cmdSessionListWith(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 			if e.Attached {
 				attached = " (attached)"
 			}
-			fmt.Fprintf(w, "  %-45s ws=%-16s type=%-12s age=%s%s\n",
+			_, _ = fmt.Fprintf(w, "  %-45s ws=%-16s type=%-12s age=%s%s\n",
 				e.SessionName, e.WorkspaceID, e.Type, formatAge(e.AgeSeconds), attached)
 		}
 	})
@@ -180,12 +180,12 @@ func cmdSessionPruneWith(w, wErr io.Writer, gf GlobalFlags, args []string, versi
 		}
 		PrintHuman(w, func(w io.Writer) {
 			if len(candidates) == 0 {
-				fmt.Fprintln(w, "Nothing to prune.")
+				_, _ = fmt.Fprintln(w, "Nothing to prune.")
 				return
 			}
-			fmt.Fprintf(w, "Would prune %d session(s) (pass --yes to confirm):\n", len(candidates))
+			_, _ = fmt.Fprintf(w, "Would prune %d session(s) (pass --yes to confirm):\n", len(candidates))
 			for _, c := range candidates {
-				fmt.Fprintf(w, "  %-45s (%s, %s old)\n", c.Session, humanReason(c.Reason), formatAge(c.AgeSeconds))
+				_, _ = fmt.Fprintf(w, "  %-45s (%s, %s old)\n", c.Session, humanReason(c.Reason), formatAge(c.AgeSeconds))
 			}
 		})
 		return ExitOK
@@ -230,17 +230,17 @@ func cmdSessionPruneWith(w, wErr io.Writer, gf GlobalFlags, args []string, versi
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(pruned) == 0 && len(errs) == 0 {
-			fmt.Fprintln(w, "Nothing to prune.")
+			_, _ = fmt.Fprintln(w, "Nothing to prune.")
 			return
 		}
 		if len(pruned) > 0 {
-			fmt.Fprintf(w, "Pruned %d session(s):\n", len(pruned))
+			_, _ = fmt.Fprintf(w, "Pruned %d session(s):\n", len(pruned))
 			for _, p := range pruned {
-				fmt.Fprintf(w, "  %-45s (%s, %s old)\n", p.Session, humanReason(p.Reason), formatAge(p.AgeSeconds))
+				_, _ = fmt.Fprintf(w, "  %-45s (%s, %s old)\n", p.Session, humanReason(p.Reason), formatAge(p.AgeSeconds))
 			}
 		}
 		for _, e := range errs {
-			fmt.Fprintf(w, "Error: %s\n", e)
+			_, _ = fmt.Fprintf(w, "Error: %s\n", e)
 		}
 	})
 	return exitCode
@@ -253,7 +253,7 @@ func routeSession(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi session <list|prune> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi session <list|prune> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi session <list|prune> [flags]")
 		}
 		return ExitUsage
 	}
@@ -268,7 +268,7 @@ func routeSession(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown session subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown session subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown session subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}

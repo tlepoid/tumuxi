@@ -123,7 +123,7 @@ func (m *LazygitModel) handleStarted(msg LazygitStarted) tea.Cmd {
 	if msg.RunGen != m.runGen {
 		// Stale - workspace or gen changed before lazygit started
 		if msg.Terminal != nil {
-			msg.Terminal.Close()
+			_ = msg.Terminal.Close()
 		}
 		return nil
 	}
@@ -180,7 +180,7 @@ func (m *LazygitModel) stopLazygit() {
 	m.flushScheduled = false
 	m.flushPendingSince = time.Time{}
 	if term != nil {
-		term.Close()
+		_ = term.Close()
 	}
 }
 

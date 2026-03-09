@@ -122,7 +122,7 @@ func cmdTerminalRun(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 		if created {
 			createdSuffix = " (created)"
 		}
-		fmt.Fprintf(w, "Sent to terminal %s%s\n", sessionName, createdSuffix)
+		_, _ = fmt.Fprintf(w, "Sent to terminal %s%s\n", sessionName, createdSuffix)
 	})
 	return ExitOK
 }

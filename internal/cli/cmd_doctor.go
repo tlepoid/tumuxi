@@ -78,7 +78,7 @@ func cmdDoctor(w, wErr io.Writer, gf GlobalFlags, args []string, version string)
 			} else if c.Status == "fail" {
 				icon = "x"
 			}
-			fmt.Fprintf(w, "  [%s] %-25s %s\n", icon, c.Name, c.Message)
+			_, _ = fmt.Fprintf(w, "  [%s] %-25s %s\n", icon, c.Name, c.Message)
 		}
 	})
 	return ExitOK
@@ -113,8 +113,8 @@ func checkHomeDir(home string) checkResult {
 	if err != nil {
 		return checkResult{Name: "tumuxi_home", Status: "warn", Message: home + " is not writable"}
 	}
-	tmp.Close()
-	os.Remove(tmp.Name())
+	_ = tmp.Close()
+	_ = os.Remove(tmp.Name())
 	return checkResult{Name: "tumuxi_home", Status: "ok", Message: home}
 }
 

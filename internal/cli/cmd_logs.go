@@ -77,7 +77,7 @@ func cmdLogs(w, wErr io.Writer, gf GlobalFlags, args []string, version string) i
 
 	PrintHuman(w, func(w io.Writer) {
 		for _, line := range tail {
-			fmt.Fprintln(w, line)
+			_, _ = fmt.Fprintln(w, line)
 		}
 	})
 	return ExitOK

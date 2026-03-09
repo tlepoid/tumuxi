@@ -34,7 +34,7 @@ func routeTerminal(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 		if gf.JSON {
 			ReturnError(w, "usage_error", "Usage: tumuxi terminal <list|run|logs> [flags]", nil, version)
 		} else {
-			fmt.Fprintln(wErr, "Usage: tumuxi terminal <list|run|logs> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi terminal <list|run|logs> [flags]")
 		}
 		return ExitUsage
 	}
@@ -51,7 +51,7 @@ func routeTerminal(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 		if gf.JSON {
 			ReturnError(w, "unknown_command", "Unknown terminal subcommand: "+sub, nil, version)
 		} else {
-			fmt.Fprintf(wErr, "Unknown terminal subcommand: %s\n", sub)
+			_, _ = fmt.Fprintf(wErr, "Unknown terminal subcommand: %s\n", sub)
 		}
 		return ExitUsage
 	}
@@ -134,7 +134,7 @@ func cmdTerminalList(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 
 	PrintHuman(w, func(w io.Writer) {
 		if len(terminals) == 0 {
-			fmt.Fprintln(w, "No terminal sessions.")
+			_, _ = fmt.Fprintln(w, "No terminal sessions.")
 			return
 		}
 		for _, t := range terminals {
@@ -142,7 +142,7 @@ func cmdTerminalList(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 			if t.Attached {
 				attached = " (attached)"
 			}
-			fmt.Fprintf(w, "  %-45s ws=%-16s age=%s%s\n",
+			_, _ = fmt.Fprintf(w, "  %-45s ws=%-16s age=%s%s\n",
 				t.SessionName, t.WorkspaceID, formatAge(t.AgeSeconds), attached)
 		}
 	})

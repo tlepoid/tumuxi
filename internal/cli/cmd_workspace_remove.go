@@ -143,7 +143,7 @@ func cmdWorkspaceRemove(w, wErr io.Writer, gf GlobalFlags, args []string, versio
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "Removed workspace %s (%s)\n", info.Name, info.ID)
+		_, _ = fmt.Fprintf(w, "Removed workspace %s (%s)\n", info.Name, info.ID)
 	})
 	return ExitOK
 }

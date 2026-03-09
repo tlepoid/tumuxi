@@ -72,7 +72,7 @@ func (c *GitHubClient) FetchLatestRelease() (*Release, error) {
 	if err != nil {
 		return nil, fmt.Errorf("fetching release: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, errors.New("no releases found")
@@ -102,7 +102,7 @@ func (c *GitHubClient) DownloadAsset(url string, w io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("downloading: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("unexpected status: %s", resp.Status)
@@ -139,7 +139,7 @@ func (c *GitHubClient) FetchChecksums(release *Release) (map[string]string, erro
 	if err != nil {
 		return nil, fmt.Errorf("fetching checksums: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status: %s", resp.Status)

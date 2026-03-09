@@ -74,12 +74,12 @@ func cmdStatus(w, wErr io.Writer, gf GlobalFlags, args []string, version string)
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprintf(w, "tumuxi %s\n", result.Version)
-		fmt.Fprintf(w, "  tmux:       %s\n", boolStatus(result.TmuxAvailable))
-		fmt.Fprintf(w, "  home:       %s\n", boolStatus(result.HomeReadable))
-		fmt.Fprintf(w, "  projects:   %d\n", result.ProjectCount)
-		fmt.Fprintf(w, "  workspaces: %d\n", result.WorkspaceCount)
-		fmt.Fprintf(w, "  sessions:   %d\n", result.SessionCount)
+		_, _ = fmt.Fprintf(w, "tumuxi %s\n", result.Version)
+		_, _ = fmt.Fprintf(w, "  tmux:       %s\n", boolStatus(result.TmuxAvailable))
+		_, _ = fmt.Fprintf(w, "  home:       %s\n", boolStatus(result.HomeReadable))
+		_, _ = fmt.Fprintf(w, "  projects:   %d\n", result.ProjectCount)
+		_, _ = fmt.Fprintf(w, "  workspaces: %d\n", result.WorkspaceCount)
+		_, _ = fmt.Fprintf(w, "  sessions:   %d\n", result.SessionCount)
 	})
 	return ExitOK
 }

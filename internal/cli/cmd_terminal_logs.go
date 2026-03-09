@@ -102,9 +102,9 @@ func cmdTerminalLogs(w, wErr io.Writer, gf GlobalFlags, args []string, version s
 		return ExitOK
 	}
 	PrintHuman(w, func(w io.Writer) {
-		fmt.Fprint(w, content)
+		_, _ = fmt.Fprint(w, content)
 		if content != "" && content[len(content)-1] != '\n' {
-			fmt.Fprintln(w)
+			_, _ = fmt.Fprintln(w)
 		}
 	})
 	return ExitOK

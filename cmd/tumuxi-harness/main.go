@@ -54,13 +54,13 @@ func main() {
 
 	h, err := app.NewHarness(opts)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "harness init failed: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "harness init failed: %v\n", err)
 		os.Exit(1)
 	}
 
 	totalFrames := *warmup + *frames
 	if totalFrames <= 0 {
-		fmt.Fprintln(os.Stderr, "frames + warmup must be > 0")
+		_, _ = fmt.Fprintln(os.Stderr, "frames + warmup must be > 0")
 		os.Exit(1)
 	}
 
@@ -79,9 +79,9 @@ func main() {
 
 	total := time.Since(startAll)
 	s := summarize(durations)
-	fmt.Printf("mode=%s tabs=%d frames=%d warmup=%d size=%dx%d hot_tabs=%d payload=%dB newline_every=%d\n",
+	_, _ = fmt.Printf("mode=%s tabs=%d frames=%d warmup=%d size=%dx%d hot_tabs=%d payload=%dB newline_every=%d\n",
 		*mode, *tabs, *frames, *warmup, *width, *height, *hotTabs, *payloadBytes, *newlineEvery)
-	fmt.Printf("total=%s avg=%s p50=%s p95=%s p99=%s min=%s max=%s fps=%.2f\n",
+	_, _ = fmt.Printf("total=%s avg=%s p50=%s p95=%s p99=%s min=%s max=%s fps=%.2f\n",
 		total, s.avg, s.p50, s.p95, s.p99, s.min, s.max, fps(durations))
 	perf.Flush("harness")
 }
@@ -157,9 +157,9 @@ func startPprof() {
 	}
 
 	go func() {
-		fmt.Fprintf(os.Stderr, "pprof listening on %s\n", addr)
+		_, _ = fmt.Fprintf(os.Stderr, "pprof listening on %s\n", addr)
 		if err := http.ListenAndServe(addr, nil); err != nil {
-			fmt.Fprintf(os.Stderr, "pprof server stopped: %v\n", err)
+			_, _ = fmt.Fprintf(os.Stderr, "pprof server stopped: %v\n", err)
 		}
 	}()
 }

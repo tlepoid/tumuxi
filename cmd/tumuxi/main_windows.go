@@ -8,6 +8,6 @@ import (
 )
 
 func main() {
-	fmt.Fprintln(os.Stderr, "tumuxi is not supported on Windows. It requires tmux and is supported on Linux/macOS.")
+	_, _ = fmt.Fprintln(os.Stderr, "tumuxi is not supported on Windows. It requires tmux and is supported on Linux/macOS.")
 	os.Exit(1)
 }

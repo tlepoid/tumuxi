@@ -44,7 +44,7 @@ var cliCommands = map[string]bool{
 func main() {
 	// Handle --version flag
 	if len(os.Args) > 1 && (os.Args[1] == "--version" || os.Args[1] == "-v") {
-		fmt.Printf("tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
+		_, _ = fmt.Printf("tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
 		os.Exit(0)
 	}
 
@@ -122,9 +122,9 @@ func runTUI() {
 	home, _ := os.UserHomeDir()
 	logDir := filepath.Join(home, ".tumuxi", "logs")
 	if err := logging.Initialize(logDir, logging.LevelInfo); err != nil {
-		fmt.Fprintf(os.Stderr, "Warning: could not initialize logging: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Warning: could not initialize logging: %v\n", err)
 	}
-	defer logging.Close()
+	defer func() { _ = logging.Close() }()
 
 	cleanupStaleTestTmuxSockets()
 
@@ -135,7 +135,7 @@ func runTUI() {
 	a, err := app.New(version, commit, date)
 	if err != nil {
 		logging.Error("Failed to initialize app: %v", err)
-		fmt.Fprintf(os.Stderr, "Error initializing app: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error initializing app: %v\n", err)
 		os.Exit(1)
 	}
 	startPprof()
@@ -148,7 +148,7 @@ func runTUI() {
 
 	if _, err := p.Run(); err != nil {
 		logging.Error("App exited with error: %v", err)
-		fmt.Fprintf(os.Stderr, "Error running app: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error running app: %v\n", err)
 		a.CleanupTmuxOnExit()
 		a.Shutdown()
 		os.Exit(1)
