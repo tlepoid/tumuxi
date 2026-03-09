@@ -15,6 +15,7 @@ const (
 	DialogInput
 	DialogConfirm
 	DialogSelect
+	DialogIssuePicker // combined name-input + live-filtered issue list
 )
 
 // DialogResult is sent when a dialog is completed
@@ -56,6 +57,9 @@ type Dialog struct {
 	filterEnabled   bool
 	filterInput     textinput.Model
 	filteredIndices []int // indices into options
+
+	// IssuePicker state: suggested workspace names parallel to options
+	issueNames []string
 
 	// Layout
 	width      int
@@ -178,10 +182,58 @@ func (d *Dialog) Show() {
 		d.input.SetCursor(len(d.initialValue))
 		d.input.Focus()
 	}
+	if d.dtype == DialogIssuePicker {
+		d.input.SetValue("")
+		d.input.Focus()
+		d.cursor = -1 // nothing selected
+		d.applyIssueFilter("")
+	}
 	if d.filterEnabled {
 		d.filterInput.SetValue("")
 		d.filterInput.Focus()
 		d.applyFilter()
+	}
+}
+
+// NewIssuePicker creates a combined name-input + issue-list dialog.
+// options are the display labels; names are the suggested workspace names (same order).
+// Index -1 in the result means the user submitted a manual name (result.Value).
+func NewIssuePicker(id, title string, options, names []string) *Dialog {
+	ti := textinput.New()
+	ti.Placeholder = "Search issues or enter workspace name..."
+	ti.Focus()
+	ti.CharLimit = 100
+	ti.SetWidth(50)
+	ti.SetVirtualCursor(false)
+
+	allIndices := make([]int, len(options))
+	for i := range options {
+		allIndices[i] = i
+	}
+
+	return &Dialog{
+		id:              id,
+		dtype:           DialogIssuePicker,
+		title:           title,
+		options:         options,
+		issueNames:      names,
+		input:           ti,
+		cursor:          -1,
+		filteredIndices: allIndices,
+	}
+}
+
+// applyIssueFilter updates filteredIndices based on the given query string.
+func (d *Dialog) applyIssueFilter(query string) {
+	d.filteredIndices = nil
+	for i, opt := range d.options {
+		if fuzzyMatch(query, opt) {
+			d.filteredIndices = append(d.filteredIndices, i)
+		}
+	}
+	// Clamp cursor into the new filtered range.
+	if d.cursor >= len(d.filteredIndices) {
+		d.cursor = len(d.filteredIndices) - 1
 	}
 }
 
@@ -221,6 +273,9 @@ func (d *Dialog) SetSize(width, height int) {
 	d.height = height
 	if d.dtype == DialogInput {
 		d.input.SetWidth(min(40, width-10))
+	}
+	if d.dtype == DialogIssuePicker {
+		d.input.SetWidth(min(50, width-10))
 	}
 	if d.dtype == DialogSelect && d.filterEnabled {
 		d.filterInput.SetWidth(min(30, width-10))

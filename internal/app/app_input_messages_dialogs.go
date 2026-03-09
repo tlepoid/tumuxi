@@ -83,10 +83,7 @@ func (a *App) handleShowGitHubIssueDialog(msg messages.ShowGitHubIssueDialog) te
 	return fetchGitHubIssuesCmd(msg.Project)
 }
 
-// issueManualOption is the label shown at the bottom of the issue picker for bypassing to name input.
-const issueManualOption = "Enter name manually..."
-
-// handleGitHubIssuesLoaded shows the issue picker once issues have been fetched.
+// handleGitHubIssuesLoaded shows the combined name-input + issue-list picker.
 // On error or when no issues exist, falls back to the regular name input dialog.
 func (a *App) handleGitHubIssuesLoaded(msg messages.GitHubIssuesLoaded) {
 	if msg.Project != nil {
@@ -95,26 +92,21 @@ func (a *App) handleGitHubIssuesLoaded(msg messages.GitHubIssuesLoaded) {
 
 	if msg.Err != nil {
 		logging.Warn("Failed to fetch GitHub issues: %v", msg.Err)
-		// Fall back to plain name input so users can still create workspaces.
+		// Fall back to plain name input so workspace creation still works.
 		a.showCreateWorkspaceNameDialog()
 		return
 	}
 
 	a.pendingGitHubIssues = msg.Issues
 
-	labels := make([]string, 0, len(msg.Issues)+1)
-	for _, issue := range msg.Issues {
-		labels = append(labels, issueLabel(issue))
+	labels := make([]string, len(msg.Issues))
+	names := make([]string, len(msg.Issues))
+	for i, issue := range msg.Issues {
+		labels[i] = issueLabel(issue)
+		names[i] = issueWorkspaceName(issue)
 	}
-	// Always include an escape hatch at the bottom.
-	labels = append(labels, issueManualOption)
 
-	title := "New Workspace"
-	message := "Pick an issue or enter a name manually:"
-	if len(msg.Issues) == 0 {
-		message = "No open issues found."
-	}
-	a.dialog = common.NewSelectDialog(DialogGitHubIssue, title, message, labels)
+	a.dialog = common.NewIssuePicker(DialogGitHubIssue, "New Workspace", labels, names)
 	a.dialog.SetSize(a.width, a.height)
 	a.dialog.SetShowKeymapHints(a.config.UI.ShowKeymapHints)
 	a.dialog.Show()

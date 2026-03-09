@@ -106,7 +106,7 @@ func (a *App) handleDialogResult(result common.DialogResult) tea.Cmd {
 
 	if !result.Confirmed {
 		if result.ID == DialogSelectAssistant || result.ID == "agent-picker" ||
-			result.ID == DialogGitHubIssue || result.ID == DialogCreateWorkspace {
+			result.ID == DialogGitHubIssue {
 			a.pendingWorkspaceProject = nil
 			a.pendingWorkspaceName = ""
 			a.pendingWorkspaceBase = ""
@@ -150,37 +150,29 @@ func (a *App) handleDialogResult(result common.DialogResult) tea.Cmd {
 		}
 
 	case DialogGitHubIssue:
+		name := validation.SanitizeInput(result.Value)
+		if result.Index >= 0 && result.Index < len(a.pendingGitHubIssues) {
+			// User selected an issue — link it and use its generated name.
+			a.pendingWorkspaceIssue = a.pendingGitHubIssues[result.Index]
+			if name == "" {
+				name = issueWorkspaceName(a.pendingWorkspaceIssue)
+			}
+		}
+		a.pendingGitHubIssues = nil
+		if name == "" {
+			// Nothing typed and nothing selected — ignore.
+			return nil
+		}
+		if err := validation.ValidateWorkspaceName(name); err != nil {
+			return func() tea.Msg {
+				return messages.Error{Err: err, Context: errorContext(errorServiceDialog, "validating workspace name")}
+			}
+		}
 		a.pendingWorkspaceProject = project
+		a.pendingWorkspaceName = name
 		a.pendingWorkspaceBase = ""
-		// Restore dialogProject so the next dialog's result handler can read it.
-		a.dialogProject = project
-		// The last option in the list is always "Enter name manually..."
-		isManual := len(a.pendingGitHubIssues) == 0 || result.Index >= len(a.pendingGitHubIssues)
-		if isManual {
-			// User chose to enter a name manually — plain name input, no issue linked.
-			a.pendingGitHubIssues = nil
-			a.showCreateWorkspaceNameDialog()
-		} else {
-			issue := a.pendingGitHubIssues[result.Index]
-			a.pendingWorkspaceIssue = issue
-			a.pendingGitHubIssues = nil
-			// Show name dialog pre-filled with the auto-generated slug so the user can edit.
-			d := common.NewInputDialog(DialogCreateWorkspace, "New Workspace from Issue", "Workspace name...")
-			d.SetInitialValue(issueWorkspaceName(issue))
-			d.SetInputValidate(func(s string) string {
-				s = validation.SanitizeInput(s)
-				if s == "" {
-					return ""
-				}
-				if err := validation.ValidateWorkspaceName(s); err != nil {
-					return err.Error()
-				}
-				return ""
-			})
-			d.SetSize(a.width, a.height)
-			d.SetShowKeymapHints(a.config.UI.ShowKeymapHints)
-			d.Show()
-			a.dialog = d
+		return func() tea.Msg {
+			return messages.ShowSelectAssistantDialog{}
 		}
 
 	case DialogDeleteWorkspace:

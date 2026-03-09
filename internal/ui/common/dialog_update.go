@@ -31,9 +31,51 @@ func (d *Dialog) Update(msg tea.Msg) (*Dialog, tea.Cmd) {
 				return DialogResult{ID: d.id, Confirmed: false}
 			}
 
+		case key.Matches(msg, key.NewBinding(key.WithKeys("down"))):
+			if d.dtype == DialogIssuePicker && len(d.filteredIndices) > 0 {
+				d.cursor = min(d.cursor+1, len(d.filteredIndices)-1)
+				return d, nil
+			}
+
+		case key.Matches(msg, key.NewBinding(key.WithKeys("up"))):
+			if d.dtype == DialogIssuePicker {
+				d.cursor = max(d.cursor-1, -1)
+				return d, nil
+			}
+
 		case key.Matches(msg, key.NewBinding(key.WithKeys("enter"))):
 			logging.Info("Dialog Enter pressed: id=%s value=%s", d.id, d.input.Value())
 			switch d.dtype {
+			case DialogIssuePicker:
+				d.visible = false
+				if d.cursor >= 0 && d.cursor < len(d.filteredIndices) {
+					originalIdx := d.filteredIndices[d.cursor]
+					value := ""
+					if originalIdx < len(d.issueNames) {
+						value = d.issueNames[originalIdx]
+					}
+					id := d.id
+					return d, func() tea.Msg {
+						return DialogResult{
+							ID:        id,
+							Confirmed: true,
+							Index:     originalIdx,
+							Value:     value,
+						}
+					}
+				}
+				// No issue highlighted — use the typed name.
+				value := strings.TrimSpace(d.input.Value())
+				id := d.id
+				return d, func() tea.Msg {
+					return DialogResult{
+						ID:        id,
+						Confirmed: true,
+						Index:     -1,
+						Value:     value,
+					}
+				}
+
 			case DialogInput:
 				// Block Enter if validation fails
 				if d.validationErr != "" {
@@ -138,6 +180,19 @@ func (d *Dialog) Update(msg tea.Msg) (*Dialog, tea.Cmd) {
 			d.validationErr = d.inputValidate(d.input.Value())
 		}
 
+		return d, cmd
+	}
+
+	// IssuePicker: input always receives text; re-filter on change.
+	if d.dtype == DialogIssuePicker {
+		oldVal := d.input.Value()
+		var cmd tea.Cmd
+		d.input, cmd = d.input.Update(msg)
+		if newVal := d.input.Value(); newVal != oldVal {
+			d.applyIssueFilter(newVal)
+			// Reset list cursor when filter changes.
+			d.cursor = -1
+		}
 		return d, cmd
 	}
 

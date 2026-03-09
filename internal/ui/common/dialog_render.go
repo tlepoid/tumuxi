@@ -49,6 +49,8 @@ func (d *Dialog) Cursor() *tea.Cursor {
 	switch d.dtype {
 	case DialogInput:
 		input = &d.input
+	case DialogIssuePicker:
+		input = &d.input
 	case DialogSelect:
 		if d.filterEnabled {
 			if d.message != "" {
@@ -160,6 +162,8 @@ func (d *Dialog) renderLines() []string {
 		}
 		baseLine := d.renderedLineCount(lines)
 		lines = append(lines, d.renderOptionsLines(baseLine)...)
+	case DialogIssuePicker:
+		lines = append(lines, d.renderIssuePickerLines()...)
 	}
 
 	if d.showKeymapHints {
@@ -269,6 +273,8 @@ func (d *Dialog) helpText() string {
 			return "type to filter • ↑/↓ or tab: move • enter: select • esc: cancel"
 		}
 		return "↑/↓ or tab: move • enter: select • esc: cancel"
+	case DialogIssuePicker:
+		return "type to search • ↑/↓: select issue • enter: confirm • esc: cancel"
 	default:
 		return "enter: confirm • esc: cancel"
 	}
