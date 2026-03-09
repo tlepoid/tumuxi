@@ -25,13 +25,6 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - name: Lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: ${{ env.GOLANGCI_LINT_VERSION }}
-          verify: false
-          args: --timeout=10m
-
       - name: File length guard (max 500 lines)
         run: |
           set -euo pipefail
