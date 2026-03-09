@@ -55,4 +55,3 @@ func (d *Dialog) renderIssuePickerLines() []string {
 
 	return lines
 }
-
