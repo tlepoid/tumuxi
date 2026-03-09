@@ -60,8 +60,8 @@ func TestGcOrphanedTmuxSessions_SkipsAttachedOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "attached-orphan", Tags: map[string]string{
-					"@amux_workspace":  "dead-ws",
-					"@amux_created_at": strconv.FormatInt(staleTS, 10),
+					"@tumuxi_workspace":  "dead-ws",
+					"@tumuxi_created_at": strconv.FormatInt(staleTS, 10),
 				}},
 			}, nil
 		},
@@ -96,8 +96,8 @@ func TestGcOrphanedTmuxSessions_SkipsRecentOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "recent-orphan", Tags: map[string]string{
-					"@amux_workspace":  "dead-ws",
-					"@amux_created_at": strconv.FormatInt(recentTS, 10),
+					"@tumuxi_workspace":  "dead-ws",
+					"@tumuxi_created_at": strconv.FormatInt(recentTS, 10),
 				}},
 			}, nil
 		},
@@ -129,8 +129,8 @@ func TestGcOrphanedTmuxSessions_KillsStaleDetachedOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "stale-orphan", Tags: map[string]string{
-					"@amux_workspace":  "dead-ws",
-					"@amux_created_at": strconv.FormatInt(staleTS, 10),
+					"@tumuxi_workspace":  "dead-ws",
+					"@tumuxi_created_at": strconv.FormatInt(staleTS, 10),
 				}},
 			}, nil
 		},

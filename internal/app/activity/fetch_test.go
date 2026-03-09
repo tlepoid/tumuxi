@@ -74,9 +74,9 @@ func TestFetchTaggedSessions_IncludesKnownAndTaggedSessions(t *testing.T) {
 		{
 			Name: "tagged-session",
 			Tags: map[string]string{
-				"@tumuxi":              "1",
-				"@tumuxi_workspace":    "ws-tagged",
-				"@tumuxi_type":         "agent",
+				"@tumuxi":            "1",
+				"@tumuxi_workspace":  "ws-tagged",
+				"@tumuxi_type":       "agent",
 				tmux.TagLastOutputAt: "1700000000000",
 				tmux.TagLastInputAt:  "1700000000000",
 			},

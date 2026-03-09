@@ -337,10 +337,10 @@ func (s *scriptedActivityTmuxOps) SessionsWithTags(map[string]string, []string, 
 	return []tmux.SessionTagValues{{
 		Name: s.sessionName,
 		Tags: map[string]string{
-			"@tumuxi":              "1",
-			"@tumuxi_workspace":    s.workspaceID,
-			"@tumuxi_tab":          "tab-1",
-			"@tumuxi_type":         "agent",
+			"@tumuxi":            "1",
+			"@tumuxi_workspace":  s.workspaceID,
+			"@tumuxi_tab":        "tab-1",
+			"@tumuxi_type":       "agent",
 			tmux.TagLastOutputAt: nowMillis,
 		},
 	}}, nil

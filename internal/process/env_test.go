@@ -28,8 +28,8 @@ func TestEnvBuilder_BuildEnv(t *testing.T) {
 		"TUMUXI_WORKSPACE_NAME":   "feature-1",
 		"TUMUXI_WORKSPACE_ROOT":   "/home/user/.tumuxi/workspaces/feature-1",
 		"TUMUXI_WORKSPACE_BRANCH": "feature-1",
-		"ROOT_WORKSPACE_PATH":   "/home/user/repo",
-		"CUSTOM_VAR":            "custom_value",
+		"ROOT_WORKSPACE_PATH":     "/home/user/repo",
+		"CUSTOM_VAR":              "custom_value",
 	}
 
 	for key, wantValue := range checks {

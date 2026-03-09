@@ -41,7 +41,7 @@ func TestHysteresisWorkspaceExtraction(t *testing.T) {
 	states := map[string]*SessionState{
 		"sess-direct":        warmState(),
 		"sess-info-fallback": warmState(),
-		"tumuxi-ws99-tab-1":    warmState(),
+		"tumuxi-ws99-tab-1":  warmState(),
 		"sess-mismatch":      warmState(),
 		"sess-viewer":        warmState(),
 		"sess-cold":          {Score: 0, Initialized: true},

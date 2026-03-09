@@ -27,9 +27,9 @@ func TestFetchTaggedSessions_UsesLeaseTagWhenOutputTagMissing(t *testing.T) {
 			{
 				Name: "tagged-session",
 				Tags: map[string]string{
-					"@tumuxi":                "1",
-					"@tumuxi_workspace":      "ws-tagged",
-					"@tumuxi_type":           "agent",
+					"@tumuxi":              "1",
+					"@tumuxi_workspace":    "ws-tagged",
+					"@tumuxi_type":         "agent",
 					tmux.TagSessionLeaseAt: strconv.FormatInt(leaseMS, 10),
 				},
 			},
