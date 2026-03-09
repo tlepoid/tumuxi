@@ -98,9 +98,10 @@ func (a *App) renderWorkspaceInfo() string {
 func (a *App) renderWelcome() string {
 	content := a.welcomeContent()
 
-	// Center the content in the pane
+	// Center the content in the agent pane (top ~3/4), not the full terminal height
 	width := a.layout.CenterWidth() - 4 // Account for borders/padding
-	height := a.layout.Height() - 2
+	topHeight, _ := centerPaneHeights(a.layout.Height())
+	height := topHeight - 2
 
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)
 }
@@ -135,11 +136,14 @@ func (a *App) welcomeContent() string {
 
 func (a *App) welcomeLogo() (string, lipgloss.Style) {
 	logo := `
- 8888b.  88888b.d88b.  888  888 888  888
-    "88b 888 "888 "88b 888  888  Y8bd8P
-.d888888 888  888  888 888  888   X88K
-888  888 888  888  888 Y88b 888 .d8""8b.
-"Y888888 888  888  888  "Y88888 888  888`
+_________          _______                   _________
+\__   __/|\     /|(       )|\     /||\     /|\__   __/
+   ) (   | )   ( || () () || )   ( |( \   / )   ) (
+   | |   | |   | || || || || |   | | \ (_) /    | |
+   | |   | |   | || |(_)| || |   | |  ) _ (     | |
+   | |   | |   | || |   | || |   | | / ( ) \    | |
+   | |   | (___) || )   ( || (___) |( /   \ )___) (___
+   )_(   (_______)|/     \|(_______)|/     \|\_______/`
 
 	logoStyle := lipgloss.NewStyle().
 		Foreground(common.ColorPrimary()).

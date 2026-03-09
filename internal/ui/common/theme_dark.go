@@ -224,9 +224,9 @@ func MonokaiProTheme() Theme {
 			Foreground:    lipgloss.Color("#e6d9db"),
 			Muted:         lipgloss.Color("#72696a"),
 			Border:        lipgloss.Color("#36302f"),
-			BorderFocused: lipgloss.Color("#ffd866"),
+			BorderFocused: lipgloss.Color("#c0c8d0"),
 
-			Primary:   lipgloss.Color("#ffd866"), // Yellow
+			Primary:   lipgloss.Color("#c0c8d0"), // Silver
 			Secondary: lipgloss.Color("#ab9df2"), // Purple
 			Success:   lipgloss.Color("#a9dc76"), // Green
 			Warning:   lipgloss.Color("#fc9867"), // Orange
