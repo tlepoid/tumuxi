@@ -66,7 +66,7 @@ func TestGetPlatformAssetName(t *testing.T) {
 	}
 
 	// Should start with tumuxi_1.2.3_ (no v prefix)
-	if len(name) < 10 || name[:10] != "tumuxi_1.2.3" {
+	if len(name) < 12 || name[:12] != "tumuxi_1.2.3" {
 		t.Errorf("Expected tumuxi_1.2.3 prefix, got %s", name)
 	}
 }

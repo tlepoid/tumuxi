@@ -100,8 +100,8 @@ func findLatestLogFile() string {
 			continue
 		}
 		name := e.Name()
-		// Match only date-stamped logs: tumuxi-YYYY-MM-DD.log (len == 19)
-		if strings.HasPrefix(name, "tumuxi-") && strings.HasSuffix(name, ".log") && len(name) == 19 {
+		// Match only date-stamped logs: tumuxi-YYYY-MM-DD.log (len == 21)
+		if strings.HasPrefix(name, "tumuxi-") && strings.HasSuffix(name, ".log") && len(name) == 21 {
 			logs = append(logs, name)
 		}
 	}
