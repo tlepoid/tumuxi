@@ -107,6 +107,9 @@ linters:
         path: ^cmd/
       - linters:
           - forbidigo
+        path: ^internal/cli/
+      - linters:
+          - forbidigo
         path: _test\.go
 
 formatters:
