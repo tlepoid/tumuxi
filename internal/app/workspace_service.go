@@ -166,6 +166,15 @@ func (s *workspaceService) CreateWorkspace(project *data.Project, name, base, as
 			}
 		}
 
+		// Write ISSUE.md so the agent has issue context available.
+		if issue != nil && issue.Body != "" {
+			issueContent := fmt.Sprintf("# Issue #%d: %s\n\n%s\n\n---\n\n%s\n", issue.Number, issue.Title, issue.URL, issue.Body)
+			issuePath := filepath.Join(workspacePath, "ISSUE.md")
+			if err := os.WriteFile(issuePath, []byte(issueContent), 0o644); err != nil {
+				logging.Warn("Failed to write ISSUE.md: %v", err)
+			}
+		}
+
 		// Save unified workspace
 		if s.store != nil {
 			if err := s.store.Save(ws); err != nil {
