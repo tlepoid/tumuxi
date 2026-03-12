@@ -176,11 +176,16 @@ func (m *Model) TabConversationStatus(tab *Tab) ConversationStatus {
 	}
 	tab.mu.Unlock()
 
-	logging.Debug("TabConversationStatus tab=%s assistant=%s running=%v detached=%v session=%q", tab.ID, tab.Assistant, running, detached, sessionName)
+	// Throttled diagnostic: log once per 5 seconds per tab to help debug unexpected ○ indicators.
+	now := time.Now()
+	if now.Sub(tab.lastStatusLogAt) >= 5*time.Second {
+		tab.lastStatusLogAt = now
+		logging.Info("TabConversationStatus tab=%s assistant=%s running=%v detached=%v session=%q", tab.ID, tab.Assistant, running, detached, sessionName)
+	}
 
 	switch {
 	case !running && !detached:
-		return ConvStatusEnded
+		return ConvStatusIdle
 	case running && !detached:
 		return ConvStatusWaiting // caller upgrades to Running when tmux says active
 	default:
@@ -190,7 +195,7 @@ func (m *Model) TabConversationStatus(tab *Tab) ConversationStatus {
 		if sessionName != "" {
 			return ConvStatusWaiting
 		}
-		return ConvStatusEnded
+		return ConvStatusIdle
 	}
 }
 
@@ -221,7 +226,7 @@ func (m *Model) GetWorkspaceStatuses() map[string]common.AgentStatus {
 			var s common.AgentStatus
 			switch {
 			case !running && !detached:
-				s = common.AgentStatusError
+				s = common.AgentStatusIdle
 			case running && !detached:
 				s = common.AgentStatusWaiting // upgraded to Running by caller if tmux active
 			default:

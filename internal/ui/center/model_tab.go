@@ -85,6 +85,7 @@ type Tab struct {
 	ptyRestartCount   int
 	ptyRestartSince   time.Time
 	lastFocusedAt     time.Time
+	lastStatusLogAt   time.Time // throttle for TabConversationStatus diagnostic log
 
 	// Snapshot cache for VTermLayer - avoid recreating snapshot when terminal unchanged
 	cachedSnap       *compositor.VTermSnapshot
