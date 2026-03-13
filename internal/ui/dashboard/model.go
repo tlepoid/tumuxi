@@ -82,7 +82,7 @@ type Model struct {
 	spinnerActive      bool                       // Whether spinner ticks are active
 
 	// Agent activity state
-	activeWorkspaceIDs map[string]bool            // Workspace IDs with active agents (synced from center)
+	activeWorkspaceIDs map[string]bool               // Workspace IDs with active agents (synced from center)
 	workspaceStatuses  map[string]common.AgentStatus // Per-workspace agent status (synced from center)
 
 	// Styles

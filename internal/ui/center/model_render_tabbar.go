@@ -66,7 +66,9 @@ func (m *Model) renderTabBar() string {
 		agentStyle := lipgloss.NewStyle().Foreground(common.AgentColor(tab.Assistant))
 
 		// indicatorColor returns the status-appropriate foreground color for the indicator.
-		indicatorColor := func() interface{ RGBA() (uint32, uint32, uint32, uint32) } {
+		indicatorColor := func() interface {
+			RGBA() (uint32, uint32, uint32, uint32)
+		} {
 			switch status {
 			case ConvStatusRunning:
 				return common.AgentColor(tab.Assistant)
