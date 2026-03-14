@@ -46,17 +46,15 @@ func (a *App) handleCenterPaneClick(msg tea.MouseClickMsg) tea.Cmd {
 }
 
 func (a *App) handleWelcomeClick(localX, localY int) tea.Cmd {
-	content := a.welcomeContent()
+	// renderWelcome returns the full-height content with logo at top and buttons
+	// at the bottom, so line indices directly correspond to screen positions.
+	content := a.renderWelcome()
 	lines := strings.Split(content, "\n")
-	_, contentHeight := viewDimensions(content)
 
 	placeWidth := a.layout.CenterWidth() - 4
-	placeHeight := a.layout.Height() - 2
-	if placeWidth <= 0 || placeHeight <= 0 {
+	if placeWidth <= 0 {
 		return nil
 	}
-
-	offsetY := centerOffset(placeHeight, contentHeight)
 
 	for i, line := range lines {
 		strippedLine := ansi.Strip(line)
@@ -67,7 +65,7 @@ func (a *App) handleWelcomeClick(localX, localY int) tea.Cmd {
 		if idx := strings.Index(strippedLine, settingsText); idx >= 0 {
 			region := common.HitRegion{
 				X:      idx + lineOffsetX,
-				Y:      i + offsetY,
+				Y:      i,
 				Width:  len(settingsText),
 				Height: 1,
 			}
@@ -80,7 +78,7 @@ func (a *App) handleWelcomeClick(localX, localY int) tea.Cmd {
 		if idx := strings.Index(strippedLine, addProjectText); idx >= 0 {
 			region := common.HitRegion{
 				X:      idx + lineOffsetX,
-				Y:      i + offsetY,
+				Y:      i,
 				Width:  len(addProjectText),
 				Height: 1,
 			}

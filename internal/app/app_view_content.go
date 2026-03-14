@@ -94,24 +94,30 @@ func (a *App) renderWorkspaceInfo() string {
 	return content
 }
 
-// renderWelcome renders the welcome screen
+// renderWelcome renders the welcome screen with the logo centered and buttons pinned to the bottom.
 func (a *App) renderWelcome() string {
-	content := a.welcomeContent()
-
-	// Center the content in the agent pane (top ~3/4), not the full terminal height
 	width := a.layout.CenterWidth() - 4 // Account for borders/padding
 	topHeight, _ := centerPaneHeights(a.layout.Height())
 	height := topHeight - 2
 
-	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)
+	centerStyle := lipgloss.NewStyle().Width(width).AlignHorizontal(lipgloss.Center)
+
+	logo, logoStyle := a.welcomeLogo()
+	logoStr := centerStyle.Render(logoStyle.Render(logo))
+	buttonsStr := centerStyle.Render(a.welcomeButtons())
+
+	logoAreaHeight := height - lipgloss.Height(buttonsStr)
+	if logoAreaHeight < 1 {
+		logoAreaHeight = 1
+	}
+
+	return lipgloss.JoinVertical(lipgloss.Left,
+		lipgloss.Place(width, logoAreaHeight, lipgloss.Center, lipgloss.Center, logoStr),
+		buttonsStr,
+	)
 }
 
-func (a *App) welcomeContent() string {
-	logo, logoStyle := a.welcomeLogo()
-	var b strings.Builder
-	b.WriteString(logoStyle.Render(logo))
-	b.WriteString("\n\n")
-
+func (a *App) welcomeButtons() string {
 	activeStyle := lipgloss.NewStyle().Foreground(common.ColorForeground()).Bold(true)
 	inactiveStyle := lipgloss.NewStyle().Foreground(common.ColorMuted())
 
@@ -126,9 +132,11 @@ func (a *App) welcomeContent() string {
 	}
 	addProject := addProjectStyle.Render("[Add project]")
 	settingsBtn := settingsStyle.Render("[Settings]")
-	b.WriteString(lipgloss.JoinHorizontal(lipgloss.Left, addProject, "  ", settingsBtn))
-	b.WriteString("\n")
+
+	var b strings.Builder
+	b.WriteString(lipgloss.JoinHorizontal(lipgloss.Center, addProject, "  ", settingsBtn))
 	if a.config.UI.ShowKeymapHints {
+		b.WriteString("\n")
 		b.WriteString(a.styles.Help.Render("Dashboard: j/k to move • Enter to select"))
 	}
 	return b.String()

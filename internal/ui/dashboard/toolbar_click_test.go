@@ -31,13 +31,13 @@ func TestToolbarClick(t *testing.T) {
 	}{
 		{
 			name:        "click Commands button",
-			screenX:     3, // [Commands] starts near the left
+			screenX:     5, // [Commands] is centered; content offset 3 puts it at screenX 4-13
 			screenY:     toolbarScreenY,
 			wantMsgType: "ShowCommandsPalette",
 		},
 		{
 			name:        "click Settings button",
-			screenX:     13, // [Settings] is after [Commands] with gap
+			screenX:     16, // [Settings] follows after [Commands]+gap; hits screenX 15-24
 			screenY:     toolbarScreenY,
 			wantMsgType: "ShowSettingsDialog",
 		},

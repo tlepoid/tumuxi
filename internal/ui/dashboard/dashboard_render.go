@@ -31,7 +31,11 @@ func (m *Model) renderRow(row Row, selected bool) string {
 		} else if m.activeRoot == "" {
 			style = style.Bold(true).Foreground(common.ColorPrimary())
 		}
-		return style.Render("[tumuxi]")
+		contentWidth := m.width - 3
+		if contentWidth < 1 {
+			contentWidth = 1
+		}
+		return style.Width(contentWidth).AlignHorizontal(lipgloss.Center).Render("[tumuxi]")
 
 	case RowProject:
 		status := ""
