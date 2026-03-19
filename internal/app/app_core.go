@@ -139,6 +139,7 @@ type App struct {
 	tmuxInstallHint           string
 	tmuxActiveWorkspaceIDs    map[string]bool
 	sessionActivityStates     map[string]*activity.SessionState // Per-session hysteresis state
+	prevWorkspaceStatuses     map[string]common.AgentStatus     // Previous cycle's resolved statuses for transition detection
 	instanceID                string                            // Immutable after init; safe for read-only access from Cmd goroutines.
 	lastTerminalGCRun         time.Time
 

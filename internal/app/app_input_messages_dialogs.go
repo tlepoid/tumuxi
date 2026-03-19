@@ -165,6 +165,7 @@ func (a *App) handleShowSettingsDialog() {
 	a.settingsDialogSession++
 	a.settingsDialog = common.NewSettingsDialog(
 		common.ThemeID(a.config.UI.Theme),
+		a.config.UI.NotifyOnWaiting,
 	)
 	a.settingsDialog.SetSession(a.settingsDialogSession)
 	a.settingsDialog.SetSize(a.width, a.height)

@@ -22,10 +22,16 @@ type ThemePreview struct {
 type settingsItem int
 
 const (
-	settingsItemTheme  settingsItem = iota
-	settingsItemUpdate              // only shown when update available
+	settingsItemTheme          settingsItem = iota
+	settingsItemNotifyOnWaiting             // toggle for desktop notifications
+	settingsItemUpdate                      // only shown when update available
 	settingsItemClose
 )
+
+// NotifyOnWaitingChanged is sent when the user toggles the notification setting.
+type NotifyOnWaitingChanged struct {
+	Enabled bool
+}
 
 // SettingsDialog is a modal dialog for application settings.
 type SettingsDialog struct {
@@ -34,7 +40,8 @@ type SettingsDialog struct {
 	height  int
 
 	// Settings values
-	theme ThemeID
+	theme           ThemeID
+	notifyOnWaiting bool
 
 	// UI state
 	focusedItem settingsItem
@@ -59,7 +66,7 @@ type settingsHitRegion struct {
 }
 
 // NewSettingsDialog creates a new settings dialog with current values.
-func NewSettingsDialog(currentTheme ThemeID) *SettingsDialog {
+func NewSettingsDialog(currentTheme ThemeID, notifyOnWaiting bool) *SettingsDialog {
 	themes := AvailableThemes()
 	themeCursor := 0
 	for i, t := range themes {
@@ -70,10 +77,11 @@ func NewSettingsDialog(currentTheme ThemeID) *SettingsDialog {
 	}
 
 	return &SettingsDialog{
-		theme:       currentTheme,
-		themes:      themes,
-		themeCursor: themeCursor,
-		focusedItem: settingsItemTheme,
+		theme:           currentTheme,
+		notifyOnWaiting: notifyOnWaiting,
+		themes:          themes,
+		themeCursor:     themeCursor,
+		focusedItem:     settingsItemTheme,
 	}
 }
 
@@ -158,6 +166,11 @@ func (s *SettingsDialog) handleSelect() (*SettingsDialog, tea.Cmd) {
 		}
 		return s, func() tea.Msg { return ThemePreview{Theme: s.theme, Session: s.session} }
 
+	case settingsItemNotifyOnWaiting:
+		s.notifyOnWaiting = !s.notifyOnWaiting
+		enabled := s.notifyOnWaiting
+		return s, func() tea.Msg { return NotifyOnWaitingChanged{Enabled: enabled} }
+
 	case settingsItemUpdate:
 		if s.updateAvailable {
 			s.visible = false
@@ -189,7 +202,7 @@ func (s *SettingsDialog) handlePrevSection() (*SettingsDialog, tea.Cmd) {
 	s.focusedItem--
 	// Skip update item if no update available
 	if s.focusedItem == settingsItemUpdate && !s.updateAvailable {
-		s.focusedItem = settingsItemTheme
+		s.focusedItem = settingsItemNotifyOnWaiting
 	}
 	if s.focusedItem < 0 {
 		s.focusedItem = settingsItemClose

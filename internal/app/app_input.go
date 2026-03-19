@@ -173,6 +173,13 @@ func (a *App) update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, cmd)
 		}
 
+	case common.NotifyOnWaitingChanged:
+		a.config.UI.NotifyOnWaiting = msg.Enabled
+		if err := a.config.SaveUISettings(); err != nil {
+			logging.Warn("Failed to save notification setting: %v", err)
+			cmds = append(cmds, a.toast.ShowWarning("Failed to save notification setting"))
+		}
+
 	case common.SettingsResult:
 		if cmd := a.handleSettingsResult(msg); cmd != nil {
 			cmds = append(cmds, cmd)

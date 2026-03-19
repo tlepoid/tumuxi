@@ -53,6 +53,22 @@ func (s *SettingsDialog) renderLines() []string {
 	}
 	lines = append(lines, "")
 
+	lines = append(lines, label.Render("Notifications"))
+	{
+		style := muted
+		if s.focusedItem == settingsItemNotifyOnWaiting {
+			style = lipgloss.NewStyle().Foreground(ColorPrimary()).Bold(true)
+		}
+		toggle := "[ ]"
+		if s.notifyOnWaiting {
+			toggle = "[x]"
+		}
+		y := len(lines)
+		lines = append(lines, "  "+style.Render(toggle+" Notify when agent needs input"))
+		s.addHit(settingsItemNotifyOnWaiting, -1, y)
+	}
+	lines = append(lines, "")
+
 	lines = append(lines, label.Render("Version"))
 	if s.currentVersion == "" || s.currentVersion == "dev" {
 		lines = append(lines, muted.Render("  Development build"))

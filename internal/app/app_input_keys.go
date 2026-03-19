@@ -1,15 +1,21 @@
 package app
 
 import (
+	"fmt"
+
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 
 	"github.com/tlepoid/tumuxi/internal/logging"
 	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumuxi/internal/notify"
+	"github.com/tlepoid/tumuxi/internal/ui/common"
 )
 
 // syncActiveWorkspacesToDashboard syncs the active workspace state from center to dashboard.
 // This ensures the dashboard has current data for spinner state decisions.
+// It also detects Running→Waiting transitions and sends desktop notifications
+// when the notify_on_waiting setting is enabled.
 func (a *App) syncActiveWorkspacesToDashboard() {
 	if a.dashboard == nil {
 		return
@@ -24,8 +30,45 @@ func (a *App) syncActiveWorkspacesToDashboard() {
 	}
 	a.dashboard.SetActiveWorkspaces(activeWorkspaces)
 	if a.center != nil {
-		a.dashboard.SetWorkspaceStatuses(a.center.GetWorkspaceStatuses())
+		baseStatuses := a.center.GetWorkspaceStatuses()
+
+		// Resolve final statuses: upgrade Waiting→Running when tmux confirms activity.
+		resolved := make(map[string]common.AgentStatus, len(baseStatuses))
+		for wsID, s := range baseStatuses {
+			if s == common.AgentStatusWaiting && activeWorkspaces[wsID] {
+				s = common.AgentStatusRunning
+			}
+			resolved[wsID] = s
+		}
+
+		// Detect Running→Waiting transitions for notifications.
+		if a.config.UI.NotifyOnWaiting && a.prevWorkspaceStatuses != nil {
+			for wsID, cur := range resolved {
+				prev := a.prevWorkspaceStatuses[wsID]
+				if prev == common.AgentStatusRunning && cur == common.AgentStatusWaiting {
+					a.sendWaitingNotification(wsID)
+				}
+			}
+		}
+		a.prevWorkspaceStatuses = resolved
+
+		a.dashboard.SetWorkspaceStatuses(baseStatuses)
 	}
+}
+
+// sendWaitingNotification sends a desktop notification that an agent needs input.
+func (a *App) sendWaitingNotification(wsID string) {
+	name := wsID
+	// Try to find a human-readable workspace name.
+	for _, p := range a.projects {
+		for _, ws := range p.Workspaces {
+			if string(ws.ID()) == wsID {
+				name = fmt.Sprintf("%s/%s", p.Name, ws.Name)
+				break
+			}
+		}
+	}
+	notify.Send("Agent waiting", name+" needs your input")
 }
 
 // handleKeyPress handles keyboard input

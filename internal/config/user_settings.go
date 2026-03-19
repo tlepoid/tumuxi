@@ -13,6 +13,7 @@ type UISettings struct {
 	TmuxServer       string
 	TmuxConfigPath   string
 	TmuxSyncInterval string
+	NotifyOnWaiting  bool // Send desktop notification when an agent needs input
 }
 
 func defaultUISettings() UISettings {
@@ -39,6 +40,7 @@ func loadUISettings(path string) UISettings {
 			TmuxServer       *string `json:"tmux_server"`
 			TmuxConfigPath   *string `json:"tmux_config"`
 			TmuxSyncInterval *string `json:"tmux_sync_interval"`
+			NotifyOnWaiting  *bool   `json:"notify_on_waiting"`
 		} `json:"ui"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
@@ -58,6 +60,9 @@ func loadUISettings(path string) UISettings {
 	}
 	if raw.UI.TmuxSyncInterval != nil {
 		settings.TmuxSyncInterval = *raw.UI.TmuxSyncInterval
+	}
+	if raw.UI.NotifyOnWaiting != nil {
+		settings.NotifyOnWaiting = *raw.UI.NotifyOnWaiting
 	}
 	return settings
 }
@@ -81,6 +86,7 @@ func saveUISettings(path string, settings UISettings) error {
 	ui["tmux_server"] = settings.TmuxServer
 	ui["tmux_config"] = settings.TmuxConfigPath
 	ui["tmux_sync_interval"] = settings.TmuxSyncInterval
+	ui["notify_on_waiting"] = settings.NotifyOnWaiting
 	payload["ui"] = ui
 
 	data, err := json.MarshalIndent(payload, "", "  ")
