@@ -18,7 +18,7 @@ type UISettings struct {
 func defaultUISettings() UISettings {
 	return UISettings{
 		ShowKeymapHints:  false,
-		Theme:            "gruvbox",
+		Theme:            "system",
 		TmuxServer:       "",
 		TmuxConfigPath:   "",
 		TmuxSyncInterval: "",

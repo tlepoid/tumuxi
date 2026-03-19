@@ -8,6 +8,9 @@ import (
 type ThemeID string
 
 const (
+	// System theme (reads from omarchy)
+	ThemeSystem ThemeID = "system"
+
 	// Dark themes
 	ThemeTokyoNight ThemeID = "tokyo-night"
 	ThemeDracula    ThemeID = "dracula"
@@ -70,7 +73,9 @@ type Theme struct {
 
 // AvailableThemes returns all predefined themes, grouped by family.
 func AvailableThemes() []Theme {
-	return []Theme{
+	themes := []Theme{
+		// System theme (omarchy pass-through)
+		SystemTheme(),
 		// Gruvbox family (default)
 		GruvboxTheme(),
 		GruvboxLightTheme(),
@@ -100,6 +105,7 @@ func AvailableThemes() []Theme {
 		EverforestTheme(),
 		AyuDarkTheme(),
 	}
+	return themes
 }
 
 // GetTheme returns a theme by ID, defaulting to Gruvbox.
