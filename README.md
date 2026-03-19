@@ -38,3 +38,67 @@ go install github.com/tlepoid/tumuxi/cmd/tumuxi@latest
 - **Keyboard + mouse**: Can be operated with just the keyboard or with a mouse
 - **All-in-one tool**: Run agents, view diffs via lazygit, and access terminal
 - **Integrate with GitHub**: Syncs with github to autopopulate agents with context from issues
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph TUI["Bubble Tea TUI"]
+        direction TB
+        Input["Input Handler<br/>(keyboard + mouse)"]
+        App["App State Manager"]
+        Compositor["Compositor & Chrome Cache"]
+
+        subgraph Layout["Three-Pane Layout"]
+            Dashboard["Dashboard<br/>(projects & workspaces)"]
+            Center["Center Pane<br/>(agent tabs)"]
+            Sidebar["Sidebar<br/>(git status & terminal)"]
+        end
+    end
+
+    subgraph Services["Background Services"]
+        Supervisor["Supervisor<br/>(worker pool)"]
+        FileWatcher["File Watcher<br/>(fsnotify)"]
+        StateWatcher["State Watcher"]
+        ActivityTracker["Activity Tracker"]
+        UpdateChecker["Update Checker"]
+    end
+
+    subgraph Core["Core Systems"]
+        Git["Git / Worktree Manager"]
+        Tmux["tmux Session Manager"]
+        PTY["PTY / Agent Manager"]
+        VTerm["Virtual Terminal<br/>(VT100 emulator)"]
+        Config["Config & Registry"]
+        Data["Data Layer<br/>(Project, Workspace, Tab)"]
+    end
+
+    subgraph External["External"]
+        GitRepo["Git Repository"]
+        TmuxServer["tmux Server"]
+        Agents["AI Agents<br/>(Claude, Codex, Gemini, ...)"]
+    end
+
+    Input --> App
+    App --> Layout
+    Layout --> Compositor
+    Compositor --> VTerm
+
+    App <--> Data
+    App <--> Config
+    App --> Supervisor
+
+    Supervisor --> FileWatcher
+    Supervisor --> StateWatcher
+    Supervisor --> ActivityTracker
+    Supervisor --> UpdateChecker
+
+    FileWatcher --> Git
+    PTY --> VTerm
+    Center --> PTY
+
+    Git --> GitRepo
+    Tmux --> TmuxServer
+    PTY --> Tmux
+    Tmux --> Agents
+```
