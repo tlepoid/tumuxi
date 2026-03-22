@@ -66,8 +66,18 @@ func (m *Model) rebuildRows() {
 		{Type: RowSpacer},
 	}
 
+	// Build project pointer list; optionally sort by agent status.
+	sortedProjects := make([]*data.Project, len(m.projects))
 	for i := range m.projects {
-		project := &m.projects[i]
+		sortedProjects[i] = &m.projects[i]
+	}
+	if m.sortByStatus {
+		sort.SliceStable(sortedProjects, func(i, j int) bool {
+			return m.bestProjectStatus(sortedProjects[i]) < m.bestProjectStatus(sortedProjects[j])
+		})
+	}
+
+	for _, project := range sortedProjects {
 		mainWS := m.getMainWorkspace(project)
 		mainWSID := ""
 		if mainWS != nil {
@@ -136,6 +146,41 @@ func (m *Model) clampScrollOffset() {
 	}
 }
 
+// statusSortPriority returns a sort rank for agent status.
+// Lower values sort first (more urgent statuses at the top).
+func statusSortPriority(s common.AgentStatus) int {
+	switch s {
+	case common.AgentStatusRunning:
+		return 0
+	case common.AgentStatusWaiting:
+		return 1
+	case common.AgentStatusError:
+		return 2
+	case common.AgentStatusIdle:
+		return 3
+	case common.AgentStatusComplete:
+		return 4
+	default:
+		return 5
+	}
+}
+
+// bestProjectStatus returns the highest-priority agent status across all
+// workspaces in a project.
+func (m *Model) bestProjectStatus(p *data.Project) int {
+	best := statusSortPriority(common.AgentStatusIdle) // default if no workspaces
+	for i := range p.Workspaces {
+		ws := &p.Workspaces[i]
+		wsID := string(ws.ID())
+		if s, ok := m.workspaceStatuses[wsID]; ok {
+			if pri := statusSortPriority(s); pri < best {
+				best = pri
+			}
+		}
+	}
+	return best
+}
+
 func (m *Model) sortedWorkspaces(project *data.Project) []*data.Workspace {
 	existingRoots := make(map[string]bool, len(project.Workspaces))
 	workspaces := make([]*data.Workspace, 0, len(project.Workspaces)+len(m.creatingWorkspaces))
@@ -157,6 +202,15 @@ func (m *Model) sortedWorkspaces(project *data.Project) []*data.Workspace {
 	}
 
 	sort.SliceStable(workspaces, func(i, j int) bool {
+		// When sort-by-status is enabled, primary sort by agent status
+		if m.sortByStatus {
+			si := statusSortPriority(m.workspaceStatuses[string(workspaces[i].ID())])
+			sj := statusSortPriority(m.workspaceStatuses[string(workspaces[j].ID())])
+			if si != sj {
+				return si < sj
+			}
+		}
+		// Fallback: creation date (newest first), then name, then root
 		if workspaces[i].Created.Equal(workspaces[j].Created) {
 			if workspaces[i].Name == workspaces[j].Name {
 				return workspaces[i].Root < workspaces[j].Root
@@ -211,4 +265,17 @@ func (m *Model) Projects() []data.Project {
 // ClearActiveRoot resets the active workspace selection to "Home".
 func (m *Model) ClearActiveRoot() {
 	m.activeRoot = ""
+}
+
+// IsSortByStatus returns whether status-based sorting is active.
+func (m *Model) IsSortByStatus() bool {
+	return m.sortByStatus
+}
+
+// ToggleSortByStatus toggles between sorting by status and sorting by date.
+// Returns the new state (true = sorting by status).
+func (m *Model) ToggleSortByStatus() bool {
+	m.sortByStatus = !m.sortByStatus
+	m.rebuildRows()
+	return m.sortByStatus
 }

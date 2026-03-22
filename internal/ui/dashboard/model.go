@@ -85,6 +85,9 @@ type Model struct {
 	activeWorkspaceIDs map[string]bool               // Workspace IDs with active agents (synced from center)
 	workspaceStatuses  map[string]common.AgentStatus // Per-workspace agent status (synced from center)
 
+	// Sort mode
+	sortByStatus bool // When true, sort projects and workspaces by agent status
+
 	// Styles
 	styles common.Styles
 }
