@@ -1,10 +1,10 @@
 #!/bin/sh
 set -e
 
-# tumuxi installer script
+# tumux installer script
 
-REPO="tlepoid/tumuxi"
-BINARY="tumuxi"
+REPO="tlepoid/tumux"
+BINARY="tumux"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
 # Detect OS

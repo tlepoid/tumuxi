@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 // RestartPolicy controls when a worker should be restarted.

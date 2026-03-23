@@ -124,7 +124,7 @@ formatters:
     gofumpt:
       extra-rules: true
     goimports:
-      local-prefixes: github.com/tlepoid/tumuxi
+      local-prefixes: github.com/tlepoid/tumux
 
 issues:
   max-issues-per-linter: 0

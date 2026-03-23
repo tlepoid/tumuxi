@@ -4,9 +4,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func testConfig() *config.Config {

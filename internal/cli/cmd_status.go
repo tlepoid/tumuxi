@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 type statusResult struct {
@@ -18,7 +18,7 @@ type statusResult struct {
 }
 
 func cmdStatus(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi status [--json]"
+	const usage = "Usage: tumux status [--json]"
 	if len(args) > 0 {
 		return returnUsageError(
 			w,
@@ -74,7 +74,7 @@ func cmdStatus(w, wErr io.Writer, gf GlobalFlags, args []string, version string)
 	}
 
 	PrintHuman(w, func(w io.Writer) {
-		_, _ = fmt.Fprintf(w, "tumuxi %s\n", result.Version)
+		_, _ = fmt.Fprintf(w, "tumux %s\n", result.Version)
 		_, _ = fmt.Fprintf(w, "  tmux:       %s\n", boolStatus(result.TmuxAvailable))
 		_, _ = fmt.Fprintf(w, "  home:       %s\n", boolStatus(result.HomeReadable))
 		_, _ = fmt.Fprintf(w, "  projects:   %d\n", result.ProjectCount)

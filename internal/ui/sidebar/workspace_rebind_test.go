@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func TestChangesSetWorkspaceSameIDPreservesState(t *testing.T) {

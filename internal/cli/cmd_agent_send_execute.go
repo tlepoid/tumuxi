@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func resolveSendJobForExecution(

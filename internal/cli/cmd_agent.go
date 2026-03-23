@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 var (
@@ -34,7 +34,7 @@ type captureResult struct {
 }
 
 func cmdAgentList(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent list [--workspace <id>] [--json]"
+	const usage = "Usage: tumux agent list [--workspace <id>] [--json]"
 	fs := newFlagSet("agent list")
 	workspace := fs.String("workspace", "", "filter by workspace ID")
 	if err := fs.Parse(args); err != nil {
@@ -99,7 +99,7 @@ func cmdAgentList(w, wErr io.Writer, gf GlobalFlags, args []string, version stri
 }
 
 func cmdAgentCapture(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent capture <session_name> [--lines N] [--json]"
+	const usage = "Usage: tumux agent capture <session_name> [--lines N] [--json]"
 	fs := newFlagSet("agent capture")
 	lines := fs.Int("lines", 50, "number of lines to capture")
 	sessionName, err := parseSinglePositionalWithFlags(fs, args)

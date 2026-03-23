@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 // gcOrphanOps is a mock TmuxOps for GC safety tests.
@@ -60,8 +60,8 @@ func TestGcOrphanedTmuxSessions_SkipsAttachedOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "attached-orphan", Tags: map[string]string{
-					"@tumuxi_workspace":  "dead-ws",
-					"@tumuxi_created_at": strconv.FormatInt(staleTS, 10),
+					"@tumux_workspace":  "dead-ws",
+					"@tumux_created_at": strconv.FormatInt(staleTS, 10),
 				}},
 			}, nil
 		},
@@ -96,8 +96,8 @@ func TestGcOrphanedTmuxSessions_SkipsRecentOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "recent-orphan", Tags: map[string]string{
-					"@tumuxi_workspace":  "dead-ws",
-					"@tumuxi_created_at": strconv.FormatInt(recentTS, 10),
+					"@tumux_workspace":  "dead-ws",
+					"@tumux_created_at": strconv.FormatInt(recentTS, 10),
 				}},
 			}, nil
 		},
@@ -129,8 +129,8 @@ func TestGcOrphanedTmuxSessions_KillsStaleDetachedOrphans(t *testing.T) {
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "stale-orphan", Tags: map[string]string{
-					"@tumuxi_workspace":  "dead-ws",
-					"@tumuxi_created_at": strconv.FormatInt(staleTS, 10),
+					"@tumux_workspace":  "dead-ws",
+					"@tumux_created_at": strconv.FormatInt(staleTS, 10),
 				}},
 			}, nil
 		},
@@ -165,8 +165,8 @@ func TestGcOrphanedTmuxSessions_SkipsRecentOrphansUsingTmuxCreatedAtFallback(t *
 		sessionsWithTags: func(match map[string]string, keys []string, opts tmux.Options) ([]tmux.SessionTagValues, error) {
 			return []tmux.SessionTagValues{
 				{Name: "no-tag-orphan", Tags: map[string]string{
-					"@tumuxi_workspace": "dead-ws",
-					// no @tumuxi_created_at tag
+					"@tumux_workspace": "dead-ws",
+					// no @tumux_created_at tag
 				}},
 			}, nil
 		},
@@ -208,10 +208,10 @@ func TestGcOrphanedTmuxSessions_UsesInstanceScopedMatchWhenInstanceIDSet(t *test
 	if capturedMatch == nil {
 		t.Fatal("expected SessionsWithTags to be called")
 	}
-	if capturedMatch["@tumuxi"] != "1" {
-		t.Fatalf("expected @tumuxi=1, got %v", capturedMatch["@tumuxi"])
+	if capturedMatch["@tumux"] != "1" {
+		t.Fatalf("expected @tumux=1, got %v", capturedMatch["@tumux"])
 	}
-	if capturedMatch["@tumuxi_instance"] != "test-instance-123" {
-		t.Fatalf("expected @tumuxi_instance=test-instance-123, got %v", capturedMatch["@tumuxi_instance"])
+	if capturedMatch["@tumux_instance"] != "test-instance-123" {
+		t.Fatalf("expected @tumux_instance=test-instance-123, got %v", capturedMatch["@tumux_instance"])
 	}
 }

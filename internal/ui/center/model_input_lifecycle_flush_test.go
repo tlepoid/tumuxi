@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 func TestUpdatePTYFlush_UsesLargerChunkForActiveTab(t *testing.T) {

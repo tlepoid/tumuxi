@@ -1,8 +1,8 @@
 package messages
 
 import (
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
 )
 
 // PaneType identifies the focused pane
@@ -279,7 +279,7 @@ type CloseTab struct{}
 // ShowCleanupTmuxDialog requests confirmation before cleaning tmux sessions.
 type ShowCleanupTmuxDialog struct{}
 
-// CleanupTmuxSessions requests cleanup of tumuxi tmux sessions.
+// CleanupTmuxSessions requests cleanup of tumux tmux sessions.
 type CleanupTmuxSessions struct{}
 
 // WorkspaceCreatedWithWarning indicates workspace was created but setup had issues
@@ -311,7 +311,7 @@ type FileWatcherEvent struct {
 	Root string
 }
 
-// StateWatcherEvent is sent when tumuxi state files change on disk.
+// StateWatcherEvent is sent when tumux state files change on disk.
 type StateWatcherEvent struct {
 	Reason string
 	Paths  []string

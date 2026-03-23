@@ -7,11 +7,11 @@ import (
 
 // Paths holds all the file system paths used by the application
 type Paths struct {
-	Home           string // ~/.tumuxi
-	WorkspacesRoot string // ~/.tumuxi/workspaces
-	RegistryPath   string // ~/.tumuxi/projects.json
-	MetadataRoot   string // ~/.tumuxi/workspaces-metadata
-	ConfigPath     string // ~/.tumuxi/config.json
+	Home           string // ~/.tumux
+	WorkspacesRoot string // ~/.tumux/workspaces
+	RegistryPath   string // ~/.tumux/projects.json
+	MetadataRoot   string // ~/.tumux/workspaces-metadata
+	ConfigPath     string // ~/.tumux/config.json
 }
 
 // DefaultPaths returns the default paths configuration
@@ -21,14 +21,14 @@ func DefaultPaths() (*Paths, error) {
 		return nil, err
 	}
 
-	tumuxiHome := filepath.Join(home, ".tumuxi")
+	tumuxHome := filepath.Join(home, ".tumux")
 
 	return &Paths{
-		Home:           tumuxiHome,
-		WorkspacesRoot: filepath.Join(tumuxiHome, "workspaces"),
-		RegistryPath:   filepath.Join(tumuxiHome, "projects.json"),
-		MetadataRoot:   filepath.Join(tumuxiHome, "workspaces-metadata"),
-		ConfigPath:     filepath.Join(tumuxiHome, "config.json"),
+		Home:           tumuxHome,
+		WorkspacesRoot: filepath.Join(tumuxHome, "workspaces"),
+		RegistryPath:   filepath.Join(tumuxHome, "projects.json"),
+		MetadataRoot:   filepath.Join(tumuxHome, "workspaces-metadata"),
+		ConfigPath:     filepath.Join(tumuxHome, "config.json"),
 	}, nil
 }
 

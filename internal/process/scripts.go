@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/safego"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/safego"
 )
 
 // ScriptType identifies the type of script
@@ -105,7 +105,7 @@ func NewScriptRunner(portStart, portRange int) *ScriptRunner {
 
 // LoadConfig loads the workspace configuration from the repo
 func (r *ScriptRunner) LoadConfig(repoPath string) (*WorkspaceConfig, error) {
-	configPath := filepath.Join(repoPath, ".tumuxi", configFilename)
+	configPath := filepath.Join(repoPath, ".tumux", configFilename)
 
 	fileData, err := os.ReadFile(configPath)
 	if os.IsNotExist(err) {

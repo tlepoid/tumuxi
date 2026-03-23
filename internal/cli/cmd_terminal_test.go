@@ -6,17 +6,17 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestResolveTerminalSessionForWorkspacePrefersAttachedThenNewest(t *testing.T) {
 	queryFn := func(_ tmux.Options) ([]sessionRow, error) {
 		return []sessionRow{
-			{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: false, createdAt: 100},
-			{name: "tumuxi-ws-a-term-tab-2", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: false, createdAt: 200},
-			{name: "tumuxi-ws-a-term-tab-3", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "terminal"}, attached: true, createdAt: 50},
-			{name: "tumuxi-ws-b-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-b", "@tumuxi_type": "terminal"}, attached: true, createdAt: 999},
+			{name: "tumux-ws-a-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "terminal"}, attached: false, createdAt: 100},
+			{name: "tumux-ws-a-term-tab-2", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "terminal"}, attached: false, createdAt: 200},
+			{name: "tumux-ws-a-term-tab-3", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "terminal"}, attached: true, createdAt: 50},
+			{name: "tumux-ws-b-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-b", "@tumux_type": "terminal"}, attached: true, createdAt: 999},
 		}, nil
 	}
 
@@ -27,8 +27,8 @@ func TestResolveTerminalSessionForWorkspacePrefersAttachedThenNewest(t *testing.
 	if !ok {
 		t.Fatal("expected session to be found")
 	}
-	if got != "tumuxi-ws-a-term-tab-3" {
-		t.Fatalf("session = %q, want %q", got, "tumuxi-ws-a-term-tab-3")
+	if got != "tumux-ws-a-term-tab-3" {
+		t.Fatalf("session = %q, want %q", got, "tumux-ws-a-term-tab-3")
 	}
 }
 
@@ -129,8 +129,8 @@ func TestCmdTerminalRunPreservesWhitespaceInTextPayload(t *testing.T) {
 	if errOut.Len() != 0 {
 		t.Fatalf("expected no stderr output in JSON mode, got %q", errOut.String())
 	}
-	if gotSession != "tumuxi-test-term-tab-1" {
-		t.Fatalf("session = %q, want %q", gotSession, "tumuxi-test-term-tab-1")
+	if gotSession != "tumux-test-term-tab-1" {
+		t.Fatalf("session = %q, want %q", gotSession, "tumux-test-term-tab-1")
 	}
 	if gotText != raw {
 		t.Fatalf("text = %q, want %q", gotText, raw)

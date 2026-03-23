@@ -31,7 +31,7 @@ func clientCommand(sessionName, workDir, command string, opts Options, tags Sess
 	sessionTgt := shellQuote(sessionTarget(sessionName))
 	dir := shellQuote(workDir)
 	// Strip tmux-specific vars inside managed panes so `tmux` commands do not
-	// accidentally target the TUMUXI control server.
+	// accidentally target the TUMUX control server.
 	command = "unset TMUX TMUX_PANE; " + command
 	cmd := shellQuote(command)
 
@@ -74,24 +74,24 @@ func appendSessionTags(settings *strings.Builder, base, session string, tags Ses
 	if tags.WorkspaceID == "" && tags.TabID == "" && tags.Type == "" && tags.Assistant == "" && tags.CreatedAt == 0 && tags.InstanceID == "" && tags.SessionOwner == "" && tags.LeaseAtMS == 0 {
 		return
 	}
-	settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi 1 2>/dev/null; ", base, session))
+	settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux 1 2>/dev/null; ", base, session))
 	if tags.WorkspaceID != "" {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_workspace %s 2>/dev/null; ", base, session, shellQuote(tags.WorkspaceID)))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_workspace %s 2>/dev/null; ", base, session, shellQuote(tags.WorkspaceID)))
 	}
 	if tags.TabID != "" {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_tab %s 2>/dev/null; ", base, session, shellQuote(tags.TabID)))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_tab %s 2>/dev/null; ", base, session, shellQuote(tags.TabID)))
 	}
 	if tags.Type != "" {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_type %s 2>/dev/null; ", base, session, shellQuote(tags.Type)))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_type %s 2>/dev/null; ", base, session, shellQuote(tags.Type)))
 	}
 	if tags.Assistant != "" {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_assistant %s 2>/dev/null; ", base, session, shellQuote(tags.Assistant)))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_assistant %s 2>/dev/null; ", base, session, shellQuote(tags.Assistant)))
 	}
 	if tags.CreatedAt != 0 {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_created_at %s 2>/dev/null; ", base, session, shellQuote(strconv.FormatInt(tags.CreatedAt, 10))))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_created_at %s 2>/dev/null; ", base, session, shellQuote(strconv.FormatInt(tags.CreatedAt, 10))))
 	}
 	if tags.InstanceID != "" {
-		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumuxi_instance %s 2>/dev/null; ", base, session, shellQuote(tags.InstanceID)))
+		settings.WriteString(fmt.Sprintf("%s set-option -t %s @tumux_instance %s 2>/dev/null; ", base, session, shellQuote(tags.InstanceID)))
 	}
 	if tags.SessionOwner != "" {
 		settings.WriteString(fmt.Sprintf("%s set-option -t %s %s %s 2>/dev/null; ", base, session, TagSessionOwner, shellQuote(tags.SessionOwner)))

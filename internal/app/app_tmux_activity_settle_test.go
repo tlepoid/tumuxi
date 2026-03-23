@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/app/activity"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/app/activity"
+	"github.com/tlepoid/tumux/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
 )
 
 func dashboardActiveWorkspaceCount(m *dashboard.Model) int {

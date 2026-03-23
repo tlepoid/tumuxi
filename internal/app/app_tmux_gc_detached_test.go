@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 type detachedGCOps struct {
@@ -92,13 +92,13 @@ func TestGcStaleDetachedAgentSessions_RunsWhenFollower(t *testing.T) {
 	if result.Err != nil {
 		t.Fatalf("unexpected GC error: %v", result.Err)
 	}
-	if ops.lastMatch["@tumuxi"] != "1" {
-		t.Fatalf("expected @tumuxi match, got %v", ops.lastMatch)
+	if ops.lastMatch["@tumux"] != "1" {
+		t.Fatalf("expected @tumux match, got %v", ops.lastMatch)
 	}
-	if ops.lastMatch["@tumuxi_type"] != "agent" {
-		t.Fatalf("expected @tumuxi_type=agent, got %v", ops.lastMatch)
+	if ops.lastMatch["@tumux_type"] != "agent" {
+		t.Fatalf("expected @tumux_type=agent, got %v", ops.lastMatch)
 	}
-	if ops.lastMatch["@tumuxi_instance"] != "instance-a" {
+	if ops.lastMatch["@tumux_instance"] != "instance-a" {
 		t.Fatalf("expected instance-scoped match, got %v", ops.lastMatch)
 	}
 }
@@ -121,13 +121,13 @@ func TestGcStaleDetachedAgentSessions_FiltersByInstanceID(t *testing.T) {
 	if result.Err != nil {
 		t.Fatalf("unexpected GC error: %v", result.Err)
 	}
-	if ops.lastMatch["@tumuxi"] != "1" {
-		t.Fatalf("expected @tumuxi match, got %v", ops.lastMatch)
+	if ops.lastMatch["@tumux"] != "1" {
+		t.Fatalf("expected @tumux match, got %v", ops.lastMatch)
 	}
-	if ops.lastMatch["@tumuxi_type"] != "agent" {
-		t.Fatalf("expected @tumuxi_type=agent, got %v", ops.lastMatch)
+	if ops.lastMatch["@tumux_type"] != "agent" {
+		t.Fatalf("expected @tumux_type=agent, got %v", ops.lastMatch)
 	}
-	if ops.lastMatch["@tumuxi_instance"] != "instance-a" {
+	if ops.lastMatch["@tumux_instance"] != "instance-a" {
 		t.Fatalf("expected instance-scoped match, got %v", ops.lastMatch)
 	}
 }
@@ -398,7 +398,7 @@ func TestActivityTagTime_ParsesMixedUnits(t *testing.T) {
 func TestActivityTagTime_CreatedAtFallback(t *testing.T) {
 	created := time.Now().Add(-2 * time.Hour).Truncate(time.Second)
 	got := activityTagTime(map[string]string{
-		"@tumuxi_created_at": strconv.FormatInt(created.Unix(), 10),
+		"@tumux_created_at": strconv.FormatInt(created.Unix(), 10),
 	})
 	if got.IsZero() {
 		t.Fatal("expected created_at fallback time")

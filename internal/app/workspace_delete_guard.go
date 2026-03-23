@@ -1,6 +1,6 @@
 package app
 
-import "github.com/tlepoid/tumuxi/internal/data"
+import "github.com/tlepoid/tumux/internal/data"
 
 func (a *App) markWorkspaceDeleteInFlight(ws *data.Workspace, deleting bool) {
 	a.deletingWorkspaceMu.Lock()

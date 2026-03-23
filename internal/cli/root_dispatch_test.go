@@ -18,7 +18,7 @@ func TestRouteWorkspaceJSON(t *testing.T) {
 			name:     "empty args",
 			args:     nil,
 			wantCode: "usage_error",
-			wantMsg:  "Usage: tumuxi workspace",
+			wantMsg:  "Usage: tumux workspace",
 		},
 		{
 			name:     "unknown subcommand",
@@ -64,7 +64,7 @@ func TestRouteAgentJSON(t *testing.T) {
 			name:     "empty args",
 			args:     nil,
 			wantCode: "usage_error",
-			wantMsg:  "Usage: tumuxi agent",
+			wantMsg:  "Usage: tumux agent",
 		},
 		{
 			name:     "unknown subcommand",
@@ -76,7 +76,7 @@ func TestRouteAgentJSON(t *testing.T) {
 			name:     "agent job missing subcommand",
 			args:     []string{"job"},
 			wantCode: "usage_error",
-			wantMsg:  "Usage: tumuxi agent job",
+			wantMsg:  "Usage: tumux agent job",
 		},
 	}
 	for _, tt := range tests {
@@ -116,7 +116,7 @@ func TestRouteTerminalJSON(t *testing.T) {
 			name:     "empty args",
 			args:     nil,
 			wantCode: "usage_error",
-			wantMsg:  "Usage: tumuxi terminal",
+			wantMsg:  "Usage: tumux terminal",
 		},
 		{
 			name:     "unknown subcommand",

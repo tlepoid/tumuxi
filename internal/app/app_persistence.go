@@ -5,9 +5,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 // persistAllWorkspacesNow saves all workspace tab state synchronously.

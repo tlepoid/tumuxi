@@ -3,12 +3,12 @@ package app
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/ui/center"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
-	"github.com/tlepoid/tumuxi/internal/ui/layout"
-	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/ui/center"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/ui/layout"
+	"github.com/tlepoid/tumux/internal/ui/sidebar"
 )
 
 func TestHandleWorkspaceActivated_AutoFocusCenterQueuesSingleReattach(t *testing.T) {
@@ -22,7 +22,7 @@ func TestHandleWorkspaceActivated_AutoFocusCenterQueuesSingleReattach(t *testing
 		ID:          center.TabID("tab-1"),
 		Name:        "Claude",
 		Assistant:   "claude",
-		SessionName: "tumuxi-test-session",
+		SessionName: "tumux-test-session",
 		Workspace:   ws,
 		Detached:    true,
 	})

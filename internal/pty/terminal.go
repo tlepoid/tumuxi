@@ -10,8 +10,8 @@ import (
 
 	"github.com/creack/pty"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/process"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/process"
 )
 
 // terminalCloseTimeout is how long Close waits for cmd.Wait after SIGTERM/SIGKILL

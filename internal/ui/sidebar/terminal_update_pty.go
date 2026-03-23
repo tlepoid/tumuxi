@@ -5,10 +5,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/perf"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/perf"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 // handlePTYOutput buffers incoming PTY data and schedules a flush.

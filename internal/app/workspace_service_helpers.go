@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 func waitForGitPath(path string, timeout time.Duration) error {

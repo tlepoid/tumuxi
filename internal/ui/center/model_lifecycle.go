@@ -3,10 +3,10 @@ package center
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	appPty "github.com/tlepoid/tumuxi/internal/pty"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	appPty "github.com/tlepoid/tumux/internal/pty"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 // New creates a new center pane model.

@@ -3,8 +3,8 @@ package dashboard
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/messages"
 )
 
 // isSelectable returns whether a row type can be selected

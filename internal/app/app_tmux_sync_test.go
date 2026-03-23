@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 type blockingWorkspaceStore struct {

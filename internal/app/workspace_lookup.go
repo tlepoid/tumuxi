@@ -1,6 +1,6 @@
 package app
 
-import "github.com/tlepoid/tumuxi/internal/data"
+import "github.com/tlepoid/tumux/internal/data"
 
 func (a *App) findWorkspaceByID(id string) *data.Workspace {
 	if id == "" {

@@ -7,7 +7,7 @@ import (
 
 	uv "github.com/charmbracelet/ultraviolet"
 
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 // Benchmark helper to create a realistic VTerm with content

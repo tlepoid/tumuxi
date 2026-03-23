@@ -8,13 +8,13 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	appPty "github.com/tlepoid/tumuxi/internal/pty"
-	"github.com/tlepoid/tumuxi/internal/tmux"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/messages"
+	appPty "github.com/tlepoid/tumux/internal/pty"
+	"github.com/tlepoid/tumux/internal/tmux"
+	"github.com/tlepoid/tumux/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 func nextAssistantName(assistant string, tabs []*Tab) string {
@@ -102,7 +102,7 @@ func (m *Model) createAgentTabWithSession(assistant string, ws *data.Workspace, 
 	termHeight := tm.Height
 	tabID := generateTabID()
 	if sessionName == "" {
-		sessionName = tmux.SessionName("tumuxi", string(ws.ID()), string(tabID))
+		sessionName = tmux.SessionName("tumux", string(ws.ID()), string(tabID))
 	}
 
 	return func() tea.Msg {

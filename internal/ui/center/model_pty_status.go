@@ -6,10 +6,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/perf"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
-	"github.com/tlepoid/tumuxi/internal/ui/compositor"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/perf"
+	"github.com/tlepoid/tumux/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/compositor"
 )
 
 const (

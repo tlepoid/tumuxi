@@ -22,7 +22,7 @@ tumuxi requires [tmux](https://github.com/tmux/tmux) (minimum 3.2). Each agent r
 Via the install script:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tlepoid/tumuxi/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/tlepoid/tumux/main/install.sh | sh
 ```
 
 Or with Go:

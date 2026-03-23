@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 const workspaceAgentTimeout = 30 * time.Second
@@ -20,11 +20,11 @@ func TestWorkspaceCreateAgentTabStaysRunning(t *testing.T) {
 	writeRegistry(t, home, repo)
 	writeConfig(t, home, false)
 	binDir := writeStubAssistant(t, home, "claude")
-	server := fmt.Sprintf("tumuxi-e2e-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumux-e2e-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
 	env := sessionEnv(binDir, server)
-	env = append(env, "TUMUXI_TMUX_SYNC_INTERVAL=1s")
+	env = append(env, "TUMUX_TMUX_SYNC_INTERVAL=1s")
 	session, cleanup, err := StartPTYSession(PTYOptions{
 		Home: home,
 		Env:  env,

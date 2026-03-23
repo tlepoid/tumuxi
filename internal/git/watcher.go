@@ -13,8 +13,8 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/perf"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/perf"
 )
 
 // FileWatcher watches git directories for changes and triggers status refreshes

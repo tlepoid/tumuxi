@@ -1,8 +1,10 @@
-# Issue #17: Add the ability to sort the sessions by status
+# Issue #26: Rename from Tumuxi to tumux
 
-https://github.com/tlepoid/tumuxi/issues/17
+https://github.com/tlepoid/tumuxi/issues/26
 
 ---
 
-Currently, sessions are sorted by project. 
-This is nice to understand what sessions align with which project but with many projects it can take a bit of time to switch, maybe we can elevate the active sessions to the top
+Simplify the package name to Tumux instead of Tumuxi
+
+- Update the naming everywhere
+- Update the logo

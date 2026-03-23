@@ -107,18 +107,18 @@ func TestIsEnabledAndIntervalEnv(t *testing.T) {
 		"yes":   true,
 	}
 	for raw, expected := range cases {
-		t.Setenv("TUMUXI_PROFILE", raw)
+		t.Setenv("TUMUX_PROFILE", raw)
 		if got := isEnabled(); got != expected {
 			t.Fatalf("isEnabled(%q)=%v, want %v", raw, got, expected)
 		}
 	}
 
-	t.Setenv("TUMUXI_PROFILE_INTERVAL_MS", "")
+	t.Setenv("TUMUX_PROFILE_INTERVAL_MS", "")
 	if got := defaultLogInterval(); got != defaultIntervalMs*time.Millisecond {
 		t.Fatalf("expected default interval, got %s", got)
 	}
 
-	t.Setenv("TUMUXI_PROFILE_INTERVAL_MS", "250")
+	t.Setenv("TUMUX_PROFILE_INTERVAL_MS", "250")
 	if got := defaultLogInterval(); got != 250*time.Millisecond {
 		t.Fatalf("expected 250ms interval, got %s", got)
 	}

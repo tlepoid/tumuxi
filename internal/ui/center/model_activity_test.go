@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func newTestModel() *Model {

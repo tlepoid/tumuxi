@@ -8,8 +8,8 @@ import (
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 
-	"github.com/tlepoid/tumuxi/internal/perf"
-	"github.com/tlepoid/tumuxi/internal/ui/compositor"
+	"github.com/tlepoid/tumux/internal/perf"
+	"github.com/tlepoid/tumux/internal/ui/compositor"
 )
 
 // composeOverlays adds overlay layers (dialogs, toasts, help, etc.) to the canvas.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func validateAgentSendSession(

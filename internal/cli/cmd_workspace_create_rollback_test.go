@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	gitpkg "github.com/tlepoid/tumuxi/internal/git"
+	gitpkg "github.com/tlepoid/tumux/internal/git"
 )
 
 func TestRollbackWorkspaceCreatePreservesExistingBranch(t *testing.T) {
@@ -21,7 +21,7 @@ func TestRollbackWorkspaceCreatePreservesExistingBranch(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
+	runGit(t, repoRoot, "config", "user.name", "tumux-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
@@ -56,7 +56,7 @@ func TestRollbackWorkspaceCreateDeletesNewBranch(t *testing.T) {
 	}
 	runGit(t, repoRoot, "init")
 	runGit(t, repoRoot, "config", "user.email", "test@example.com")
-	runGit(t, repoRoot, "config", "user.name", "tumuxi-test")
+	runGit(t, repoRoot, "config", "user.name", "tumux-test")
 	if err := os.WriteFile(filepath.Join(repoRoot, "README.md"), []byte("hello\n"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}

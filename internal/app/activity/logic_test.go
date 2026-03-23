@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestHysteresisWorkspaceExtraction(t *testing.T) {
@@ -30,7 +30,7 @@ func TestHysteresisWorkspaceExtraction(t *testing.T) {
 		// Source 2: workspace ID falls back to tab info
 		{Name: "sess-info-fallback", WorkspaceID: "", Type: "agent"},
 		// Source 3: workspace ID falls back to session name
-		{Name: "tumuxi-ws99-tab-1", WorkspaceID: "", Type: "agent"},
+		{Name: "tumux-ws99-tab-1", WorkspaceID: "", Type: "agent"},
 		// Source 4: known-session metadata wins over stale/mismatched tmux tag
 		{Name: "sess-mismatch", WorkspaceID: "ws-stale-tag", Type: "agent"},
 		// Excluded: non-chat session (type="" and IsChat=false)
@@ -41,7 +41,7 @@ func TestHysteresisWorkspaceExtraction(t *testing.T) {
 	states := map[string]*SessionState{
 		"sess-direct":        warmState(),
 		"sess-info-fallback": warmState(),
-		"tumuxi-ws99-tab-1":  warmState(),
+		"tumux-ws99-tab-1":  warmState(),
 		"sess-mismatch":      warmState(),
 		"sess-viewer":        warmState(),
 		"sess-cold":          {Score: 0, Initialized: true},
@@ -80,7 +80,7 @@ func TestHysteresisWorkspaceExtraction(t *testing.T) {
 		t.Error("session below threshold should not be active")
 	}
 	// Updated states returned for all processed sessions
-	for _, name := range []string{"sess-direct", "sess-info-fallback", "tumuxi-ws99-tab-1", "sess-mismatch", "sess-cold"} {
+	for _, name := range []string{"sess-direct", "sess-info-fallback", "tumux-ws99-tab-1", "sess-mismatch", "sess-cold"} {
 		if _, ok := updated[name]; !ok {
 			t.Errorf("expected updated state for %s", name)
 		}
@@ -92,10 +92,10 @@ func TestHysteresisNewSessionImmediatelyActive(t *testing.T) {
 	// immediately active (score starts at threshold) without needing
 	// multiple scan cycles.
 	infoBySession := map[string]SessionInfo{
-		"tumuxi-abc-tab-1": {WorkspaceID: "ws-abc", IsChat: true},
+		"tumux-abc-tab-1": {WorkspaceID: "ws-abc", IsChat: true},
 	}
 	sessions := []tmux.SessionActivity{
-		{Name: "tumuxi-abc-tab-1", WorkspaceID: "ws-abc", Type: "agent"},
+		{Name: "tumux-abc-tab-1", WorkspaceID: "ws-abc", Type: "agent"},
 	}
 	// Empty states map -- session has never been seen before
 	states := map[string]*SessionState{}
@@ -108,7 +108,7 @@ func TestHysteresisNewSessionImmediatelyActive(t *testing.T) {
 	if !active["ws-abc"] {
 		t.Fatal("newly discovered session with successful capture should be immediately active")
 	}
-	st := updated["tumuxi-abc-tab-1"]
+	st := updated["tumux-abc-tab-1"]
 	if st == nil {
 		t.Fatal("expected updated state for session")
 	}

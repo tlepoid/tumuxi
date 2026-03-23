@@ -7,9 +7,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 // Services is a lightweight service container for CLI commands.
@@ -35,8 +35,8 @@ func NewServices(version string) (*Services, error) {
 	// CLI commands execute in their own process, so these env assignments are
 	// intentionally process-scoped defaults for tmux integration.
 	// They do not leak across independent CLI invocations.
-	setEnvIfNonEmpty("TUMUXI_TMUX_SERVER", cfg.UI.TmuxServer)
-	setEnvIfNonEmpty("TUMUXI_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
+	setEnvIfNonEmpty("TUMUX_TMUX_SERVER", cfg.UI.TmuxServer)
+	setEnvIfNonEmpty("TUMUX_TMUX_CONFIG", cfg.UI.TmuxConfigPath)
 
 	registry := data.NewRegistry(cfg.Paths.RegistryPath)
 	store := data.NewWorkspaceStore(cfg.Paths.MetadataRoot)

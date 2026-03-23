@@ -3,7 +3,7 @@ package sidebar
 import (
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/pty"
+	"github.com/tlepoid/tumux/internal/pty"
 )
 
 const (

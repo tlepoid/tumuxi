@@ -13,7 +13,7 @@ func TestOpenClawTurnScript_CompletesAfterFollowupStep(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	fakeStepDir := t.TempDir()
 	fakeStepPath := filepath.Join(fakeStepDir, "fake-step.sh")
 	counterPath := filepath.Join(fakeStepDir, "counter.txt")
@@ -35,7 +35,7 @@ esac
 		t.Fatalf("write fake step script: %v", err)
 	}
 
-	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Timed out waiting for first visible output; agent may still be starting.","agent_id":"agent-1","workspace_id":"ws-1","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Run one focused follow-up step.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-1 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Timed out waiting for first visible output; agent may still be starting.","agent_id":"agent-1","workspace_id":"ws-1","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Run one focused follow-up step.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-1 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
 	step2 := `{"ok":true,"mode":"send","status":"idle","summary":"Refactor applied and tests passed.","agent_id":"agent-1","workspace_id":"ws-1","assistant":"codex","response":{"substantive_output":true,"needs_input":false},"next_action":"Review uncommitted changes.","suggested_command":""}`
 
 	cmd := exec.Command(
@@ -176,7 +176,7 @@ func TestOpenClawTurnScript_CoalescesDuplicateMilestonesAndStopsOnTimeoutStreak(
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	fakeStepDir := t.TempDir()
 	fakeStepPath := filepath.Join(fakeStepDir, "fake-step.sh")
 	counterPath := filepath.Join(fakeStepDir, "counter.txt")
@@ -199,8 +199,8 @@ fi
 		t.Fatalf("write fake step script: %v", err)
 	}
 
-	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Agent warming up.","agent_id":"agent-2","workspace_id":"ws-2","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Retry with a short follow-up.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-2 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
-	step2 := `{"ok":true,"mode":"send","status":"timed_out","summary":"Agent warming up.","agent_id":"agent-2","workspace_id":"ws-2","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Retry with a short follow-up.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-2 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Agent warming up.","agent_id":"agent-2","workspace_id":"ws-2","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Retry with a short follow-up.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-2 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step2 := `{"ok":true,"mode":"send","status":"timed_out","summary":"Agent warming up.","agent_id":"agent-2","workspace_id":"ws-2","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Retry with a short follow-up.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-2 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
 
 	cmd := exec.Command(
 		scriptPath,
@@ -272,7 +272,7 @@ func TestOpenClawTurnScript_QuietVerbositySuppressesExtraSections(t *testing.T) 
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	fakeStepDir := t.TempDir()
 	fakeStepPath := filepath.Join(fakeStepDir, "fake-step.sh")
 	counterPath := filepath.Join(fakeStepDir, "counter.txt")
@@ -291,7 +291,7 @@ printf '%s' "${FAKE_STEP_1_JSON:?missing FAKE_STEP_1_JSON}"
 		t.Fatalf("write fake step script: %v", err)
 	}
 
-	step1 := `{"ok":true,"mode":"run","status":"needs_input","summary":"Need approval to continue.","agent_id":"agent-q","workspace_id":"ws-q","assistant":"codex","response":{"substantive_output":true,"needs_input":true},"next_action":"Choose A or B.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-q --text \"A\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step1 := `{"ok":true,"mode":"run","status":"needs_input","summary":"Need approval to continue.","agent_id":"agent-q","workspace_id":"ws-q","assistant":"codex","response":{"substantive_output":true,"needs_input":true},"next_action":"Choose A or B.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-q --text \"A\" --enter --wait-timeout 60s --idle-threshold 10s"}`
 
 	cmd := exec.Command(
 		scriptPath,
@@ -337,7 +337,7 @@ func TestOpenClawTurnScript_DisablesInlineButtonsWhenScopeOff(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	fakeStepDir := t.TempDir()
 	fakeStepPath := filepath.Join(fakeStepDir, "fake-step.sh")
 	counterPath := filepath.Join(fakeStepDir, "counter.txt")
@@ -356,7 +356,7 @@ printf '%s' "${FAKE_STEP_1_JSON:?missing FAKE_STEP_1_JSON}"
 		t.Fatalf("write fake step script: %v", err)
 	}
 
-	step1 := `{"ok":true,"mode":"run","status":"needs_input","summary":"Need approval to continue.","agent_id":"agent-inline-off","workspace_id":"ws-inline-off","assistant":"codex","response":{"substantive_output":true,"needs_input":true},"next_action":"Choose A or B.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-inline-off --text \"A\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step1 := `{"ok":true,"mode":"run","status":"needs_input","summary":"Need approval to continue.","agent_id":"agent-inline-off","workspace_id":"ws-inline-off","assistant":"codex","response":{"substantive_output":true,"needs_input":true},"next_action":"Choose A or B.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-inline-off --text \"A\" --enter --wait-timeout 60s --idle-threshold 10s"}`
 
 	cmd := exec.Command(
 		scriptPath,

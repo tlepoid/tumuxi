@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func TestRebindWorkspaceIDMigratesTabState(t *testing.T) {

@@ -66,7 +66,7 @@ const (
 
 	// defaultMaxAttachedAgentTabs limits concurrently attached chat PTYs to keep
 	// UI responsiveness predictable under heavy multi-agent workloads.
-	// TUMUXI_MAX_ATTACHED_AGENT_TABS=0 disables the limit.
+	// TUMUX_MAX_ATTACHED_AGENT_TABS=0 disables the limit.
 	defaultMaxAttachedAgentTabs = 6
 
 	// orphanGCInterval controls how often the periodic tmux orphan GC runs.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestCmdAgentStopMissingSessionReturnsNotFound(t *testing.T) {

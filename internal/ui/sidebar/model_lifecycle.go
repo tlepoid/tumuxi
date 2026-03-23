@@ -3,9 +3,9 @@ package sidebar
 import (
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 // SetShowKeymapHints controls whether helper text is rendered.

@@ -12,16 +12,16 @@ func TestOpenClawDXAssistants_ReportsMissingFromConfig(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	readyBotPath := filepath.Join(fakeBinDir, "readybot")
 	homeDir := t.TempDir()
-	tumuxiHome := filepath.Join(homeDir, ".tumuxi")
-	if err := os.MkdirAll(tumuxiHome, 0o755); err != nil {
-		t.Fatalf("mkdir tumuxi home: %v", err)
+	tumuxHome := filepath.Join(homeDir, ".tumux")
+	if err := os.MkdirAll(tumuxHome, 0o755); err != nil {
+		t.Fatalf("mkdir tumux home: %v", err)
 	}
-	configPath := filepath.Join(tumuxiHome, "config.json")
+	configPath := filepath.Join(tumuxHome, "config.json")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -99,18 +99,18 @@ func TestOpenClawDXAssistants_ProbeAggregatesReadiness(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	passBotPath := filepath.Join(fakeBinDir, "aa-pass-bot")
 	needsBotPath := filepath.Join(fakeBinDir, "ab-needs-bot")
 	homeDir := t.TempDir()
-	tumuxiHome := filepath.Join(homeDir, ".tumuxi")
-	if err := os.MkdirAll(tumuxiHome, 0o755); err != nil {
-		t.Fatalf("mkdir tumuxi home: %v", err)
+	tumuxHome := filepath.Join(homeDir, ".tumux")
+	if err := os.MkdirAll(tumuxHome, 0o755); err != nil {
+		t.Fatalf("mkdir tumux home: %v", err)
 	}
-	configPath := filepath.Join(tumuxiHome, "config.json")
+	configPath := filepath.Join(tumuxHome, "config.json")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -221,9 +221,9 @@ func TestOpenClawDXGitShip_CommitsWorkspaceChanges(t *testing.T) {
 	requireBinary(t, "bash")
 	requireBinary(t, "git")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 
 	repoDir := t.TempDir()
 	if out, err := exec.Command("git", "-C", repoDir, "init", "-b", "main").CombinedOutput(); err != nil {
@@ -306,9 +306,9 @@ func TestOpenClawDXGitShip_NoChangesButAheadSuggestsPush(t *testing.T) {
 	requireBinary(t, "bash")
 	requireBinary(t, "git")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 
 	repoDir := t.TempDir()
 	if out, err := exec.Command("git", "-C", repoDir, "init", "-b", "main").CombinedOutput(); err != nil {

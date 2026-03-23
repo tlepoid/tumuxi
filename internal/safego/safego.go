@@ -4,7 +4,7 @@ import (
 	"runtime/debug"
 	"sync"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 // PanicHandler receives panic details from recovered goroutines.

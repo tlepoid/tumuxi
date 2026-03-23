@@ -1,8 +1,8 @@
 package compositor
 
 import (
-	"github.com/tlepoid/tumuxi/internal/perf"
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/perf"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 type VTermSnapshot struct {

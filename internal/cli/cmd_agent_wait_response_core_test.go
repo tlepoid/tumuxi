@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestWaitForAgentResponse_ContentChangesAndStabilizes(t *testing.T) {

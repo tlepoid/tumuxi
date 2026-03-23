@@ -11,9 +11,9 @@ func TestOpenClawDXWorkflowKickoff_RegistersProjectCreatesWorkspaceAndStartsTurn
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -39,7 +39,7 @@ esac
 
 	writeExecutable(t, fakeTurnPath, `#!/usr/bin/env bash
 set -euo pipefail
-printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented first debt fix.","agent_id":"agent-1","workspace_id":"ws-mobile","assistant":"codex","next_action":"Run review.","suggested_command":"skills/tumuxi/scripts/openclaw-dx.sh review --workspace ws-mobile --assistant codex","quick_actions":[{"id":"continue","label":"Continue","command":"skills/tumuxi/scripts/openclaw-dx.sh continue --workspace ws-mobile --text \"Continue\" --enter","style":"primary","prompt":"Continue current work"}],"channel":{"message":"done","chunks":["done"],"chunks_meta":[{"index":1,"total":1,"text":"done"}],"inline_buttons":[]}}'
+printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented first debt fix.","agent_id":"agent-1","workspace_id":"ws-mobile","assistant":"codex","next_action":"Run review.","suggested_command":"skills/tumux/scripts/openclaw-dx.sh review --workspace ws-mobile --assistant codex","quick_actions":[{"id":"continue","label":"Continue","command":"skills/tumux/scripts/openclaw-dx.sh continue --workspace ws-mobile --text \"Continue\" --enter","style":"primary","prompt":"Continue current work"}],"channel":{"message":"done","chunks":["done"],"chunks_meta":[{"index":1,"total":1,"text":"done"}],"inline_buttons":[]}}'
 `)
 
 	env := os.Environ()
@@ -98,9 +98,9 @@ func TestOpenClawDXWorkflowKickoff_IgnoresPresentScriptAndPrintsJSON(t *testing.
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	fakePresentPath := filepath.Join(fakeBinDir, "present.sh")
 
@@ -127,7 +127,7 @@ esac
 
 	writeExecutable(t, fakeTurnPath, `#!/usr/bin/env bash
 set -euo pipefail
-printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented first debt fix.","agent_id":"agent-1","workspace_id":"ws-mobile","assistant":"codex","next_action":"Run review.","suggested_command":"skills/tumuxi/scripts/openclaw-dx.sh review --workspace ws-mobile --assistant codex","quick_actions":[],"channel":{"message":"done","chunks":["done"],"chunks_meta":[{"index":1,"total":1,"text":"done"}],"inline_buttons":[]}}'
+printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented first debt fix.","agent_id":"agent-1","workspace_id":"ws-mobile","assistant":"codex","next_action":"Run review.","suggested_command":"skills/tumux/scripts/openclaw-dx.sh review --workspace ws-mobile --assistant codex","quick_actions":[],"channel":{"message":"done","chunks":["done"],"chunks_meta":[{"index":1,"total":1,"text":"done"}],"inline_buttons":[]}}'
 `)
 
 	writeExecutable(t, fakePresentPath, `#!/usr/bin/env bash
@@ -158,9 +158,9 @@ func TestOpenClawDXWorkflowDual_RunsImplementationThenReview(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -188,10 +188,10 @@ for ((i=1; i<=$#; i++)); do
   fi
 done
 if [[ "$assistant" == "claude" ]]; then
-  printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented refactor and tests.","agent_id":"agent-impl","workspace_id":"ws-1","assistant":"claude","next_action":"Run review.","suggested_command":"skills/tumuxi/scripts/openclaw-dx.sh review --workspace ws-1 --assistant codex","quick_actions":[],"channel":{"message":"impl done","chunks":["impl done"],"chunks_meta":[{"index":1,"total":1,"text":"impl done"}],"inline_buttons":[]}}'
+  printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Implemented refactor and tests.","agent_id":"agent-impl","workspace_id":"ws-1","assistant":"claude","next_action":"Run review.","suggested_command":"skills/tumux/scripts/openclaw-dx.sh review --workspace ws-1 --assistant codex","quick_actions":[],"channel":{"message":"impl done","chunks":["impl done"],"chunks_meta":[{"index":1,"total":1,"text":"impl done"}],"inline_buttons":[]}}'
   exit 0
 fi
-printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Review complete with no blockers.","agent_id":"agent-review","workspace_id":"ws-1","assistant":"codex","next_action":"Ship changes.","suggested_command":"skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace ws-1","quick_actions":[],"channel":{"message":"review done","chunks":["review done"],"chunks_meta":[{"index":1,"total":1,"text":"review done"}],"inline_buttons":[]}}'
+printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"Review complete with no blockers.","agent_id":"agent-review","workspace_id":"ws-1","assistant":"codex","next_action":"Ship changes.","suggested_command":"skills/tumux/scripts/openclaw-dx.sh git ship --workspace ws-1","quick_actions":[],"channel":{"message":"review done","chunks":["review done"],"chunks_meta":[{"index":1,"total":1,"text":"review done"}],"inline_buttons":[]}}'
 `)
 
 	env := os.Environ()
@@ -260,9 +260,9 @@ func TestOpenClawDXWorkflowDual_NeedsInputAutoFallbackRunsReview(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -293,7 +293,7 @@ if [[ "$assistant" == "claude" ]]; then
   printf '%s' '{"ok":true,"mode":"run","status":"needs_input","overall_status":"needs_input","summary":"Needs local permission selection.","agent_id":"agent-impl","workspace_id":"ws-1","assistant":"claude","next_action":"Switch to a non-interactive assistant (e.g. codex) for this step.","suggested_command":"","quick_actions":[],"channel":{"message":"needs input","chunks":["needs input"],"chunks_meta":[{"index":1,"total":1,"text":"needs input"}],"inline_buttons":[]}}'
   exit 0
 fi
-printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"review should not run","agent_id":"agent-review","workspace_id":"ws-1","assistant":"codex","next_action":"Ship.","suggested_command":"skills/tumuxi/scripts/openclaw-dx.sh git ship --workspace ws-1","quick_actions":[],"channel":{"message":"review","chunks":["review"],"chunks_meta":[{"index":1,"total":1,"text":"review"}],"inline_buttons":[]}}'
+printf '%s' '{"ok":true,"mode":"run","status":"idle","overall_status":"completed","summary":"review should not run","agent_id":"agent-review","workspace_id":"ws-1","assistant":"codex","next_action":"Ship.","suggested_command":"skills/tumux/scripts/openclaw-dx.sh git ship --workspace ws-1","quick_actions":[],"channel":{"message":"review","chunks":["review"],"chunks_meta":[{"index":1,"total":1,"text":"review"}],"inline_buttons":[]}}'
 `)
 
 	env := os.Environ()

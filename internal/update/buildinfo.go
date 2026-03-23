@@ -3,7 +3,7 @@ package update
 import "strings"
 
 // homebrewBuild is set via ldflags in the Homebrew formula.
-// Example: -X github.com/tlepoid/tumuxi/internal/update.homebrewBuild=true
+// Example: -X github.com/tlepoid/tumux/internal/update.homebrewBuild=true
 var homebrewBuild = "false"
 
 // IsHomebrewBuild returns true when the binary was built for Homebrew.

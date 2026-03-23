@@ -7,28 +7,28 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
-// maxAttachedAgentTabsFromEnv parses TUMUXI_MAX_ATTACHED_AGENT_TABS.
+// maxAttachedAgentTabsFromEnv parses TUMUX_MAX_ATTACHED_AGENT_TABS.
 // Empty or invalid values fall back to defaultMaxAttachedAgentTabs.
 // A value of 0 explicitly disables auto-detach enforcement.
 func maxAttachedAgentTabsFromEnv() int {
-	raw := strings.TrimSpace(os.Getenv("TUMUXI_MAX_ATTACHED_AGENT_TABS"))
+	raw := strings.TrimSpace(os.Getenv("TUMUX_MAX_ATTACHED_AGENT_TABS"))
 	if raw == "" {
 		return defaultMaxAttachedAgentTabs
 	}
 	value, err := strconv.Atoi(raw)
 	if err != nil {
-		logging.Warn("Invalid TUMUXI_MAX_ATTACHED_AGENT_TABS=%q; using default %d", raw, defaultMaxAttachedAgentTabs)
+		logging.Warn("Invalid TUMUX_MAX_ATTACHED_AGENT_TABS=%q; using default %d", raw, defaultMaxAttachedAgentTabs)
 		return defaultMaxAttachedAgentTabs
 	}
 	if value < 0 {
-		logging.Warn("Invalid TUMUXI_MAX_ATTACHED_AGENT_TABS=%q; must be >= 0; using default %d", raw, defaultMaxAttachedAgentTabs)
+		logging.Warn("Invalid TUMUX_MAX_ATTACHED_AGENT_TABS=%q; must be >= 0; using default %d", raw, defaultMaxAttachedAgentTabs)
 		return defaultMaxAttachedAgentTabs
 	}
 	if value == 0 {
-		logging.Info("TUMUXI_MAX_ATTACHED_AGENT_TABS=0; auto-detach limit disabled")
+		logging.Info("TUMUX_MAX_ATTACHED_AGENT_TABS=0; auto-detach limit disabled")
 	}
 	return value
 }

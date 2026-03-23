@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -n "${TUMUXI_SKIP_HARNESS:-}" ]]; then
-  echo "tumuxi pre-push: skipping harness (TUMUXI_SKIP_HARNESS set)"
+if [[ -n "${TUMUX_SKIP_HARNESS:-}" ]]; then
+  echo "tumux pre-push: skipping harness (TUMUX_SKIP_HARNESS set)"
   exit 0
 fi
 
 root="$(git rev-parse --show-toplevel)"
 cd "$root"
 
-if [[ -n "${TUMUXI_SKIP_LINT:-}" ]]; then
-  echo "tumuxi pre-push: skipping strict lint (TUMUXI_SKIP_LINT set)"
+if [[ -n "${TUMUX_SKIP_LINT:-}" ]]; then
+  echo "tumux pre-push: skipping strict lint (TUMUX_SKIP_LINT set)"
 else
-  base_ref="${TUMUXI_LINT_BASE_REF:-origin/main}"
-  echo "tumuxi pre-push: running CI-parity strict lint (base_ref=${base_ref})..."
+  base_ref="${TUMUX_LINT_BASE_REF:-origin/main}"
+  echo "tumux pre-push: running CI-parity strict lint (base_ref=${base_ref})..."
   BASE_REF="$base_ref" make lint-ci-parity
 fi
 
-center_args=(${TUMUXI_HARNESS_CENTER_ARGS:---mode=center --tabs=8 --frames=200 --warmup=20 --hot-tabs=1 --payload-bytes=128})
+center_args=(${TUMUX_HARNESS_CENTER_ARGS:---mode=center --tabs=8 --frames=200 --warmup=20 --hot-tabs=1 --payload-bytes=128})
 
-echo "tumuxi pre-push: running headless UI harness (center)..."
-go run ./cmd/tumuxi-harness "${center_args[@]}"
+echo "tumux pre-push: running headless UI harness (center)..."
+go run ./cmd/tumux-harness "${center_args[@]}"
 
-echo "tumuxi pre-push: running tests..."
+echo "tumux pre-push: running tests..."
 go test ./internal/e2e

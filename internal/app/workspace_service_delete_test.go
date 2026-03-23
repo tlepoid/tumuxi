@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/messages"
 )
 
 // mockGitOps implements GitOperations for tests.

@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/messages"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/messages"
 )
 
 func TestHandleStateWatcherEvent_SuppressesSelfOriginatedWorkspaceReload(t *testing.T) {

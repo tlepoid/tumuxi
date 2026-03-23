@@ -15,7 +15,7 @@ func TestIsNoServerError(t *testing.T) {
 		},
 		{
 			name: "macos error connecting",
-			err:  wrappedErr("display-message -p: error connecting to /private/tmp/tmux-501/tumuxi (No such file or directory)"),
+			err:  wrappedErr("display-message -p: error connecting to /private/tmp/tmux-501/tumux (No such file or directory)"),
 			want: true,
 		},
 		{
@@ -25,7 +25,7 @@ func TestIsNoServerError(t *testing.T) {
 		},
 		{
 			name: "other error",
-			err:  wrappedErr("set-option -g @tumuxi_activity_owner: invalid option"),
+			err:  wrappedErr("set-option -g @tumux_activity_owner: invalid option"),
 			want: false,
 		},
 		{

@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/app/activity"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/app/activity"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 type sessionsWithTagsStubTmuxOps struct {
@@ -214,7 +214,7 @@ func TestRunTmuxActivityScan_LeaseRevalidationErrorBeforePublishSkipsApply(t *te
 func TestRunTmuxActivityScan_OwnerResolutionErrorLeavesRoleUnknown(t *testing.T) {
 	skipIfNoTmux(t)
 	opts := tmux.Options{
-		ServerName:     fmt.Sprintf("tumuxi-noserver-%d", time.Now().UnixNano()),
+		ServerName:     fmt.Sprintf("tumux-noserver-%d", time.Now().UnixNano()),
 		ConfigPath:     "/dev/null",
 		CommandTimeout: 5 * time.Second,
 	}

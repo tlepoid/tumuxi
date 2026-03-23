@@ -1,6 +1,6 @@
 package app
 
-import "github.com/tlepoid/tumuxi/internal/update"
+import "github.com/tlepoid/tumux/internal/update"
 
 type updateService struct {
 	version   string

@@ -5,9 +5,9 @@ before:
     - go mod tidy
 
 builds:
-  - id: tumuxi
-    main: ./cmd/tumuxi
-    binary: tumuxi
+  - id: tumux
+    main: ./cmd/tumux
+    binary: tumux
     env:
       - CGO_ENABLED=0
     goos:
@@ -45,7 +45,7 @@ changelog:
 release:
   github:
     owner: tlepoid
-    name: tumuxi
+    name: tumux
   draft: false
   prerelease: auto
   name_template: "v{{.Version}}"

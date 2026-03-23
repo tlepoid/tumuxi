@@ -14,37 +14,37 @@ func TestSessionName(t *testing.T) {
 		{
 			name:     "empty parts",
 			parts:    []string{},
-			expected: "tumuxi",
+			expected: "tumux",
 		},
 		{
 			name:     "single part",
-			parts:    []string{"tumuxi"},
-			expected: "tumuxi",
+			parts:    []string{"tumux"},
+			expected: "tumux",
 		},
 		{
 			name:     "multiple parts",
-			parts:    []string{"tumuxi", "ws-123", "tab-456"},
-			expected: "tumuxi-ws-123-tab-456",
+			parts:    []string{"tumux", "ws-123", "tab-456"},
+			expected: "tumux-ws-123-tab-456",
 		},
 		{
 			name:     "parts with spaces are trimmed",
-			parts:    []string{"  tumuxi  ", "  ws  "},
-			expected: "tumuxi-ws",
+			parts:    []string{"  tumux  ", "  ws  "},
+			expected: "tumux-ws",
 		},
 		{
 			name:     "empty parts are skipped",
-			parts:    []string{"tumuxi", "", "ws"},
-			expected: "tumuxi-ws",
+			parts:    []string{"tumux", "", "ws"},
+			expected: "tumux-ws",
 		},
 		{
 			name:     "special characters are sanitized",
-			parts:    []string{"tumuxi", "my/workspace", "tab:1"},
-			expected: "tumuxi-my-workspace-tab-1",
+			parts:    []string{"tumux", "my/workspace", "tab:1"},
+			expected: "tumux-my-workspace-tab-1",
 		},
 		{
 			name:     "uppercase is lowercased",
-			parts:    []string{"TUMUXI", "WS"},
-			expected: "tumuxi-ws",
+			parts:    []string{"TUMUX", "WS"},
+			expected: "tumux-ws",
 		},
 	}
 
@@ -205,26 +205,26 @@ func TestNewClientCommandWithTags(t *testing.T) {
 		DetachExisting: true,
 	})
 
-	if !strings.Contains(cmd, "@tumuxi 1") {
-		t.Error("Command should set @tumuxi tag")
+	if !strings.Contains(cmd, "@tumux 1") {
+		t.Error("Command should set @tumux tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_workspace 'ws-1'") {
-		t.Error("Command should set @tumuxi_workspace tag")
+	if !strings.Contains(cmd, "@tumux_workspace 'ws-1'") {
+		t.Error("Command should set @tumux_workspace tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_tab 'tab-2'") {
-		t.Error("Command should set @tumuxi_tab tag")
+	if !strings.Contains(cmd, "@tumux_tab 'tab-2'") {
+		t.Error("Command should set @tumux_tab tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_type 'agent'") {
-		t.Error("Command should set @tumuxi_type tag")
+	if !strings.Contains(cmd, "@tumux_type 'agent'") {
+		t.Error("Command should set @tumux_type tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_assistant 'claude'") {
-		t.Error("Command should set @tumuxi_assistant tag")
+	if !strings.Contains(cmd, "@tumux_assistant 'claude'") {
+		t.Error("Command should set @tumux_assistant tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_created_at '123'") {
-		t.Error("Command should set @tumuxi_created_at tag")
+	if !strings.Contains(cmd, "@tumux_created_at '123'") {
+		t.Error("Command should set @tumux_created_at tag")
 	}
-	if !strings.Contains(cmd, "@tumuxi_instance 'inst-9'") {
-		t.Error("Command should set @tumuxi_instance tag")
+	if !strings.Contains(cmd, "@tumux_instance 'inst-9'") {
+		t.Error("Command should set @tumux_instance tag")
 	}
 }
 
@@ -245,11 +245,11 @@ func TestNewClientCommandWithInstanceIDOnly(t *testing.T) {
 		DetachExisting: true,
 	})
 
-	if !strings.Contains(cmd, "@tumuxi 1") {
-		t.Error("Command should set @tumuxi tag when only InstanceID is provided")
+	if !strings.Contains(cmd, "@tumux 1") {
+		t.Error("Command should set @tumux tag when only InstanceID is provided")
 	}
-	if !strings.Contains(cmd, "@tumuxi_instance 'inst-only'") {
-		t.Error("Command should set @tumuxi_instance tag")
+	if !strings.Contains(cmd, "@tumux_instance 'inst-only'") {
+		t.Error("Command should set @tumux_instance tag")
 	}
 }
 
@@ -366,7 +366,7 @@ func TestCapturePaneEmptySession(t *testing.T) {
 
 func TestCapturePaneNonexistentSession(t *testing.T) {
 	opts := Options{
-		ServerName:     "tumuxi-test-nonexistent",
+		ServerName:     "tumux-test-nonexistent",
 		ConfigPath:     "/dev/null",
 		CommandTimeout: 5_000_000_000, // 5s
 	}

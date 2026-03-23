@@ -201,11 +201,11 @@ func TestWorkspaceStore_ListByRepo_NormalizesSymlinks(t *testing.T) {
 		t.Skipf("symlinks not supported: %v", err)
 	}
 
-	rootReal := filepath.Join(repoReal, ".tumuxi", "workspaces", "feature")
+	rootReal := filepath.Join(repoReal, ".tumux", "workspaces", "feature")
 	if err := os.MkdirAll(rootReal, 0o755); err != nil {
 		t.Fatalf("MkdirAll(rootReal) error = %v", err)
 	}
-	rootLink := filepath.Join(repoLink, ".tumuxi", "workspaces", "feature")
+	rootLink := filepath.Join(repoLink, ".tumux", "workspaces", "feature")
 
 	wsReal := &Workspace{Name: "feature", Repo: repoReal, Root: rootReal}
 	wsLink := &Workspace{Name: "feature", Repo: repoLink, Root: rootLink}
@@ -248,7 +248,7 @@ func TestWorkspaceStore_DeleteWaitsForWorkspaceLock(t *testing.T) {
 	ws := &Workspace{
 		Name: "locked-delete",
 		Repo: "/home/user/repo",
-		Root: "/home/user/.tumuxi/workspaces/locked-delete",
+		Root: "/home/user/.tumux/workspaces/locked-delete",
 	}
 	if err := store.Save(ws); err != nil {
 		t.Fatalf("Save() error = %v", err)

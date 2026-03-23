@@ -10,7 +10,7 @@ import (
 const agentSendCommandName = "agent.send"
 
 func cmdAgentSend(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent send (<session_name>|--agent <agent_id>) --text <message> [--enter] [--async] [--wait] [--wait-timeout <duration>] [--idle-threshold <duration>] [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumux agent send (<session_name>|--agent <agent_id>) --text <message> [--enter] [--async] [--wait] [--wait-timeout <duration>] [--idle-threshold <duration>] [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("agent send")
 	agentID := fs.String("agent", "", "agent ID (workspace_id:tab_id)")
 	text := fs.String("text", "", "text to send (required)")

@@ -6,7 +6,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 func (m *Model) flushTiming(tab *Tab, active bool) (time.Duration, time.Duration) {

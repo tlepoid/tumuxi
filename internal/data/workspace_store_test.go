@@ -16,7 +16,7 @@ func TestWorkspaceStore_SaveLoadDelete(t *testing.T) {
 		Branch:     "test-branch",
 		Base:       "origin/main",
 		Repo:       "/home/user/repo",
-		Root:       "/home/user/.tumuxi/workspaces/test-workspace",
+		Root:       "/home/user/.tumux/workspaces/test-workspace",
 		Created:    time.Now(),
 		Runtime:    RuntimeLocalWorktree,
 		Assistant:  "claude",
@@ -83,12 +83,12 @@ func TestWorkspaceStore_List(t *testing.T) {
 	ws1 := &Workspace{
 		Name: "ws1",
 		Repo: "/home/user/repo",
-		Root: "/home/user/.tumuxi/workspaces/ws1",
+		Root: "/home/user/.tumux/workspaces/ws1",
 	}
 	ws2 := &Workspace{
 		Name: "ws2",
 		Repo: "/home/user/repo",
-		Root: "/home/user/.tumuxi/workspaces/ws2",
+		Root: "/home/user/.tumux/workspaces/ws2",
 	}
 
 	if err := store.Save(ws1); err != nil {

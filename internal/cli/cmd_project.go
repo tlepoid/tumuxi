@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumux/internal/git"
 )
 
 func canonicalizeProjectPathNoSymlinks(path string) string {
@@ -49,9 +49,9 @@ func lenientCanonicalizePath(path string) string {
 func routeProject(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: tumuxi project <list|add|remove> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumux project <list|add|remove> [flags]", nil, version)
 		} else {
-			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi project <list|add|remove> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumux project <list|add|remove> [flags]")
 		}
 		return ExitUsage
 	}
@@ -82,7 +82,7 @@ type projectEntry struct {
 }
 
 func cmdProjectList(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi project list [--json]"
+	const usage = "Usage: tumux project list [--json]"
 	if len(args) > 0 {
 		return returnUsageError(w, wErr, gf, usage, version, errors.New("unexpected arguments"))
 	}
@@ -135,7 +135,7 @@ func cmdProjectList(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 // --- project add ---
 
 func cmdProjectAdd(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi project add <path> [--json]"
+	const usage = "Usage: tumux project add <path> [--json]"
 	fs := newFlagSet("project add")
 	path, err := parseSinglePositionalWithFlags(fs, args)
 	if err != nil {
@@ -202,7 +202,7 @@ func cmdProjectAdd(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 // --- project remove ---
 
 func cmdProjectRemove(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi project remove <path> [--json]"
+	const usage = "Usage: tumux project remove <path> [--json]"
 	fs := newFlagSet("project remove")
 	path, err := parseSinglePositionalWithFlags(fs, args)
 	if err != nil {

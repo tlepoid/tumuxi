@@ -1,4 +1,4 @@
-module github.com/tlepoid/tumuxi
+module github.com/tlepoid/tumux
 
 go 1.25.8
 

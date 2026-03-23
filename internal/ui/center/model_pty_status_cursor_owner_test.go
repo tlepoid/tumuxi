@@ -3,7 +3,7 @@ package center
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 func TestTerminalLayerWithCursorOwner_HidesCursorWhenNotOwner(t *testing.T) {

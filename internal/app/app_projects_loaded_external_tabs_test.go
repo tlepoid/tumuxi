@@ -3,12 +3,12 @@ package app
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/ui/center"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
-	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/ui/center"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/ui/sidebar"
 )
 
 func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing.T) {
@@ -24,13 +24,13 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 		{
 			Assistant:   "codex",
 			Name:        "existing",
-			SessionName: "tumuxi-existing-session",
+			SessionName: "tumux-existing-session",
 			Status:      "running",
 		},
 		{
 			Assistant:   "codex",
 			Name:        "external",
-			SessionName: "tumuxi-external-session",
+			SessionName: "tumux-external-session",
 			Status:      "running",
 		},
 	}
@@ -47,7 +47,7 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 		ID:          center.TabID("existing"),
 		Name:        "existing",
 		Assistant:   "codex",
-		SessionName: "tumuxi-existing-session",
+		SessionName: "tumux-existing-session",
 		Workspace:   oldWS,
 		Running:     true,
 	})
@@ -74,7 +74,7 @@ func TestRebindActiveSelection_MergesExternalTabsForStatefulWorkspace(t *testing
 	}
 	hasExternal := false
 	for _, tab := range tabs {
-		if tab.SessionName == "tumuxi-external-session" {
+		if tab.SessionName == "tumux-external-session" {
 			hasExternal = true
 			break
 		}
@@ -97,7 +97,7 @@ func TestRebindActiveSelection_DoesNotRehydratePersistedTabsWhenWorkspaceStateEx
 		{
 			Assistant:   "codex",
 			Name:        "stale",
-			SessionName: "tumuxi-stale-session",
+			SessionName: "tumux-stale-session",
 			Status:      "running",
 		},
 	}
