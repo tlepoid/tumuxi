@@ -259,7 +259,7 @@ func TestDialogInputClickCancel(t *testing.T) {
 // longMessage returns a message long enough to word-wrap in a dialog with
 // the default content width (~70 chars).
 func longMessage() string {
-	return "Remove project 'manim_magical_6mo_epics' from TUMUXI? This won't delete any files."
+	return "Remove project 'manim_magical_6mo_epics' from TUMUX? This won't delete any files."
 }
 
 func TestDialogConfirmClickYesWrappingMessage(t *testing.T) {

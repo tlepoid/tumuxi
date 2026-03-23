@@ -50,10 +50,10 @@ var defaultLogger *Logger
 
 const (
 	logDateLayout          = "2006-01-02"
-	logPrefix              = "tumuxi-"
+	logPrefix              = "tumux-"
 	logSuffix              = ".log"
 	defaultRetentionDays   = 14
-	logRetentionEnvVarName = "TUMUXI_LOG_RETENTION_DAYS"
+	logRetentionEnvVarName = "TUMUX_LOG_RETENTION_DAYS"
 )
 
 // Initialize sets up the default logger

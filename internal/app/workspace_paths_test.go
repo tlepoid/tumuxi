@@ -3,7 +3,7 @@ package app
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func TestProjectNameSegment(t *testing.T) {

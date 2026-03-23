@@ -6,8 +6,8 @@ import (
 
 	"github.com/mattn/go-runewidth"
 
-	"github.com/tlepoid/tumuxi/internal/perf"
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/perf"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 // Canvas is a fixed-size buffer of styled cells.

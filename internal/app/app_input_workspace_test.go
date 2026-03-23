@@ -3,11 +3,11 @@ package app
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/ui/center"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
-	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/ui/center"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/ui/sidebar"
 )
 
 func TestHandleWorkspaceDeletedClearsDirtyWorkspaceMarker(t *testing.T) {

@@ -46,7 +46,7 @@ func TestUpdaterUpgradeHomebrewBuild(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error for Homebrew build upgrade")
 	}
-	if !strings.Contains(err.Error(), "brew upgrade tumuxi") {
+	if !strings.Contains(err.Error(), "brew upgrade tumux") {
 		t.Fatalf("expected Homebrew upgrade hint, got: %v", err)
 	}
 }
@@ -65,9 +65,9 @@ func TestGetPlatformAssetName(t *testing.T) {
 		t.Errorf("Expected .tar.gz extension, got %s", name)
 	}
 
-	// Should start with tumuxi_1.2.3_ (no v prefix)
-	if len(name) < 12 || name[:12] != "tumuxi_1.2.3" {
-		t.Errorf("Expected tumuxi_1.2.3 prefix, got %s", name)
+	// Should start with tumux_1.2.3_ (no v prefix)
+	if len(name) < 11 || name[:11] != "tumux_1.2.3" {
+		t.Errorf("Expected tumux_1.2.3 prefix, got %s", name)
 	}
 }
 
@@ -75,9 +75,9 @@ func TestFindPlatformAsset(t *testing.T) {
 	release := &Release{
 		TagName: "v1.0.0",
 		Assets: []Asset{
-			{Name: "tumuxi_1.0.0_darwin_amd64.tar.gz", BrowserDownloadURL: "https://example.com/darwin_amd64.tar.gz"},
-			{Name: "tumuxi_1.0.0_darwin_arm64.tar.gz", BrowserDownloadURL: "https://example.com/darwin_arm64.tar.gz"},
-			{Name: "tumuxi_1.0.0_linux_amd64.tar.gz", BrowserDownloadURL: "https://example.com/linux_amd64.tar.gz"},
+			{Name: "tumux_1.0.0_darwin_amd64.tar.gz", BrowserDownloadURL: "https://example.com/darwin_amd64.tar.gz"},
+			{Name: "tumux_1.0.0_darwin_arm64.tar.gz", BrowserDownloadURL: "https://example.com/darwin_arm64.tar.gz"},
+			{Name: "tumux_1.0.0_linux_amd64.tar.gz", BrowserDownloadURL: "https://example.com/linux_amd64.tar.gz"},
 			{Name: "checksums.txt", BrowserDownloadURL: "https://example.com/checksums.txt"},
 		},
 	}
@@ -89,8 +89,8 @@ func TestFindPlatformAsset(t *testing.T) {
 }
 
 func TestParseChecksums(t *testing.T) {
-	content := `abc123def456  tumuxi_1.0.0_darwin_amd64.tar.gz
-789xyz000111  tumuxi_1.0.0_linux_amd64.tar.gz
+	content := `abc123def456  tumux_1.0.0_darwin_amd64.tar.gz
+789xyz000111  tumux_1.0.0_linux_amd64.tar.gz
 checksum1234  checksums.txt`
 
 	checksums := parseChecksums(content)
@@ -99,11 +99,11 @@ checksum1234  checksums.txt`
 		t.Errorf("Expected 3 checksums, got %d", len(checksums))
 	}
 
-	if checksums["tumuxi_1.0.0_darwin_amd64.tar.gz"] != "abc123def456" {
+	if checksums["tumux_1.0.0_darwin_amd64.tar.gz"] != "abc123def456" {
 		t.Errorf("Wrong checksum for darwin_amd64")
 	}
 
-	if checksums["tumuxi_1.0.0_linux_amd64.tar.gz"] != "789xyz000111" {
+	if checksums["tumux_1.0.0_linux_amd64.tar.gz"] != "789xyz000111" {
 		t.Errorf("Wrong checksum for linux_amd64")
 	}
 }
@@ -126,10 +126,10 @@ func TestIsGoInstallPath(t *testing.T) {
 		path string
 		want bool
 	}{
-		{"exact match", filepath.Join(goBin, "tumuxi"), true},
-		{"nested binary", filepath.Join(goBin, "tools", "tumuxi"), true},
-		{"prefix collision", goBin + "-extra/tumuxi", false},
-		{"different root", "/usr/local/bin/tumuxi", false},
+		{"exact match", filepath.Join(goBin, "tumux"), true},
+		{"nested binary", filepath.Join(goBin, "tools", "tumux"), true},
+		{"prefix collision", goBin + "-extra/tumux", false},
+		{"different root", "/usr/local/bin/tumux", false},
 	}
 
 	for _, tt := range tests {
@@ -152,7 +152,7 @@ func TestCanWrite(t *testing.T) {
 func TestExtractBinary(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	// Create a test tar.gz archive with an tumuxi binary
+	// Create a test tar.gz archive with an tumux binary
 	archivePath := filepath.Join(tmpDir, "test.tar.gz")
 	binaryContent := []byte("#!/bin/sh\necho hello\n")
 
@@ -164,9 +164,9 @@ func TestExtractBinary(t *testing.T) {
 	gzw := gzip.NewWriter(f)
 	tw := tar.NewWriter(gzw)
 
-	// Add the tumuxi binary to the archive
+	// Add the tumux binary to the archive
 	hdr := &tar.Header{
-		Name: "tumuxi",
+		Name: "tumux",
 		Mode: 0o755,
 		Size: int64(len(binaryContent)),
 	}
@@ -193,8 +193,8 @@ func TestExtractBinary(t *testing.T) {
 	}
 
 	// Verify the extracted file
-	if extractedPath != filepath.Join(destDir, "tumuxi") {
-		t.Errorf("Expected path %s, got %s", filepath.Join(destDir, "tumuxi"), extractedPath)
+	if extractedPath != filepath.Join(destDir, "tumux") {
+		t.Errorf("Expected path %s, got %s", filepath.Join(destDir, "tumux"), extractedPath)
 	}
 
 	content, err := os.ReadFile(extractedPath)
@@ -210,7 +210,7 @@ func TestExtractBinary(t *testing.T) {
 func TestExtractBinaryMissing(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	// Create an archive without an tumuxi binary
+	// Create an archive without an tumux binary
 	archivePath := filepath.Join(tmpDir, "test.tar.gz")
 	f, err := os.Create(archivePath)
 	if err != nil {
@@ -244,7 +244,7 @@ func TestExtractBinaryMissing(t *testing.T) {
 
 	_, err = ExtractBinary(archivePath, destDir)
 	if err == nil {
-		t.Error("ExtractBinary() should fail when tumuxi binary not found")
+		t.Error("ExtractBinary() should fail when tumux binary not found")
 	}
 }
 
@@ -252,13 +252,13 @@ func TestInstallBinary(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// Create source binary
-	srcPath := filepath.Join(tmpDir, "new-tumuxi")
+	srcPath := filepath.Join(tmpDir, "new-tumux")
 	if err := os.WriteFile(srcPath, []byte("new binary"), 0o755); err != nil {
 		t.Fatalf("Failed to create source: %v", err)
 	}
 
 	// Create destination binary
-	destPath := filepath.Join(tmpDir, "tumuxi")
+	destPath := filepath.Join(tmpDir, "tumux")
 	if err := os.WriteFile(destPath, []byte("old binary"), 0o755); err != nil {
 		t.Fatalf("Failed to create dest: %v", err)
 	}
@@ -283,7 +283,7 @@ func TestInstallBinary(t *testing.T) {
 	}
 
 	// Verify staged file was cleaned up
-	if _, err := os.Stat(filepath.Join(tmpDir, ".tumuxi-upgrade-new")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(tmpDir, ".tumux-upgrade-new")); !os.IsNotExist(err) {
 		t.Error("Staged file should have been removed")
 	}
 }
@@ -294,12 +294,12 @@ func TestInstallBinaryCrossDir(t *testing.T) {
 	srcDir := t.TempDir()
 	destDir := t.TempDir()
 
-	srcPath := filepath.Join(srcDir, "new-tumuxi")
+	srcPath := filepath.Join(srcDir, "new-tumux")
 	if err := os.WriteFile(srcPath, []byte("new binary content"), 0o755); err != nil {
 		t.Fatalf("Failed to create source: %v", err)
 	}
 
-	destPath := filepath.Join(destDir, "tumuxi")
+	destPath := filepath.Join(destDir, "tumux")
 	if err := os.WriteFile(destPath, []byte("old binary content"), 0o755); err != nil {
 		t.Fatalf("Failed to create dest: %v", err)
 	}

@@ -1,6 +1,6 @@
 package app
 
-import "github.com/tlepoid/tumuxi/internal/perf"
+import "github.com/tlepoid/tumux/internal/perf"
 
 // Shutdown releases resources that may outlive the Bubble Tea program.
 func (a *App) Shutdown() {

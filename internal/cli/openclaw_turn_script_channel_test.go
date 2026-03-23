@@ -13,7 +13,7 @@ func TestOpenClawTurnScript_AddsChunkContinuationMetadata(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	fakeStepDir := t.TempDir()
 	fakeStepPath := filepath.Join(fakeStepDir, "fake-step.sh")
 	counterPath := filepath.Join(fakeStepDir, "counter.txt")
@@ -36,7 +36,7 @@ fi
 		t.Fatalf("write fake step script: %v", err)
 	}
 
-	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Warming up and gathering repository context.","agent_id":"agent-3","workspace_id":"ws-3","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Continue.","suggested_command":"skills/tumuxi/scripts/openclaw-step.sh send --agent agent-3 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
+	step1 := `{"ok":true,"mode":"run","status":"timed_out","summary":"Warming up and gathering repository context.","agent_id":"agent-3","workspace_id":"ws-3","assistant":"codex","response":{"substantive_output":false,"needs_input":false},"next_action":"Continue.","suggested_command":"skills/tumux/scripts/openclaw-step.sh send --agent agent-3 --text \"Continue\" --enter --wait-timeout 60s --idle-threshold 10s"}`
 	step2 := `{"ok":true,"mode":"send","status":"idle","summary":"Implemented a long list of refactors and added tests and docs and validation so the final OpenClaw update should be split into multiple chunks for readability.","agent_id":"agent-3","workspace_id":"ws-3","assistant":"codex","response":{"substantive_output":true,"needs_input":false},"next_action":"Review patch.","suggested_command":""}`
 
 	cmd := exec.Command(
@@ -85,7 +85,7 @@ func TestOpenClawTurnScript_UsesSiblingStepScriptWhenInvokedOutsideRepoRoot(t *t
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	sourceScriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-turn.sh")
+	sourceScriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-turn.sh")
 	src, err := os.ReadFile(sourceScriptPath)
 	if err != nil {
 		t.Fatalf("read source script: %v", err)
@@ -153,7 +153,7 @@ printf '%s' '{"ok":true,"mode":"run","status":"idle","summary":"Sibling step use
 		t.Fatalf("quick_action_map missing or wrong type: %T", payload["quick_action_map"])
 	}
 	statusCmd, _ := quickActionMap["qa:status"].(string)
-	if !strings.HasPrefix(statusCmd, "skills/tumuxi/scripts/openclaw-step.sh send --agent agent-sib") {
+	if !strings.HasPrefix(statusCmd, "skills/tumux/scripts/openclaw-step.sh send --agent agent-sib") {
 		t.Fatalf("status quick action = %q, expected openclaw-step command", statusCmd)
 	}
 }

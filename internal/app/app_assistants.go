@@ -3,7 +3,7 @@ package app
 import (
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func (a *App) defaultAssistantName() string {

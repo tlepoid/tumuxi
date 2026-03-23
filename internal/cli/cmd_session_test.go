@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 // --- classifyForPrune tests ---
@@ -60,14 +60,14 @@ func TestClassifyForPruneEmptyWorkspaceNotPruned(t *testing.T) {
 // --- inferWorkspaceID tests ---
 
 func TestInferWorkspaceIDTermTab(t *testing.T) {
-	got := inferWorkspaceID("tumuxi-abc123-term-tab-3")
+	got := inferWorkspaceID("tumux-abc123-term-tab-3")
 	if got != "abc123" {
 		t.Fatalf("inferWorkspaceID() = %q, want %q", got, "abc123")
 	}
 }
 
 func TestInferWorkspaceIDTab(t *testing.T) {
-	got := inferWorkspaceID("tumuxi-abc123-tab-1")
+	got := inferWorkspaceID("tumux-abc123-tab-1")
 	if got != "abc123" {
 		t.Fatalf("inferWorkspaceID() = %q, want %q", got, "abc123")
 	}
@@ -81,7 +81,7 @@ func TestInferWorkspaceIDNoPrefix(t *testing.T) {
 }
 
 func TestInferWorkspaceIDNoSuffix(t *testing.T) {
-	got := inferWorkspaceID("tumuxi-abc123")
+	got := inferWorkspaceID("tumux-abc123")
 	if got != "abc123" {
 		t.Fatalf("inferWorkspaceID() = %q, want %q", got, "abc123")
 	}
@@ -90,21 +90,21 @@ func TestInferWorkspaceIDNoSuffix(t *testing.T) {
 // --- inferSessionType tests ---
 
 func TestInferSessionTypeTermTab(t *testing.T) {
-	got := inferSessionType("tumuxi-abc123-term-tab-3")
+	got := inferSessionType("tumux-abc123-term-tab-3")
 	if got != "term-tab" {
 		t.Fatalf("inferSessionType() = %q, want %q", got, "term-tab")
 	}
 }
 
 func TestInferSessionTypeAgent(t *testing.T) {
-	got := inferSessionType("tumuxi-abc123-tab-1")
+	got := inferSessionType("tumux-abc123-tab-1")
 	if got != "agent" {
 		t.Fatalf("inferSessionType() = %q, want %q", got, "agent")
 	}
 }
 
 func TestInferSessionTypeUnknown(t *testing.T) {
-	got := inferSessionType("tumuxi-abc123")
+	got := inferSessionType("tumux-abc123")
 	if got != "unknown" {
 		t.Fatalf("inferSessionType() = %q, want %q", got, "unknown")
 	}
@@ -142,10 +142,10 @@ func TestBuildSessionListUsesTagsOverInference(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
 		{
-			name: "tumuxi-ws1-tab-1",
+			name: "tumux-ws1-tab-1",
 			tags: map[string]string{
-				"@tumuxi_workspace": "ws-tagged",
-				"@tumuxi_type":      "agent",
+				"@tumux_workspace": "ws-tagged",
+				"@tumux_type":      "agent",
 			},
 			createdAt: 900,
 		},
@@ -169,7 +169,7 @@ func TestBuildSessionListFallsBackToInference(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
 		{
-			name:      "tumuxi-abc123-term-tab-3",
+			name:      "tumux-abc123-term-tab-3",
 			tags:      map[string]string{},
 			createdAt: 500,
 		},
@@ -191,7 +191,7 @@ func TestBuildSessionListFallsBackToInference(t *testing.T) {
 func TestFindPruneCandidatesOrphanedSession(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-gone-tab-1", tags: map[string]string{"@tumuxi_workspace": "gone"}, createdAt: 500},
+		{name: "tumux-gone-tab-1", tags: map[string]string{"@tumux_workspace": "gone"}, createdAt: 500},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 0, now)
 	if len(candidates) != 1 {
@@ -205,7 +205,7 @@ func TestFindPruneCandidatesOrphanedSession(t *testing.T) {
 func TestFindPruneCandidatesDetachedTermTab(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"}, createdAt: 500},
+		{name: "tumux-ws-a-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "term-tab"}, createdAt: 500},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 0, now)
 	if len(candidates) != 1 {
@@ -219,7 +219,7 @@ func TestFindPruneCandidatesDetachedTermTab(t *testing.T) {
 func TestFindPruneCandidatesAttachedNotPruned(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"}, attached: true, createdAt: 500},
+		{name: "tumux-ws-a-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "term-tab"}, attached: true, createdAt: 500},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 0, now)
 	if len(candidates) != 0 {
@@ -230,7 +230,7 @@ func TestFindPruneCandidatesAttachedNotPruned(t *testing.T) {
 func TestFindPruneCandidatesAgentNotPruned(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-ws-a-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "agent"}, createdAt: 500},
+		{name: "tumux-ws-a-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "agent"}, createdAt: 500},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 0, now)
 	if len(candidates) != 0 {
@@ -241,7 +241,7 @@ func TestFindPruneCandidatesAgentNotPruned(t *testing.T) {
 func TestFindPruneCandidatesOlderThanSkipsUnknownAge(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"}, createdAt: 0},
+		{name: "tumux-ws-a-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "term-tab"}, createdAt: 0},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 10*time.Minute, now)
 	if len(candidates) != 0 {
@@ -252,15 +252,15 @@ func TestFindPruneCandidatesOlderThanSkipsUnknownAge(t *testing.T) {
 func TestFindPruneCandidatesOlderThanFilter(t *testing.T) {
 	now := time.Unix(1000, 0)
 	rows := []sessionRow{
-		{name: "tumuxi-ws-a-term-tab-1", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"}, createdAt: 999},
-		{name: "tumuxi-ws-a-term-tab-2", tags: map[string]string{"@tumuxi_workspace": "ws-a", "@tumuxi_type": "term-tab"}, createdAt: 100},
+		{name: "tumux-ws-a-term-tab-1", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "term-tab"}, createdAt: 999},
+		{name: "tumux-ws-a-term-tab-2", tags: map[string]string{"@tumux_workspace": "ws-a", "@tumux_type": "term-tab"}, createdAt: 100},
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 10*time.Minute, now)
 	if len(candidates) != 1 {
 		t.Fatalf("got %d candidates, want 1", len(candidates))
 	}
-	if candidates[0].Session != "tumuxi-ws-a-term-tab-2" {
-		t.Errorf("session = %q, want %q", candidates[0].Session, "tumuxi-ws-a-term-tab-2")
+	if candidates[0].Session != "tumux-ws-a-term-tab-2" {
+		t.Errorf("session = %q, want %q", candidates[0].Session, "tumux-ws-a-term-tab-2")
 	}
 }
 
@@ -271,30 +271,30 @@ func TestFindPruneCandidatesSkipsNonAmuxSessions(t *testing.T) {
 	}
 	candidates := findPruneCandidates(rows, []data.WorkspaceID{"ws-a"}, 0, now)
 	if len(candidates) != 0 {
-		t.Fatalf("got %d candidates, want 0 (non-tumuxi sessions should not be pruned)", len(candidates))
+		t.Fatalf("got %d candidates, want 0 (non-tumux sessions should not be pruned)", len(candidates))
 	}
 }
 
 // --- isAmuxSession tests ---
 
 func TestIsAmuxSessionTagged(t *testing.T) {
-	row := sessionRow{name: "whatever", tags: map[string]string{"@tumuxi_workspace": "ws-a"}}
+	row := sessionRow{name: "whatever", tags: map[string]string{"@tumux_workspace": "ws-a"}}
 	if !isAmuxSession(row) {
 		t.Fatal("expected true for tagged session")
 	}
 }
 
 func TestIsAmuxSessionPrefixed(t *testing.T) {
-	row := sessionRow{name: "tumuxi-ws-a-tab-1", tags: map[string]string{}}
+	row := sessionRow{name: "tumux-ws-a-tab-1", tags: map[string]string{}}
 	if !isAmuxSession(row) {
-		t.Fatal("expected true for tumuxi-prefixed session")
+		t.Fatal("expected true for tumux-prefixed session")
 	}
 }
 
 func TestIsAmuxSessionForeignNotMatched(t *testing.T) {
 	row := sessionRow{name: "my-term-tab-1", tags: map[string]string{}}
 	if isAmuxSession(row) {
-		t.Fatal("expected false for non-tumuxi session")
+		t.Fatal("expected false for non-tumux session")
 	}
 }
 

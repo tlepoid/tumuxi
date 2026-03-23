@@ -6,7 +6,7 @@ import (
 
 	"charm.land/lipgloss/v2"
 
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 func (a *App) centerPaneStyle() lipgloss.Style {
@@ -144,14 +144,14 @@ func (a *App) welcomeButtons() string {
 
 func (a *App) welcomeLogo() (string, lipgloss.Style) {
 	logo := `
-_________          _______                   _________
-\__   __/|\     /|(       )|\     /||\     /|\__   __/
-   ) (   | )   ( || () () || )   ( |( \   / )   ) (
-   | |   | |   | || || || || |   | | \ (_) /    | |
-   | |   | |   | || |(_)| || |   | |  ) _ (     | |
-   | |   | |   | || |   | || |   | | / ( ) \    | |
-   | |   | (___) || )   ( || (___) |( /   \ )___) (___
-   )_(   (_______)|/     \|(_______)|/     \|\_______/`
+_________          _______
+\__   __/|\     /|(       )|\     /||\     /|
+   ) (   | )   ( || () () || )   ( |( \   / )
+   | |   | |   | || || || || |   | | \ (_) /
+   | |   | |   | || |(_)| || |   | |  ) _ (
+   | |   | |   | || |   | || |   | | / ( ) \
+   | |   | (___) || )   ( || (___) |( /   \ )
+   )_(   (_______)|/     \|(_______)|/     \|`
 
 	logoStyle := lipgloss.NewStyle().
 		Foreground(common.ColorPrimary()).

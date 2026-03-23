@@ -5,13 +5,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/ui/center"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
-	"github.com/tlepoid/tumuxi/internal/ui/sidebar"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/ui/center"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/ui/sidebar"
 )
 
 func TestHandleProjectsLoadedCanonicalRebindMigratesCenterAndSidebarTerminalTabs(t *testing.T) {
@@ -184,7 +184,7 @@ func TestRebindActiveSelection_DoesNotRehydratePersistedTabsOnCanonicalIDMigrati
 		{
 			Assistant:   "codex",
 			Name:        "stale",
-			SessionName: "tumuxi-stale-session",
+			SessionName: "tumux-stale-session",
 			Status:      "running",
 		},
 	}

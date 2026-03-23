@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestCmdAgentRunMetadataSaveFailureReturnsInternalErrorAndCleansSession(t *testing.T) {

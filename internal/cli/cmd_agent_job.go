@@ -9,9 +9,9 @@ import (
 func routeAgentJob(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: tumuxi agent job <status|cancel|wait> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumux agent job <status|cancel|wait> [flags]", nil, version)
 		} else {
-			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi agent job <status|cancel|wait> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumux agent job <status|cancel|wait> [flags]")
 		}
 		return ExitUsage
 	}
@@ -36,7 +36,7 @@ func routeAgentJob(w, wErr io.Writer, gf GlobalFlags, args []string, version str
 }
 
 func cmdAgentJobStatus(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent job status <job_id> [--json]"
+	const usage = "Usage: tumux agent job status <job_id> [--json]"
 	fs := newFlagSet("agent job status")
 	jobID, err := parseSinglePositionalWithFlags(fs, args)
 	if err != nil {
@@ -79,7 +79,7 @@ func cmdAgentJobStatus(w, wErr io.Writer, gf GlobalFlags, args []string, version
 }
 
 func cmdAgentJobCancel(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent job cancel <job_id> [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumux agent job cancel <job_id> [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("agent job cancel")
 	idempotencyKey := fs.String("idempotency-key", "", "idempotency key for safe retries")
 	jobID, err := parseSinglePositionalWithFlags(fs, args)
@@ -151,7 +151,7 @@ func cmdAgentJobCancel(w, wErr io.Writer, gf GlobalFlags, args []string, version
 }
 
 func cmdAgentJobWait(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent job wait <job_id> [--timeout <dur>] [--interval <dur>] [--json]"
+	const usage = "Usage: tumux agent job wait <job_id> [--timeout <dur>] [--interval <dur>] [--json]"
 	fs := newFlagSet("agent job wait")
 	timeout := fs.Duration("timeout", 30*time.Second, "max wait duration")
 	interval := fs.Duration("interval", 200*time.Millisecond, "poll interval")

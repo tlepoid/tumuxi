@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestSidebarTerminalDiscoveryAvoidsExtraSession(t *testing.T) {
@@ -14,7 +14,7 @@ func TestSidebarTerminalDiscoveryAvoidsExtraSession(t *testing.T) {
 	skipIfNoTmux(t)
 
 	repo := initRepo(t)
-	server := fmt.Sprintf("tumuxi-e2e-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumux-e2e-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
 	homeA := t.TempDir()

@@ -47,7 +47,7 @@ func Run(args []string, version, commit, date string) int {
 
 	if len(rest) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: tumuxi <command> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumux <command> [flags]", nil, version)
 		} else {
 			PrintUsage(wErr)
 		}
@@ -85,7 +85,7 @@ func Run(args []string, version, commit, date string) int {
 			}, version)
 			return ExitOK
 		}
-		_, _ = fmt.Fprintf(w, "tumuxi %s (commit: %s, built: %s)\n", version, commit, date)
+		_, _ = fmt.Fprintf(w, "tumux %s (commit: %s, built: %s)\n", version, commit, date)
 		return ExitOK
 	case "help":
 		if gf.JSON {
@@ -140,9 +140,9 @@ func applyRunGlobals(gf GlobalFlags) (func(), error) {
 func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: tumuxi workspace <list|create|remove> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumux workspace <list|create|remove> [flags]", nil, version)
 		} else {
-			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi workspace <list|create|remove> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumux workspace <list|create|remove> [flags]")
 		}
 		return ExitUsage
 	}
@@ -168,9 +168,9 @@ func routeWorkspace(w, wErr io.Writer, gf GlobalFlags, args []string, version st
 func routeAgent(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
 	if len(args) == 0 {
 		if gf.JSON {
-			ReturnError(w, "usage_error", "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]", nil, version)
+			ReturnError(w, "usage_error", "Usage: tumux agent <list|capture|run|send|stop|watch|job> [flags]", nil, version)
 		} else {
-			_, _ = fmt.Fprintln(wErr, "Usage: tumuxi agent <list|capture|run|send|stop|watch|job> [flags]")
+			_, _ = fmt.Fprintln(wErr, "Usage: tumux agent <list|capture|run|send|stop|watch|job> [flags]")
 		}
 		return ExitUsage
 	}
@@ -207,13 +207,13 @@ func PrintUsage(w io.Writer) {
 }
 
 func usageText() string {
-	return `Usage: tumuxi <command> [flags]
+	return `Usage: tumux <command> [flags]
 
 Commands:
   status              Health check and summary
   doctor              Diagnostics check list
   capabilities        Machine-readable CLI capabilities
-  logs tail           Tail the tumuxi log file
+  logs tail           Tail the tumux log file
   workspace list      List workspaces
   workspace create    Create a workspace (--issue <N> links a GitHub issue)
   workspace remove    Remove a workspace

@@ -41,7 +41,7 @@ linters:
         - os.RemoveAll
         - (*os.File).Close
         - (*compress/gzip.Reader).Close
-        - (*github.com/tlepoid/tumuxi/internal/pty.Terminal).Close
+        - (*github.com/tlepoid/tumux/internal/pty.Terminal).Close
     errorlint:
       asserts: false
       comparison: false
@@ -93,7 +93,7 @@ formatters:
     - goimports
   settings:
     goimports:
-      local-prefixes: github.com/tlepoid/tumuxi
+      local-prefixes: github.com/tlepoid/tumux
 
 issues:
   max-issues-per-linter: 0

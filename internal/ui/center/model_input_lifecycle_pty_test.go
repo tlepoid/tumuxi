@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 func TestHasVisiblePTYOutput(t *testing.T) {
@@ -117,7 +117,7 @@ func TestUpdatePTYOutput_DoesNotTagControlOnlyOutput(t *testing.T) {
 		ID:          TabID("tab-1"),
 		Assistant:   "codex",
 		Workspace:   ws,
-		SessionName: "tumuxi-test-session",
+		SessionName: "tumux-test-session",
 		Running:     true,
 	}
 	m.tabsByWorkspace[wsID] = []*Tab{tab}
@@ -149,7 +149,7 @@ func TestUpdatePTYOutput_TagsVisibleOutput(t *testing.T) {
 		ID:                TabID("tab-1"),
 		Assistant:         "codex",
 		Workspace:         ws,
-		SessionName:       "tumuxi-test-session",
+		SessionName:       "tumux-test-session",
 		Running:           true,
 		lastActivityTagAt: before,
 	}
@@ -181,7 +181,7 @@ func TestUpdatePTYOutput_EndsBootstrapAfterQuietGap(t *testing.T) {
 		ID:                    TabID("tab-1"),
 		Assistant:             "codex",
 		Workspace:             ws,
-		SessionName:           "tumuxi-test-session",
+		SessionName:           "tumux-test-session",
 		Terminal:              vterm.New(80, 24),
 		Running:               true,
 		bootstrapActivity:     true,
@@ -222,7 +222,7 @@ func TestUpdatePTYFlush_TagsVisibleScreenDelta(t *testing.T) {
 		ID:                TabID("tab-1"),
 		Assistant:         "codex",
 		Workspace:         ws,
-		SessionName:       "tumuxi-test-session",
+		SessionName:       "tumux-test-session",
 		Terminal:          vterm.New(80, 24),
 		Running:           true,
 		lastActivityTagAt: before,
@@ -274,7 +274,7 @@ func TestUpdatePTYFlush_DoesNotTagUnchangedVisibleScreen(t *testing.T) {
 		ID:          TabID("tab-1"),
 		Assistant:   "codex",
 		Workspace:   ws,
-		SessionName: "tumuxi-test-session",
+		SessionName: "tumux-test-session",
 		Terminal:    vterm.New(80, 24),
 		Running:     true,
 	}
@@ -326,7 +326,7 @@ func TestUpdatePTYFlush_SuppressesImmediateUserInputEcho(t *testing.T) {
 		ID:              TabID("tab-1"),
 		Assistant:       "codex",
 		Workspace:       ws,
-		SessionName:     "tumuxi-test-session",
+		SessionName:     "tumux-test-session",
 		Terminal:        vterm.New(80, 24),
 		Running:         true,
 		lastUserInputAt: time.Now(),

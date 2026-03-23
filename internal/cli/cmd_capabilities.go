@@ -32,7 +32,7 @@ type capabilitiesResult struct {
 }
 
 func cmdCapabilities(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi capabilities [--json]"
+	const usage = "Usage: tumux capabilities [--json]"
 	if len(args) > 0 {
 		return returnUsageError(w, wErr, gf, usage, version, nil)
 	}

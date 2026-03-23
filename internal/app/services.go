@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
-	"github.com/tlepoid/tumuxi/internal/tmux"
-	"github.com/tlepoid/tumuxi/internal/update"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
+	"github.com/tlepoid/tumux/internal/tmux"
+	"github.com/tlepoid/tumux/internal/update"
 )
 
 // ProjectRegistry is the minimal interface used by the app for project tracking.

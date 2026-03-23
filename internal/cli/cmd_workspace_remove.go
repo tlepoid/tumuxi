@@ -7,13 +7,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func cmdWorkspaceRemove(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi workspace remove <id> --yes [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumux workspace remove <id> --yes [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("workspace remove")
 	yes := fs.Bool("yes", false, "confirm removal (required)")
 	idempotencyKey := fs.String("idempotency-key", "", "idempotency key for safe retries")

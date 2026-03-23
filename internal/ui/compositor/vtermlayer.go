@@ -5,7 +5,7 @@ import (
 
 	uv "github.com/charmbracelet/ultraviolet"
 
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 var asciiStrings [128]string

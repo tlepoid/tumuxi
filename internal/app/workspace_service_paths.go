@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
 )
 
-// shouldSurfaceWorkspace returns true for workspaces managed by tumuxi for this
+// shouldSurfaceWorkspace returns true for workspaces managed by tumux for this
 // project and for the primary checkout.
 func (s *workspaceService) shouldSurfaceWorkspace(_ string, ws *data.Workspace) bool {
 	if ws == nil {

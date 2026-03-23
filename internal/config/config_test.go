@@ -36,7 +36,7 @@ func TestDefaultConfigLoadsAssistantOverrides(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	configPath := filepath.Join(home, ".tumuxi", "config.json")
+	configPath := filepath.Join(home, ".tumux", "config.json")
 	if err := os.MkdirAll(filepath.Dir(configPath), 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
@@ -91,7 +91,7 @@ func TestDefaultConfigIgnoresDefaultAssistantSetting(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	configPath := filepath.Join(home, ".tumuxi", "config.json")
+	configPath := filepath.Join(home, ".tumux", "config.json")
 	if err := os.MkdirAll(filepath.Dir(configPath), 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
@@ -114,7 +114,7 @@ func TestDefaultConfigSkipsInvalidAssistantOverrideIDs(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	configPath := filepath.Join(home, ".tumuxi", "config.json")
+	configPath := filepath.Join(home, ".tumux", "config.json")
 	if err := os.MkdirAll(filepath.Dir(configPath), 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}

@@ -32,9 +32,9 @@ func TestOpenClawStepScriptRun_RecoversTimedOutNoOutputFromCapture(t *testing.T)
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
@@ -42,13 +42,13 @@ if [[ "${1:-}" == "--json" ]]; then
 fi
 case "${1:-} ${2:-}" in
   "agent run")
-    printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
+    printf '%s' "${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_RUN_JSON}"
     ;;
   "agent send")
-    printf '%s' "${FAKE_TUMUXI_SEND_JSON:-${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_SEND_JSON}}"
+    printf '%s' "${FAKE_TUMUX_SEND_JSON:-${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_SEND_JSON}}"
     ;;
   "agent capture")
-    printf '%s' "${FAKE_TUMUXI_CAPTURE_JSON:?missing FAKE_TUMUXI_CAPTURE_JSON}"
+    printf '%s' "${FAKE_TUMUX_CAPTURE_JSON:?missing FAKE_TUMUX_CAPTURE_JSON}"
     ;;
   *)
     echo "unexpected args: $*" >&2
@@ -56,7 +56,7 @@ case "${1:-} ${2:-}" in
     ;;
 esac
 `), 0o755); err != nil {
-		t.Fatalf("write fake tumuxi: %v", err)
+		t.Fatalf("write fake tumux: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-1","agent_id":"agent-1","workspace_id":"ws-1","assistant":"codex","response":{"status":"timed_out","latest_line":"(no output yet)","summary":"(no output yet)","delta":"","needs_input":false,"input_hint":"","timed_out":true,"session_exited":false,"changed":false}}}`
@@ -73,8 +73,8 @@ esac
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
-	env = withEnv(env, "FAKE_TUMUXI_CAPTURE_JSON", captureJSON)
+	env = withEnv(env, "FAKE_TUMUX_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUX_CAPTURE_JSON", captureJSON)
 	env = withEnv(env, "OPENCLAW_STEP_TIMEOUT_RECOVERY_POLLS", "1")
 	env = withEnv(env, "OPENCLAW_STEP_TIMEOUT_RECOVERY_INTERVAL", "0")
 	env = withEnv(env, "OPENCLAW_STEP_TIMEOUT_RECOVERY_LINES", "80")
@@ -216,22 +216,22 @@ func TestOpenClawStepScriptRun_SetsBlockedPermissionMode(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake tumuxi: %v", err)
+		t.Fatalf("write fake tumux: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-2","agent_id":"agent-2","workspace_id":"ws-2","assistant":"claude","response":{"status":"needs_input","latest_line":"Assistant is waiting for local permission-mode selection.","summary":"Needs input: Assistant is waiting for local permission-mode selection.","delta":"Assistant is waiting for local permission-mode selection.","needs_input":true,"input_hint":"Assistant is waiting for local permission-mode selection.","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -247,7 +247,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUX_RUN_JSON", runJSON)
 	cmd.Env = env
 	out, err := cmd.Output()
 	if err != nil {
@@ -286,22 +286,22 @@ func TestOpenClawStepScriptRun_AutoIdempotencyCanBeDisabled(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake tumuxi: %v", err)
+		t.Fatalf("write fake tumux: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-3","agent_id":"agent-3","workspace_id":"ws-3","assistant":"codex","response":{"status":"idle","latest_line":"done","summary":"done","delta":"done","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -317,7 +317,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUX_RUN_JSON", runJSON)
 	env = withEnv(env, "OPENCLAW_STEP_AUTO_IDEMPOTENCY", "false")
 	cmd.Env = env
 	out, err := cmd.Output()
@@ -339,22 +339,22 @@ func TestOpenClawStepScriptRun_UpgradesWeakSummaryFromDelta(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake tumuxi: %v", err)
+		t.Fatalf("write fake tumux: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-weak","agent_id":"agent-weak","workspace_id":"ws-weak","assistant":"codex","response":{"status":"idle","latest_line":"output tracking.","summary":"output tracking.","delta":"Search rg --files\n- internal/cli/cmd_agent_watch.go:207 computeNewLines can duplicate lines when output is rewritten","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -370,7 +370,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUX_RUN_JSON", runJSON)
 	cmd.Env = env
 	out, err := cmd.Output()
 	if err != nil {
@@ -392,22 +392,22 @@ func TestOpenClawStepScriptRun_RedactsSecretsInOutput(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-step.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-step.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	if err := os.WriteFile(fakeAmuxPath, []byte(`#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
   shift
 fi
 if [[ "${1:-}" == "agent" && "${2:-}" == "run" ]]; then
-  printf '%s' "${FAKE_TUMUXI_RUN_JSON:?missing FAKE_TUMUXI_RUN_JSON}"
+  printf '%s' "${FAKE_TUMUX_RUN_JSON:?missing FAKE_TUMUX_RUN_JSON}"
   exit 0
 fi
 echo "unexpected args: $*" >&2
 exit 2
 `), 0o755); err != nil {
-		t.Fatalf("write fake tumuxi: %v", err)
+		t.Fatalf("write fake tumux: %v", err)
 	}
 
 	runJSON := `{"ok":true,"data":{"session_name":"sess-secret","agent_id":"agent-secret","workspace_id":"ws-secret","assistant":"codex","response":{"status":"idle","latest_line":"token=ghp_abcde1234567890","summary":"Use token sk-ant-api1-abcdefghijklmnopqrstuv in env","delta":"Authorization: Bearer sk-ant-api1-abcdefghijklmnopqrstuv123456\nSECRET=supersecretvalue123456","needs_input":false,"input_hint":"","timed_out":false,"session_exited":false,"changed":true}}}`
@@ -423,7 +423,7 @@ exit 2
 	)
 	env := os.Environ()
 	env = withEnv(env, "PATH", fakeBinDir+":"+os.Getenv("PATH"))
-	env = withEnv(env, "FAKE_TUMUXI_RUN_JSON", runJSON)
+	env = withEnv(env, "FAKE_TUMUX_RUN_JSON", runJSON)
 	cmd.Env = env
 	out, err := cmd.Output()
 	if err != nil {

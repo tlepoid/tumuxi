@@ -9,7 +9,7 @@ import (
 )
 
 func TestOpenClawDXScriptDoesNotUseBash4AssociativeArrays(t *testing.T) {
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	body, err := os.ReadFile(scriptPath)
 	if err != nil {
 		t.Fatalf("read script: %v", err)
@@ -23,9 +23,9 @@ func TestOpenClawDXProjectAdd_CreatesWorkspace(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
 if [[ "${1:-}" == "--json" ]]; then
@@ -82,12 +82,12 @@ func TestOpenClawDXProjectAdd_InferPathFromGitRoot(t *testing.T) {
 	requireBinary(t, "bash")
 	requireBinary(t, "git")
 
-	scriptPath, err := filepath.Abs(filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh"))
+	scriptPath, err := filepath.Abs(filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh"))
 	if err != nil {
 		t.Fatalf("resolve script path: %v", err)
 	}
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	projectPathFile := filepath.Join(fakeBinDir, "project-path.txt")
 
 	repoDir := t.TempDir()
@@ -158,9 +158,9 @@ func TestOpenClawDXProjectList_QueryFiltersProjects(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -218,9 +218,9 @@ func TestOpenClawDXProjectList_PaginatesAndAddsNavigationActions(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -309,9 +309,9 @@ func TestOpenClawDXProjectList_QuickActionCallbackDataIsOpenClawSafe(t *testing.
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
@@ -365,9 +365,9 @@ func TestOpenClawDXProjectList_DataIncludesContextSnapshot(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	contextPath := filepath.Join(t.TempDir(), "context.json")
 	if err := os.WriteFile(contextPath, []byte(`{"project":{"path":"/tmp/demo","name":"demo"},"workspace":{"id":"ws-1","name":"mobile","repo":"/tmp/demo","assistant":"codex"},"agent":{"id":"agent-1","workspace_id":"ws-1","assistant":"codex"}}`), 0o644); err != nil {
 		t.Fatalf("write context file: %v", err)
@@ -415,10 +415,10 @@ func TestOpenClawDXWorkspaceList_UsesContextProjectWhenProjectMissing(t *testing
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
-	argsLog := filepath.Join(fakeBinDir, "tumuxi-args.log")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
+	argsLog := filepath.Join(fakeBinDir, "tumux-args.log")
 	contextPath := filepath.Join(t.TempDir(), "context.json")
 	if err := os.WriteFile(contextPath, []byte(`{"project":{"path":"/tmp/demo","name":"demo"}}`), 0o644); err != nil {
 		t.Fatalf("write context file: %v", err)

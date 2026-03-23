@@ -5,9 +5,9 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/ui/center"
-	"github.com/tlepoid/tumuxi/internal/ui/dashboard"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/ui/center"
+	"github.com/tlepoid/tumux/internal/ui/dashboard"
 )
 
 // handlePTYMessages handles PTY-related messages for center pane.
@@ -69,7 +69,7 @@ func (a *App) handleFileWatcherEvent(msg messages.FileWatcherEvent) []tea.Cmd {
 	}
 }
 
-// handleStateWatcherEvent handles changes to tumuxi state files (projects/workspaces).
+// handleStateWatcherEvent handles changes to tumux state files (projects/workspaces).
 func (a *App) handleStateWatcherEvent(msg messages.StateWatcherEvent) []tea.Cmd {
 	if msg.Reason == "workspaces" && a.shouldSuppressWorkspaceReload(msg.Paths, time.Now()) {
 		return []tea.Cmd{

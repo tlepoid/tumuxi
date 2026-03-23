@@ -37,7 +37,7 @@ branch refs/heads/main
 HEAD abc123
 branch refs/heads/main
 
-worktree /home/user/.tumuxi/workspaces/myrepo/feature
+worktree /home/user/.tumux/workspaces/myrepo/feature
 HEAD def456
 branch refs/heads/feature
 
@@ -50,7 +50,7 @@ branch refs/heads/feature
 			output: `worktree /home/user/myrepo.git
 bare
 
-worktree /home/user/.tumuxi/workspaces/myrepo/feature
+worktree /home/user/.tumux/workspaces/myrepo/feature
 HEAD def456
 branch refs/heads/feature
 
@@ -64,7 +64,7 @@ branch refs/heads/feature
 HEAD abc123
 branch refs/heads/main
 
-worktree /home/user/.tumuxi/workspaces/myrepo/detached
+worktree /home/user/.tumux/workspaces/myrepo/detached
 HEAD def456
 detached
 
@@ -97,7 +97,7 @@ func TestParseWorktreeList_Fields(t *testing.T) {
 HEAD abc123
 branch refs/heads/main
 
-worktree /home/user/.tumuxi/workspaces/myrepo/feature-branch
+worktree /home/user/.tumux/workspaces/myrepo/feature-branch
 HEAD def456
 branch refs/heads/feature-branch
 
@@ -123,8 +123,8 @@ branch refs/heads/feature-branch
 	}
 
 	// Check second workspace (worktree)
-	if workspaces[1].Root != "/home/user/.tumuxi/workspaces/myrepo/feature-branch" {
-		t.Errorf("ws[1].Root = %q, want %q", workspaces[1].Root, "/home/user/.tumuxi/workspaces/myrepo/feature-branch")
+	if workspaces[1].Root != "/home/user/.tumux/workspaces/myrepo/feature-branch" {
+		t.Errorf("ws[1].Root = %q, want %q", workspaces[1].Root, "/home/user/.tumux/workspaces/myrepo/feature-branch")
 	}
 	if workspaces[1].Branch != "feature-branch" {
 		t.Errorf("ws[1].Branch = %q, want %q", workspaces[1].Branch, "feature-branch")

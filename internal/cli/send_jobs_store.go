@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/config"
+	"github.com/tlepoid/tumux/internal/config"
 )
 
 const (

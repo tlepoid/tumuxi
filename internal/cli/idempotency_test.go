@@ -23,7 +23,7 @@ func TestIdempotencyReplaySuccessEnvelope(t *testing.T) {
 		"test-v1",
 		"agent.run",
 		"idem-1",
-		map[string]any{"session_name": "tumuxi-ws-tab"},
+		map[string]any{"session_name": "tumux-ws-tab"},
 	)
 	if code != ExitOK {
 		t.Fatalf("first write code = %d, want %d", code, ExitOK)
@@ -70,7 +70,7 @@ func TestIdempotencyReplayMissByCommand(t *testing.T) {
 		"test-v1",
 		"agent.run",
 		"idem-2",
-		map[string]any{"session_name": "tumuxi-ws-tab"},
+		map[string]any{"session_name": "tumux-ws-tab"},
 	)
 
 	var replay bytes.Buffer
@@ -196,8 +196,8 @@ func TestWriteJSONEnvelopeWithIdempotencyReportsStoreFailureInJSONMode(t *testin
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 
-	// Force idempotency store writes to fail by blocking ~/.tumuxi with a file.
-	if err := os.WriteFile(filepath.Join(home, ".tumuxi"), []byte("not-a-dir"), 0o644); err != nil {
+	// Force idempotency store writes to fail by blocking ~/.tumux with a file.
+	if err := os.WriteFile(filepath.Join(home, ".tumux"), []byte("not-a-dir"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
 

@@ -3,7 +3,7 @@ package app
 import (
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func (a *App) markInput() {

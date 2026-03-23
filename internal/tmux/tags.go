@@ -20,10 +20,10 @@ type SessionTagValues struct {
 
 const (
 	tagFieldSeparator = "|"
-	TagLastOutputAt   = "@tumuxi_last_output_at"
-	TagLastInputAt    = "@tumuxi_last_input_at"
-	TagSessionOwner   = "@tumuxi_session_owner"
-	TagSessionLeaseAt = "@tumuxi_session_lease_ms"
+	TagLastOutputAt   = "@tumux_last_output_at"
+	TagLastInputAt    = "@tumux_last_input_at"
+	TagSessionOwner   = "@tumux_session_owner"
+	TagSessionLeaseAt = "@tumux_session_lease_ms"
 )
 
 // SessionsWithTags returns sessions matching the provided tags, plus values for requested tag keys.

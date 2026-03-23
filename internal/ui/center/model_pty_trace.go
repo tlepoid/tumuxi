@@ -8,13 +8,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 const ptyTraceLimit = 256 * 1024
 
 func ptyTraceAllowed(assistant string) bool {
-	value := strings.TrimSpace(os.Getenv("TUMUXI_PTY_TRACE"))
+	value := strings.TrimSpace(os.Getenv("TUMUX_PTY_TRACE"))
 	if value == "" {
 		return false
 	}
@@ -62,7 +62,7 @@ func (m *Model) tracePTYOutput(tab *Tab, data []byte) {
 
 	if tab.ptyTraceFile == nil {
 		dir := ptyTraceDir()
-		name := fmt.Sprintf("tumuxi-pty-claude-%s-%s.log", tab.ID, time.Now().Format("20060102-150405"))
+		name := fmt.Sprintf("tumux-pty-claude-%s-%s.log", tab.ID, time.Now().Format("20060102-150405"))
 		path := filepath.Join(dir, name)
 		file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
 		if err != nil {

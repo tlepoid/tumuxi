@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func stopAgentSession(sessionName string, svc *Services, graceful bool, gracePeriod time.Duration) error {

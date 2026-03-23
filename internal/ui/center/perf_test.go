@@ -8,18 +8,18 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/config"
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/vterm"
+	"github.com/tlepoid/tumux/internal/config"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/vterm"
 )
 
 func TestPerfScenario(t *testing.T) {
-	if os.Getenv("TUMUXI_PERF_TEST") != "1" {
-		t.Skip("set TUMUXI_PERF_TEST=1 to run perf scenario")
+	if os.Getenv("TUMUX_PERF_TEST") != "1" {
+		t.Skip("set TUMUX_PERF_TEST=1 to run perf scenario")
 	}
 
-	logDir := os.Getenv("TUMUXI_PERF_LOG_DIR")
+	logDir := os.Getenv("TUMUX_PERF_LOG_DIR")
 	if logDir == "" {
 		logDir = t.TempDir()
 	}

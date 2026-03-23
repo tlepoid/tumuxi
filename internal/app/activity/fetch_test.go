@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 // stubFetcher satisfies SessionFetcher for tests.
@@ -60,23 +60,23 @@ func (f activeFetcher) ActiveAgentSessionsByActivity(time.Duration, tmux.Options
 func TestFetchTaggedSessions_IncludesKnownAndTaggedSessions(t *testing.T) {
 	rows := []tmux.SessionTagValues{
 		{
-			Name: "tumuxi-legacyws-tab-1",
+			Name: "tumux-legacyws-tab-1",
 			Tags: map[string]string{
-				"@tumuxi": "",
+				"@tumux": "",
 			},
 		},
 		{
 			Name: "known-custom",
 			Tags: map[string]string{
-				"@tumuxi": "",
+				"@tumux": "",
 			},
 		},
 		{
 			Name: "tagged-session",
 			Tags: map[string]string{
-				"@tumuxi":            "1",
-				"@tumuxi_workspace":  "ws-tagged",
-				"@tumuxi_type":       "agent",
+				"@tumux":             "1",
+				"@tumux_workspace":   "ws-tagged",
+				"@tumux_type":        "agent",
 				tmux.TagLastOutputAt: "1700000000000",
 				tmux.TagLastInputAt:  "1700000000000",
 			},
@@ -84,7 +84,7 @@ func TestFetchTaggedSessions_IncludesKnownAndTaggedSessions(t *testing.T) {
 		{
 			Name: "other-random",
 			Tags: map[string]string{
-				"@tumuxi": "",
+				"@tumux": "",
 			},
 		},
 	}
@@ -104,11 +104,11 @@ func TestFetchTaggedSessions_IncludesKnownAndTaggedSessions(t *testing.T) {
 	}
 
 	// Untagged sessions not in infoBySession are excluded (legacy heuristic removed).
-	if _, ok := byName["tumuxi-legacyws-tab-1"]; ok {
+	if _, ok := byName["tumux-legacyws-tab-1"]; ok {
 		t.Fatal("expected untagged session not in infoBySession to be excluded")
 	}
 	if _, ok := byName["known-custom"]; !ok {
-		t.Fatal("expected known session without @tumuxi tag to be included")
+		t.Fatal("expected known session without @tumux tag to be included")
 	}
 	if _, ok := byName["tagged-session"]; !ok {
 		t.Fatal("expected tagged session to be included")
@@ -138,11 +138,11 @@ func TestIsChatSession(t *testing.T) {
 		t.Fatal("session without type or info should not be classified as chat")
 	}
 
-	// Sessions without type but with tumuxi naming should also not match
+	// Sessions without type but with tumux naming should also not match
 	// (legacy name heuristic removed).
-	session2 := tmux.SessionActivity{Name: "tumuxi-ws1-tab-1", Type: "", Tagged: true}
+	session2 := tmux.SessionActivity{Name: "tumux-ws1-tab-1", Type: "", Tagged: true}
 	if IsChatSession(session2, SessionInfo{}, false) {
-		t.Fatal("session without type should not be classified as chat even with tumuxi name pattern")
+		t.Fatal("session without type should not be classified as chat even with tumux name pattern")
 	}
 
 	// Sessions with explicit type should use type regardless of name.
@@ -152,13 +152,13 @@ func TestIsChatSession(t *testing.T) {
 	}
 
 	// Known tab metadata should win over stale/mismatched session type tags.
-	session4 := tmux.SessionActivity{Name: "tumuxi-ws1-tab-2", Type: "terminal"}
+	session4 := tmux.SessionActivity{Name: "tumux-ws1-tab-2", Type: "terminal"}
 	if !IsChatSession(session4, SessionInfo{IsChat: true}, true) {
 		t.Fatal("known chat tab should be classified as chat even with stale type tag")
 	}
 
 	// Known tabs whose assistant metadata drifted should still honor tmux agent tags.
-	session5 := tmux.SessionActivity{Name: "tumuxi-ws1-tab-3", Type: "agent"}
+	session5 := tmux.SessionActivity{Name: "tumux-ws1-tab-3", Type: "agent"}
 	if !IsChatSession(session5, SessionInfo{IsChat: false}, true) {
 		t.Fatal("known session should still be chat when tmux type is explicitly agent")
 	}

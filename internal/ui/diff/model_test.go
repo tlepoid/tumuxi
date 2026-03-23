@@ -3,7 +3,7 @@ package diff
 import (
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/git"
+	"github.com/tlepoid/tumux/internal/git"
 )
 
 func newModelWithDiff(height, lines int, hunks []git.Hunk) *Model {

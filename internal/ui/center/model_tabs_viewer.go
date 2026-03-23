@@ -7,13 +7,13 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/git"
-	"github.com/tlepoid/tumuxi/internal/logging"
-	"github.com/tlepoid/tumuxi/internal/messages"
-	"github.com/tlepoid/tumuxi/internal/tmux"
-	"github.com/tlepoid/tumuxi/internal/ui/common"
-	"github.com/tlepoid/tumuxi/internal/ui/diff"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/git"
+	"github.com/tlepoid/tumux/internal/logging"
+	"github.com/tlepoid/tumux/internal/messages"
+	"github.com/tlepoid/tumux/internal/tmux"
+	"github.com/tlepoid/tumux/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/diff"
 )
 
 // createVimTab creates a new tab that opens a file in vim
@@ -28,7 +28,7 @@ func (m *Model) createVimTab(filePath string, ws *data.Workspace) tea.Cmd {
 	termWidth := tm.Width
 	termHeight := tm.Height
 	tabID := generateTabID()
-	sessionName := tmux.SessionName("tumuxi", string(ws.ID()), string(tabID))
+	sessionName := tmux.SessionName("tumux", string(ws.ID()), string(tabID))
 
 	return func() tea.Msg {
 		logging.Info("Creating vim tab: file=%s workspace=%s", filePath, ws.Name)

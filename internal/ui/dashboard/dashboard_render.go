@@ -3,7 +3,7 @@ package dashboard
 import (
 	"charm.land/lipgloss/v2"
 
-	"github.com/tlepoid/tumuxi/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/ui/common"
 )
 
 // applyDirtyForeground sets the dirty color (ColorSecondary) on a row style
@@ -35,7 +35,7 @@ func (m *Model) renderRow(row Row, selected bool) string {
 		if contentWidth < 1 {
 			contentWidth = 1
 		}
-		return style.Width(contentWidth).AlignHorizontal(lipgloss.Center).Render("[tumuxi]")
+		return style.Width(contentWidth).AlignHorizontal(lipgloss.Center).Render("[tumux]")
 
 	case RowProject:
 		status := ""

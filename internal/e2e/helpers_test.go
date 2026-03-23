@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/data"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func createWorkspaceFromDashboard(t *testing.T, session *PTYSession, name string) {
@@ -32,8 +32,8 @@ func waitForAgentSessions(t *testing.T, opts tmux.Options, timeout time.Duration
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		sessions, err := tmux.ListSessionsMatchingTags(map[string]string{
-			"@tumuxi":      "1",
-			"@tumuxi_type": "agent",
+			"@tumux":      "1",
+			"@tumux_type": "agent",
 		}, opts)
 		if err == nil && len(sessions) > 0 {
 			return sessions
@@ -49,8 +49,8 @@ func assertAgentSessionsStayLive(t *testing.T, opts tmux.Options, duration time.
 	deadline := time.Now().Add(duration)
 	for time.Now().Before(deadline) {
 		sessions, err := tmux.ListSessionsMatchingTags(map[string]string{
-			"@tumuxi":      "1",
-			"@tumuxi_type": "agent",
+			"@tumux":      "1",
+			"@tumux_type": "agent",
 		}, opts)
 		if err != nil {
 			time.Sleep(200 * time.Millisecond)
@@ -107,9 +107,9 @@ func waitForTerminalSessionCount(t *testing.T, opts tmux.Options, wsID string, c
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		sessions, err := tmux.ListSessionsMatchingTags(map[string]string{
-			"@tumuxi":           "1",
-			"@tumuxi_type":      "terminal",
-			"@tumuxi_workspace": wsID,
+			"@tumux":           "1",
+			"@tumux_type":      "terminal",
+			"@tumux_workspace": wsID,
 		}, opts)
 		if err == nil && len(sessions) == count {
 			return
@@ -124,16 +124,16 @@ func waitForAssistantSessions(t *testing.T, opts tmux.Options, want map[string]b
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		rows, err := tmux.SessionsWithTags(map[string]string{
-			"@tumuxi":      "1",
-			"@tumuxi_type": "agent",
-		}, []string{"@tumuxi_assistant"}, opts)
+			"@tumux":      "1",
+			"@tumux_type": "agent",
+		}, []string{"@tumux_assistant"}, opts)
 		if err != nil {
 			time.Sleep(200 * time.Millisecond)
 			continue
 		}
 		byAssistant := make(map[string][]string)
 		for _, row := range rows {
-			assistant := strings.TrimSpace(row.Tags["@tumuxi_assistant"])
+			assistant := strings.TrimSpace(row.Tags["@tumux_assistant"])
 			if assistant == "" {
 				continue
 			}
@@ -157,11 +157,11 @@ func waitForAssistantSessions(t *testing.T, opts tmux.Options, want map[string]b
 
 func tmuxSessionDebug(opts tmux.Options) string {
 	rows, err := tmux.SessionsWithTags(map[string]string{}, []string{
-		"@tumuxi",
-		"@tumuxi_type",
-		"@tumuxi_assistant",
-		"@tumuxi_workspace",
-		"@tumuxi_tab",
+		"@tumux",
+		"@tumux_type",
+		"@tumux_assistant",
+		"@tumux_workspace",
+		"@tumux_tab",
 	}, opts)
 	if err != nil {
 		return fmt.Sprintf("tmux sessions: error=%v", err)
@@ -172,13 +172,13 @@ func tmuxSessionDebug(opts tmux.Options) string {
 	lines := make([]string, 0, len(rows))
 	for _, row := range rows {
 		lines = append(lines, fmt.Sprintf(
-			"%s tumuxi=%q type=%q assistant=%q workspace=%q tab=%q",
+			"%s tumux=%q type=%q assistant=%q workspace=%q tab=%q",
 			row.Name,
-			row.Tags["@tumuxi"],
-			row.Tags["@tumuxi_type"],
-			row.Tags["@tumuxi_assistant"],
-			row.Tags["@tumuxi_workspace"],
-			row.Tags["@tumuxi_tab"],
+			row.Tags["@tumux"],
+			row.Tags["@tumux_type"],
+			row.Tags["@tumux_assistant"],
+			row.Tags["@tumux_workspace"],
+			row.Tags["@tumux_tab"],
 		))
 	}
 	return "tmux sessions:\n" + strings.Join(lines, "\n")

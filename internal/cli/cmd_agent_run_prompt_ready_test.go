@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestPaneReadyForPrompt_CodexAndClaude(t *testing.T) {

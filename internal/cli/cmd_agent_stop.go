@@ -14,7 +14,7 @@ type agentStopResult struct {
 }
 
 func cmdAgentStop(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi agent stop (<session_name>|--agent <agent_id>) [--graceful] [--grace-period <dur>] [--idempotency-key <key>] [--json]\n       tumuxi agent stop --all --yes [--graceful] [--grace-period <dur>] [--idempotency-key <key>] [--json]"
+	const usage = "Usage: tumux agent stop (<session_name>|--agent <agent_id>) [--graceful] [--grace-period <dur>] [--idempotency-key <key>] [--json]\n       tumux agent stop --all --yes [--graceful] [--grace-period <dur>] [--idempotency-key <key>] [--json]"
 	fs := newFlagSet("agent stop")
 	all := fs.Bool("all", false, "stop all agents")
 	yes := fs.Bool("yes", false, "confirm (required for --all)")

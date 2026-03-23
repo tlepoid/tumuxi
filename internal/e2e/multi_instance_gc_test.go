@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
 func TestMultiInstanceOrphanGCDoesNotKillNewWorkspace(t *testing.T) {
@@ -14,7 +14,7 @@ func TestMultiInstanceOrphanGCDoesNotKillNewWorkspace(t *testing.T) {
 	skipIfNoTmux(t)
 
 	repo := initRepo(t)
-	server := fmt.Sprintf("tumuxi-e2e-%d", time.Now().UnixNano())
+	server := fmt.Sprintf("tumux-e2e-%d", time.Now().UnixNano())
 	defer killTmuxServer(t, server)
 
 	homeA := t.TempDir()
@@ -27,8 +27,8 @@ func TestMultiInstanceOrphanGCDoesNotKillNewWorkspace(t *testing.T) {
 	binDirA := writeStubAssistant(t, homeA, "claude")
 	binDirB := writeStubAssistant(t, homeB, "claude")
 
-	envA := append(sessionEnv(binDirA, server), "TUMUXI_TMUX_SYNC_INTERVAL=1s")
-	envB := append(sessionEnv(binDirB, server), "TUMUXI_TMUX_SYNC_INTERVAL=1s")
+	envA := append(sessionEnv(binDirA, server), "TUMUX_TMUX_SYNC_INTERVAL=1s")
+	envB := append(sessionEnv(binDirB, server), "TUMUX_TMUX_SYNC_INTERVAL=1s")
 
 	sessionB, cleanupB, err := StartPTYSession(PTYOptions{
 		Home: homeB,

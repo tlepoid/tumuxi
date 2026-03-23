@@ -3,10 +3,10 @@ package activity
 import (
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/tmux"
+	"github.com/tlepoid/tumux/internal/tmux"
 )
 
-// ActiveWorkspaceIDsFromTags uses the @tumuxi_last_output_at tag when present.
+// ActiveWorkspaceIDsFromTags uses the @tumux_last_output_at tag when present.
 // Sessions with missing tags always fall back to screen-delta hysteresis
 // (compatibility mode). Sessions with stale tags fall back when they have
 // recent tmux window activity (or if that prefilter is unavailable).

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/app/activity"
+	"github.com/tlepoid/tumux/internal/app/activity"
 )
 
 func TestTmuxActivityScan_PrefilterErrorStillAllowsStaleFallback(t *testing.T) {

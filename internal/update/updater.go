@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 // CheckResult contains the result of an update check.
@@ -89,12 +89,12 @@ func (u *Updater) Upgrade(release *Release) error {
 	}
 
 	if IsHomebrewBuild() {
-		return errors.New("installed via Homebrew; run: brew upgrade tumuxi")
+		return errors.New("installed via Homebrew; run: brew upgrade tumux")
 	}
 
 	// Check if go install user
 	if IsGoInstall() {
-		return errors.New("installed via 'go install'; run: go install github.com/tlepoid/tumuxi/cmd/tumuxi@latest")
+		return errors.New("installed via 'go install'; run: go install github.com/tlepoid/tumux/cmd/tumux@latest")
 	}
 
 	// Find the platform asset
@@ -126,7 +126,7 @@ func (u *Updater) Upgrade(release *Release) error {
 	}
 
 	// Create temp directory for download
-	tmpDir, err := os.MkdirTemp("", "tumuxi-update-*")
+	tmpDir, err := os.MkdirTemp("", "tumux-update-*")
 	if err != nil {
 		return fmt.Errorf("creating temp directory: %w", err)
 	}

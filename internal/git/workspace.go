@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 const worktreeTimeout = 30 * time.Second

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// ExtractBinary extracts the tumuxi binary from a tar.gz archive.
+// ExtractBinary extracts the tumux binary from a tar.gz archive.
 // Returns the path to the extracted binary.
 func ExtractBinary(archivePath, destDir string) (string, error) {
 	f, err := os.Open(archivePath)
@@ -38,9 +38,9 @@ func ExtractBinary(archivePath, destDir string) (string, error) {
 			return "", fmt.Errorf("reading tar: %w", err)
 		}
 
-		// Only extract the tumuxi binary
+		// Only extract the tumux binary
 		name := filepath.Base(header.Name)
-		if name != "tumuxi" {
+		if name != "tumux" {
 			continue
 		}
 
@@ -48,7 +48,7 @@ func ExtractBinary(archivePath, destDir string) (string, error) {
 			continue
 		}
 
-		binaryPath = filepath.Join(destDir, "tumuxi")
+		binaryPath = filepath.Join(destDir, "tumux")
 		outFile, err := os.OpenFile(binaryPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
 		if err != nil {
 			return "", fmt.Errorf("creating output file: %w", err)
@@ -63,7 +63,7 @@ func ExtractBinary(archivePath, destDir string) (string, error) {
 	}
 
 	if binaryPath == "" {
-		return "", errors.New("tumuxi binary not found in archive")
+		return "", errors.New("tumux binary not found in archive")
 	}
 
 	return binaryPath, nil
@@ -87,7 +87,7 @@ func InstallBinary(newBinaryPath, currentBinaryPath string) error {
 	// Stage the new binary in the same directory as the target to avoid
 	// cross-filesystem rename failures (EXDEV)
 	targetDir := filepath.Dir(currentBinaryPath)
-	stagedPath := filepath.Join(targetDir, ".tumuxi-upgrade-new")
+	stagedPath := filepath.Join(targetDir, ".tumux-upgrade-new")
 
 	if err := copyFile(newBinaryPath, stagedPath); err != nil {
 		return fmt.Errorf("staging new binary: %w", err)
@@ -184,7 +184,7 @@ func CanWrite(path string) bool {
 
 	// Check if parent directory is writable (for rename operation)
 	dir := filepath.Dir(path)
-	testFile := filepath.Join(dir, ".tumuxi-write-test")
+	testFile := filepath.Join(dir, ".tumux-write-test")
 	f, err = os.Create(testFile)
 	if err != nil {
 		return false

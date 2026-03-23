@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tlepoid/tumuxi/internal/ui/common"
-	"github.com/tlepoid/tumuxi/internal/update"
+	"github.com/tlepoid/tumux/internal/ui/common"
+	"github.com/tlepoid/tumux/internal/update"
 )
 
 func TestHandleThemePreview_PersistsOnCloseOnly(t *testing.T) {
@@ -23,7 +23,7 @@ func TestHandleThemePreview_PersistsOnCloseOnly(t *testing.T) {
 		t.Fatalf("NewHarness returned error: %v", err)
 	}
 
-	configPath := filepath.Join(t.TempDir(), "tumuxi-config.json")
+	configPath := filepath.Join(t.TempDir(), "tumux-config.json")
 	h.app.config.Paths.ConfigPath = configPath
 	h.app.handleShowSettingsDialog()
 	session := h.app.settingsDialogSession
@@ -96,7 +96,7 @@ func TestHandleSettingsResult_UnchangedThemeSkipsSave(t *testing.T) {
 		t.Fatalf("NewHarness returned error: %v", err)
 	}
 
-	configPath := filepath.Join(t.TempDir(), "tumuxi-config.json")
+	configPath := filepath.Join(t.TempDir(), "tumux-config.json")
 	h.app.config.Paths.ConfigPath = configPath
 	if err := h.app.config.SaveUISettings(); err != nil {
 		t.Fatalf("SaveUISettings returned error: %v", err)
@@ -125,7 +125,7 @@ func TestHandleTriggerUpgrade_PersistsThemeChange(t *testing.T) {
 		t.Fatalf("NewHarness returned error: %v", err)
 	}
 
-	configPath := filepath.Join(t.TempDir(), "tumuxi-config.json")
+	configPath := filepath.Join(t.TempDir(), "tumux-config.json")
 	h.app.config.Paths.ConfigPath = configPath
 	h.app.updateAvailable = &update.CheckResult{
 		CurrentVersion:  "v0.0.1",
@@ -213,7 +213,7 @@ func TestHandleShowSettingsDialog_RefreshesPersistedThemeBaseline(t *testing.T) 
 	}
 
 	// Persist the same in-memory theme via another save path.
-	configPath := filepath.Join(t.TempDir(), "tumuxi-config.json")
+	configPath := filepath.Join(t.TempDir(), "tumux-config.json")
 	h.app.config.Paths.ConfigPath = configPath
 	if err := h.app.config.SaveUISettings(); err != nil {
 		t.Fatalf("SaveUISettings returned error: %v", err)
@@ -254,7 +254,7 @@ func TestHandleThemePreview_DropsStaleSessionAfterClose(t *testing.T) {
 		t.Fatalf("NewHarness returned error: %v", err)
 	}
 
-	configPath := filepath.Join(t.TempDir(), "tumuxi-config.json")
+	configPath := filepath.Join(t.TempDir(), "tumux-config.json")
 	h.app.config.Paths.ConfigPath = configPath
 	startTheme := common.ThemeID(h.app.config.UI.Theme)
 	h.app.handleShowSettingsDialog()

@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tlepoid/tumuxi/internal/data"
+	"github.com/tlepoid/tumux/internal/data"
 )
 
 func writeWorkspaceConfig(t *testing.T, repoPath, content string) {
-	configDir := filepath.Join(repoPath, ".tumuxi")
+	configDir := filepath.Join(repoPath, ".tumux")
 	if err := os.MkdirAll(configDir, 0o755); err != nil {
-		t.Fatalf("mkdir .tumuxi: %v", err)
+		t.Fatalf("mkdir .tumux: %v", err)
 	}
 	if err := os.WriteFile(filepath.Join(configDir, "workspaces.json"), []byte(content), 0o644); err != nil {
 		t.Fatalf("write workspaces.json: %v", err)
@@ -72,9 +72,9 @@ func TestScriptRunnerLoadConfigValidJSON(t *testing.T) {
 
 func TestScriptRunnerLoadConfigPermissionError(t *testing.T) {
 	repo := t.TempDir()
-	configDir := filepath.Join(repo, ".tumuxi")
+	configDir := filepath.Join(repo, ".tumux")
 	if err := os.MkdirAll(configDir, 0o755); err != nil {
-		t.Fatalf("mkdir .tumuxi: %v", err)
+		t.Fatalf("mkdir .tumux: %v", err)
 	}
 	configPath := filepath.Join(configDir, "workspaces.json")
 	if err := os.WriteFile(configPath, []byte(`{"run":"test"}`), 0o644); err != nil {
@@ -103,7 +103,7 @@ func TestScriptRunnerRunSetupAndEnv(t *testing.T) {
 	wsRoot := t.TempDir()
 
 	writeWorkspaceConfig(t, repo, `{
-  "setup-workspace": ["printf \"$TUMUXI_WORKSPACE_NAME-$CUSTOM_VAR\" > setup.txt"]
+  "setup-workspace": ["printf \"$TUMUX_WORKSPACE_NAME-$CUSTOM_VAR\" > setup.txt"]
 }`)
 
 	runner := NewScriptRunner(6200, 10)

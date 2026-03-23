@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tlepoid/tumuxi/internal/logging"
+	"github.com/tlepoid/tumux/internal/logging"
 )
 
 type logsResult struct {
@@ -18,7 +18,7 @@ type logsResult struct {
 }
 
 func cmdLogs(w, wErr io.Writer, gf GlobalFlags, args []string, version string) int {
-	const usage = "Usage: tumuxi logs tail [--lines N] [--json]"
+	const usage = "Usage: tumux logs tail [--lines N] [--json]"
 	if len(args) == 0 || args[0] != "tail" {
 		return returnUsageError(w, wErr, gf, usage, version, nil)
 	}
@@ -83,13 +83,13 @@ func cmdLogs(w, wErr io.Writer, gf GlobalFlags, args []string, version string) i
 	return ExitOK
 }
 
-// findLatestLogFile locates the most recent tumuxi-*.log in ~/.tumuxi/logs.
+// findLatestLogFile locates the most recent tumux-*.log in ~/.tumux/logs.
 func findLatestLogFile() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return ""
 	}
-	logDir := filepath.Join(home, ".tumuxi", "logs")
+	logDir := filepath.Join(home, ".tumux", "logs")
 	entries, err := os.ReadDir(logDir)
 	if err != nil {
 		return ""
@@ -100,8 +100,8 @@ func findLatestLogFile() string {
 			continue
 		}
 		name := e.Name()
-		// Match only date-stamped logs: tumuxi-YYYY-MM-DD.log (len == 21)
-		if strings.HasPrefix(name, "tumuxi-") && strings.HasSuffix(name, ".log") && len(name) == 21 {
+		// Match only date-stamped logs: tumux-YYYY-MM-DD.log (len == 20)
+		if strings.HasPrefix(name, "tumux-") && strings.HasSuffix(name, ".log") && len(name) == 20 {
 			logs = append(logs, name)
 		}
 	}

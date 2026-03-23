@@ -11,13 +11,13 @@ func TestOpenClawDXAssistants_ProbeWorkspaceNotFoundReturnsCommandError(t *testi
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	homeDir := t.TempDir()
-	tumuxiHome := filepath.Join(homeDir, ".tumuxi")
-	if err := os.MkdirAll(tumuxiHome, 0o755); err != nil {
-		t.Fatalf("mkdir tumuxi home: %v", err)
+	tumuxHome := filepath.Join(homeDir, ".tumux")
+	if err := os.MkdirAll(tumuxHome, 0o755); err != nil {
+		t.Fatalf("mkdir tumux home: %v", err)
 	}
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
@@ -61,18 +61,18 @@ func TestOpenClawDXAssistants_ProbePrefersProbePassedAssistant(t *testing.T) {
 	requireBinary(t, "jq")
 	requireBinary(t, "bash")
 
-	scriptPath := filepath.Join("..", "..", "skills", "tumuxi", "scripts", "openclaw-dx.sh")
+	scriptPath := filepath.Join("..", "..", "skills", "tumux", "scripts", "openclaw-dx.sh")
 	fakeBinDir := t.TempDir()
-	fakeAmuxPath := filepath.Join(fakeBinDir, "tumuxi")
+	fakeAmuxPath := filepath.Join(fakeBinDir, "tumux")
 	fakeTurnPath := filepath.Join(fakeBinDir, "fake-turn.sh")
 	claudeBotPath := filepath.Join(fakeBinDir, "claude-ready-bot")
 	codexBotPath := filepath.Join(fakeBinDir, "codex-ready-bot")
 	homeDir := t.TempDir()
-	tumuxiHome := filepath.Join(homeDir, ".tumuxi")
-	if err := os.MkdirAll(tumuxiHome, 0o755); err != nil {
-		t.Fatalf("mkdir tumuxi home: %v", err)
+	tumuxHome := filepath.Join(homeDir, ".tumux")
+	if err := os.MkdirAll(tumuxHome, 0o755); err != nil {
+		t.Fatalf("mkdir tumux home: %v", err)
 	}
-	configPath := filepath.Join(tumuxiHome, "config.json")
+	configPath := filepath.Join(tumuxHome, "config.json")
 
 	writeExecutable(t, fakeAmuxPath, `#!/usr/bin/env bash
 set -euo pipefail
