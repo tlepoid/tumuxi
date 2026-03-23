@@ -6,6 +6,7 @@ import (
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 
+	"github.com/tlepoid/tumuxi/internal/data"
 	"github.com/tlepoid/tumuxi/internal/logging"
 	"github.com/tlepoid/tumuxi/internal/messages"
 	"github.com/tlepoid/tumuxi/internal/notify"
@@ -57,18 +58,33 @@ func (a *App) syncActiveWorkspacesToDashboard() {
 }
 
 // sendWaitingNotification sends a desktop notification that an agent needs input.
+// If the user clicks the notification, it switches tumuxi to that workspace.
 func (a *App) sendWaitingNotification(wsID string) {
 	name := wsID
-	// Try to find a human-readable workspace name.
-	for _, p := range a.projects {
-		for _, ws := range p.Workspaces {
+	var matchedProject *data.Project
+	var matchedWorkspace *data.Workspace
+	// Try to find a human-readable workspace name and keep references for the callback.
+	for i := range a.projects {
+		for j := range a.projects[i].Workspaces {
+			ws := &a.projects[i].Workspaces[j]
 			if string(ws.ID()) == wsID {
-				name = fmt.Sprintf("%s/%s", p.Name, ws.Name)
+				matchedProject = &a.projects[i]
+				matchedWorkspace = ws
+				name = fmt.Sprintf("%s/%s", a.projects[i].Name, ws.Name)
 				break
 			}
 		}
 	}
-	notify.Send("Agent waiting", name+" needs your input")
+	logging.Info("Sending waiting notification for workspace %s", name)
+
+	var onAction func()
+	if matchedProject != nil && matchedWorkspace != nil && a.externalSender != nil {
+		p, ws, sender := matchedProject, matchedWorkspace, a.externalSender
+		onAction = func() {
+			sender(messages.NotificationClicked{Project: p, Workspace: ws})
+		}
+	}
+	notify.Send("Agent waiting", name+" needs your input", onAction)
 }
 
 // handleKeyPress handles keyboard input

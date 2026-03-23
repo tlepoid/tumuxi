@@ -2,17 +2,31 @@ package notify
 
 import (
 	"os/exec"
+	"strings"
 
 	"github.com/tlepoid/tumuxi/internal/logging"
 )
 
 // Send sends a desktop notification using notify-send.
-// It runs asynchronously and logs errors without blocking.
-func Send(title, body string) {
+// If onAction is non-nil, the notification includes a "Switch" action button.
+// When clicked, onAction is called from a background goroutine.
+// The goroutine blocks until the notification is dismissed or acted on.
+func Send(title, body string, onAction func()) {
 	go func() {
-		cmd := exec.Command("notify-send", "--app-name=tumuxi", title, body)
-		if err := cmd.Run(); err != nil {
+		args := []string{"--app-name=tumuxi"}
+		if onAction != nil {
+			args = append(args, "--action=switch=Switch")
+		}
+		args = append(args, title, body)
+
+		cmd := exec.Command("notify-send", args...)
+		out, err := cmd.Output()
+		if err != nil {
 			logging.Warn("notify-send failed: %v", err)
+			return
+		}
+		if onAction != nil && strings.TrimSpace(string(out)) == "switch" {
+			onAction()
 		}
 	}()
 }

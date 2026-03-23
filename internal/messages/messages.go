@@ -372,6 +372,12 @@ type UpgradeComplete struct {
 	Err        error
 }
 
+// NotificationClicked is sent when a user clicks a desktop notification action.
+type NotificationClicked struct {
+	Project   *data.Project
+	Workspace *data.Workspace
+}
+
 // OpenFileInVim requests opening a file in vim in the center pane
 type OpenFileInVim struct {
 	Path      string
